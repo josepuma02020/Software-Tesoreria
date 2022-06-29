@@ -19,7 +19,7 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
         $rol = $arreglo['tipo'];
         switch ($rol) {
             case '1':
-                $menu = "diseno/navegadoradmin.php";
+                $menu = "./layouts/navadmin.php";
                 break;
             case 2:
                 $menu = "diseno/navegadorsupervisor.php";
