@@ -78,6 +78,8 @@
     </main>
     <footer>
 
+        <img class="logo" src="./img/logo.png" alt="Logo ESSA">
+
     </footer>
     <script src="./css/bootstrap/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
     </script>
