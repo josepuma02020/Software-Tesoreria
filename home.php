@@ -19,7 +19,7 @@
     </header>
     <main>
         <?php
-        include('./vistas/creacionnotas.php');
+        include('./vistas/notascontables.php');
         ?>
     </main>
 </body>

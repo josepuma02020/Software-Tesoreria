@@ -67,7 +67,7 @@
         </form>
     </header>
     <main>
-
+        <?php include('registrosnotas.php') ?>
     </main>
     <footer>
 
