@@ -1,10 +1,27 @@
-form {
-    margin: 1.5em;
-    padding: 1em;
-    width: 80%;
+body {
     text-align: center;
+    align-items: center;
+}
+
+form {
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 1em;
+    width: 90%;
+    text-align: center;
+
 }
 
 .mediano {
-    width: 40%;
+    width: 20%;
+    display: inline-block;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.completo {
+    margin-left: 1em;
+    margin-right: 1em;
+    width: 90%;
+    display: inline-block;
 }

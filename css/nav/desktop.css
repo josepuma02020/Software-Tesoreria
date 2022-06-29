@@ -5,5 +5,7 @@
 
 .end-nav {
     text-align: end;
-    width: 100%;
+    width: 94%;
+    margin-left: 2%;
+    margin-right: 2%;
 }
