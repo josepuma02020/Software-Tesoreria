@@ -2,3 +2,8 @@
     width: 6em;
     height: 3em;
 }
+
+.end-nav {
+    text-align: end;
+    width: 100%;
+}

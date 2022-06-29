@@ -18,8 +18,13 @@
         <?php include($_SESSION['menu']) ?>
     </header>
     <main>
-
+        <?php
+        include('./vistas/creacionnotas.php');
+        ?>
     </main>
 </body>
 
 </html>
+<script>
+
+</script>
