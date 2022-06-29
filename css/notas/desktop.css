@@ -12,6 +12,22 @@ form {
 
 }
 
+
+
+.form-registros {
+    font-size: small;
+}
+
+
+.tabla-registros {
+    margin-top: 1.5em;
+    margin-left: 1%;
+    margin-right: 1%;
+    width: 98%;
+    display: inline-block;
+
+}
+
 .mediano {
     width: 20%;
     display: inline-block;
