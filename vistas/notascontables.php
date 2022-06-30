@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="librerias/alertify/css/themes/default.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css" />
     <link type="text/css" href="./librerias/jquery-ui-1.12.1.custom/jquery-ui.min.css" rel=" Stylesheet" />
+    <SCRIPT lang="javascript" type="text/javascript" src="notascontables/notascontables.js"></script>
     <SCRIPT src="librerias/alertify/alertify.js"></script>
 
     <title>Notas Contables</title>
@@ -100,7 +101,8 @@
                 <form action="#" method="POST" class="form-registros">
                     <tr>
                         <td>
-                            <input class="form-control" type="date" required id="date" name="date">
+                            <input class="form-control" type="hidden" required id="idnota" name="idnota" value="0">
+                            <input class="form-control" type="text" required id="date" name="date">
                         </td>
                         <td style="width: 13%;">
                             <input class=" form-control" type="text" required id="cuenta" name="cuenta">
@@ -109,22 +111,22 @@
                             <input class="form-control" type="text" required id="descripcion" name="descripcion" disabled>
                         </td>
                         <td style="width:8%">
-                            <input style="text-align:center" value="0" min="0" class="form-control" type="number" required id="debe" name="debe">
+                            <input style="text-align:center" value="0" min="0" class="form-control" type="text" required id="debe" name="debe">
                         </td>
                         <td style="width:8%">
-                            <input style="text-align:center" value="0" min="0" class="form-control" type="number" required id="haber" name="haber">
+                            <input style="text-align:center" value="0" min="0" class="form-control" type="text" required id="haber" name="haber">
                         </td>
                         <td style="width:10%">
                             <input style="text-align:center" class="form-control" type="number" required id="importe" name="importe" disabled>
                         </td>
                         <td>
-                            <input class="form-control" type="text" required id="tipolm" name="tipolm" disabled>
+                            <input style="text-align:center" class="form-control" type="text" required id="tipolm" name="tipolm" disabled>
                         </td>
                         <td style="width:10%">
-                            <input class="form-control" type="text" required id="lm" name="lm" required>
+                            <input style="text-align:center" class="form-control" type="text" required id="lm" name="lm" required>
                         </td>
                         <td style="width:10%">
-                            <input class="form-control" type="text" required id="an" name="an" required>
+                            <input style="text-align:center" class="form-control" type="text" required id="an" name="an" required>
                         </td>
                         <td style="width: 8%;">
                             <SCRIPT lang="javascript" type="text/javascript" src="  "></script>
@@ -208,37 +210,78 @@
             importe = debe - haber;
             $('#importe').val(importe);
         });
+        $('#cuenta').change(function() {
+
+
+        });
         $('#registrar').click(function() {
-            a = 0;
+            //grupo
             cuenta = $('#cuenta').val();
+            const cuentas = cuenta.split(' ');
+            date = $('#date').val();
+            const dates = date.split(' ');
             debe = $('#debe').val();
-            haber = $('#haber').val();
-            lm = $('#lm').val();
-            an = $('#an').val();
-            dias = $('#diasref').val();
-            valorprestamo = $('#valoru').val();
-            comentario = $('#comentariou').val();
-            if (debe <= 0 && haber <= 0) {
-                a = 1;
-                alertify.alert('ATENCION!!', 'Debe llenar el campo de Debe o Haber(Los dos no pueden registrarse en valor menor o igual a cero). ', function() {
-                    alertify.success('Ok');
-                });
-            }
-            if (cuenta == '') {
-                a = 1;
-                alertify.alert('ATENCION!!', 'El campo de Cuenta se encuentra vacío', function() {
-                    alertify.success('Ok');
-                });
-            }
-            if (a == 0) {
-                //editarprestamo(dias, valor, ruta, id, comentario);
-                window.location.reload();
-            }
-        })
+            const debes = debe.split('   ');
 
+            if (cuentas.length > 1) {
+                for (var i = 0; i < cuentas.length; i++) {
+                    cuenta = cuentas[i];
+                    if (debes[i] == '-' || debes[i] == '- ') {
+                        debes[i] = '0';
+                    }
+                    document.getElementById("registrosnotas").insertRow(+1).innerHTML =
+                        '<td>' + dates[i] + '</td>' +
+                        '<td>' + cuenta + '</td>' +
+                        '<td>' + '</td>' +
+                        '<td> ' + debes[i] + '</td>' +
+                        '<td> <input style="text-align:center" value="0" min="0" class="form-control" type="number" required id="haber" name="haber"></td>' +
+                        '<td> <input style="text-align:center" class="form-control" type="number" required id="importe" name="importe" disabled></td>' +
+                        '<td> <input style="text-align:center" value="0" min="0" class="form-control" type="number" required id="debe" name="debe"></td>' +
+                        '<td> <input style="text-align:center" class="form-control" type="text" required id="tipolm" name="tipolm" disabled></td>' +
+                        '<td> <input style="text-align:center" class="form-control" type="text" required id="lm" name="lm" required></td>' +
+                        '<td></td>';
+                    $('#cuenta').val('');
+                    $('#date').val('');
+                    console.log(debes);
+                    //registrargrupo(cuenta, dates)
+                }
+            } else {
+                //individual
+                a = 0;
+                idnota = $('#idnota').val();
+                cuenta = $('#cuenta').val();
+                fecha = $('#date').val();
+                debe = $('#debe').val();
+                haber = $('#haber').val();
+                lm = $('#lm').val();
+                an = $('#an').val();
+                tipolm = $('#tipolm').val();
+                if (debe <= 0 && haber <= 0) {
+                    a = 1;
+                    alertify.alert('ATENCION!!', 'Debe llenar el campo de Debe o Haber(Los dos no pueden registrarse en valor menor o igual a cero). ', function() {
+                        alertify.success('Ok');
+                    });
+                }
+                if (cuenta == '') {
+                    a = 1;
+                    alertify.alert('ATENCION!!', 'El campo de Cuenta se encuentra vacío', function() {
+                        alertify.success('Ok');
+                    });
+                }
+                if (idnota == 0) {
+                    a = 1;
+                    alertify.alert('ATENCION!!', 'Favor llenar campos para la creación de una nueva nota', function() {
+                        alertify.success('Ok');
+                    });
+                }
+                if (a == 0) {
+                    //registrar(idnota, cuenta, fecha, debe, haber, lm, an, tipolm);
+                    //window.location.reload(); 
+                }
+            }
 
+        });
         disponible = (<?php echo $relleno ?>);
-        console.log(disponible);
         $("#cuenta").autocomplete({
             source: disponible,
             lookup: disponible,
