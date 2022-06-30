@@ -20,18 +20,35 @@ footer>button {
     margin: 1rem;
 }
 
-
-
 .form-registros {
     font-size: small;
 }
 
+.form-control-register {
+    display: block;
+    width: 100%;
+    padding: .2rem .75rem;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .375rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+
+}
 
 .tabla-registros {
+    font-size: 0.8rem;
     margin-top: 1.5em;
-    margin-left: 1%;
-    margin-right: 1%;
-    width: 98%;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 80%;
     display: inline-block;
 }
 

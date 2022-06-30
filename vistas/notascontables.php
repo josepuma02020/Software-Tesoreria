@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/notas/desktop.css">
     <link rel="stylesheet" type="text/css" href="librerias/alertify/css/alertify.css" />
     <link rel="stylesheet" type="text/css" href="librerias/alertify/css/themes/default.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css" />
     <link type="text/css" href="./librerias/jquery-ui-1.12.1.custom/jquery-ui.min.css" rel=" Stylesheet" />
+    <link rel="stylesheet" href="./css/notas/desktop.css">
     <SCRIPT lang="javascript" type="text/javascript" src="notascontables/notascontables.js"></script>
     <SCRIPT src="librerias/alertify/alertify.js"></script>
 
@@ -56,7 +56,7 @@
 
                 <div class="form-group mediano">
                     <label for="type">Clasificación de Documento</label>
-                    <select id="type" class="form-control col-md-8 ">
+                    <select id="clasificaciion" class="form-control col-md-8 ">
                         <?php
                         $consultausuarios = "select * from clasificacionesnotas order by clasificacion";
                         $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
@@ -98,42 +98,42 @@
                 <th>Acciones</th>
             </thead>
             <tbody>
-                <form action="#" method="POST" class="form-registros">
+                <form id="registros" action="#" method="POST" class="form-registros">
                     <tr>
-                        <td>
+                        <td style="width: 13%;padding:5">
                             <input class="form-control" type="hidden" required id="idnota" name="idnota" value="0">
-                            <input class="form-control" type="text" required id="date" name="date">
+                            <input class="  form-control-register" type="text" required id="date" name="date">
                         </td>
-                        <td style="width: 13%;">
-                            <input class=" form-control" type="text" required id="cuenta" name="cuenta">
+                        <td style="width: 13%;padding:5">
+                            <input class="  form-control-register" type="text" required id="cuenta" name="cuenta">
                         </td>
-                        <td style="width: 15% ;">
-                            <input class="form-control" type="text" required id="descripcion" name="descripcion" disabled>
-                        </td>
-                        <td style="width:8%">
-                            <input style="text-align:center" value="0" min="0" class="form-control" type="text" required id="debe" name="debe">
+                        <td style="width: 15% ;padding:5">
+                            <input class="  form-control-register" type="text" required id="descripcion" name="descripcion" disabled>
                         </td>
                         <td style="width:8%">
-                            <input style="text-align:center" value="0" min="0" class="form-control" type="text" required id="haber" name="haber">
+                            <input style="text-align:center;padding:5" value="0" min="0" class="  form-control-register" type="text" required id="debe" name="debe">
+                        </td>
+                        <td style="width:8%">
+                            <input style="text-align:center;padding:5" value="0" min="0" class="  form-control-register" type="text" required id="haber" name="haber">
                         </td>
                         <td style="width:10%">
-                            <input style="text-align:center" class="form-control" type="number" required id="importe" name="importe" disabled>
+                            <input style="text-align:center;padding:5" class="  form-control-register" type="number" required id="importe" name="importe" disabled>
                         </td>
                         <td>
-                            <input style="text-align:center" class="form-control" type="text" required id="tipolm" name="tipolm" disabled>
+                            <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="tipolm" name="tipolm" disabled>
                         </td>
                         <td style="width:10%">
-                            <input style="text-align:center" class="form-control" type="text" required id="lm" name="lm" required>
+                            <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="lm" name="lm" required>
                         </td>
                         <td style="width:10%">
-                            <input style="text-align:center" class="form-control" type="text" required id="an" name="an" required>
+                            <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="an" name="an" required>
                         </td>
-                        <td style="width: 8%;">
+                        <td style="width: 8%">
                             <SCRIPT lang="javascript" type="text/javascript" src="  "></script>
-                            <button onclick="" type="button" id="registrar" class="btn btn-primary" data-toggle="modal" data-target="#editar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-plus" viewBox="0 0 16 16">
-                                    <path d="M8 6.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 .5-.5z" />
-                                    <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z" />
+                            <button style="height:25px;padding:0;width:40px" onclick="" type="button" id="registrar" class="btn btn-primary" data-toggle="modal" data-target="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+                                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
+                                    <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
                                 </svg>
                             </button>
                             <!-- <button onclick="" type="button" id="eeeee" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
@@ -215,6 +215,10 @@
 
         });
         $('#registrar').click(function() {
+            type = $('#type').val();
+            batch = $('#batch').val();
+            clasificaciion = $('#clasificaciion').val();
+
             //grupo
             cuenta = $('#cuenta').val();
             const cuentas = cuenta.split(' ');
@@ -222,26 +226,29 @@
             const dates = date.split(' ');
             debe = $('#debe').val();
             const debes = debe.split('   ');
-
+            haber = $('#haber').val();
+            const habers = haber.split('   ');
+            console.log(habers);
             if (cuentas.length > 1) {
                 for (var i = 0; i < cuentas.length; i++) {
                     cuenta = cuentas[i];
-                    if (debes[i] == '-' || debes[i] == '- ') {
+                    if (debes[i] == '-' || debes[i] == '- ' || debes[i] == ' -') {
                         debes[i] = '0';
+                    }
+                    if (habers[i] == '-' || habers[i] == '- ' || habers[i] == ' -') {
+                        habers[i] = '0';
                     }
                     document.getElementById("registrosnotas").insertRow(+1).innerHTML =
                         '<td>' + dates[i] + '</td>' +
                         '<td>' + cuenta + '</td>' +
                         '<td>' + '</td>' +
                         '<td> ' + debes[i] + '</td>' +
-                        '<td> <input style="text-align:center" value="0" min="0" class="form-control" type="number" required id="haber" name="haber"></td>' +
-                        '<td> <input style="text-align:center" class="form-control" type="number" required id="importe" name="importe" disabled></td>' +
-                        '<td> <input style="text-align:center" value="0" min="0" class="form-control" type="number" required id="debe" name="debe"></td>' +
-                        '<td> <input style="text-align:center" class="form-control" type="text" required id="tipolm" name="tipolm" disabled></td>' +
-                        '<td> <input style="text-align:center" class="form-control" type="text" required id="lm" name="lm" required></td>' +
+                        '<td>' + habers[i] + '</td>' +
+                        '<td> </td>' +
+                        '<td> </td>' +
+                        '<td> </td>' +
+                        '<td> </td>' +
                         '<td></td>';
-                    $('#cuenta').val('');
-                    $('#date').val('');
                     console.log(debes);
                     //registrargrupo(cuenta, dates)
                 }
