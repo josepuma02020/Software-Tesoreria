@@ -1,6 +1,6 @@
 body {
     text-align: center;
-    align-items: center;
+    align-items: center !important;
 }
 
 form {
@@ -10,6 +10,14 @@ form {
     width: 90%;
     text-align: center;
 
+}
+
+footer {
+    text-align: center;
+}
+
+footer>button {
+    margin: 1rem;
 }
 
 
@@ -25,7 +33,6 @@ form {
     margin-right: 1%;
     width: 98%;
     display: inline-block;
-
 }
 
 .mediano {
@@ -33,6 +40,7 @@ form {
     display: inline-block;
     margin-left: 1em;
     margin-right: 1em;
+    text-align: center;
 }
 
 .completo {
