@@ -33,6 +33,10 @@
     <header>
         <form action="" method="post">
             <div class="form-row formulario">
+                <div class="form-group pequeno">
+                    <label for="user">Id.Documento:</label>
+                    <input style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled value="">
+                </div>
                 <div class="form-group mediano">
                     <label for="user">Usuario:</label>
                     <input style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $_SESSION['nombre']; ?>">
@@ -56,7 +60,7 @@
 
                 <div class="form-group mediano">
                     <label for="type">Clasificación de Documento</label>
-                    <select id="clasificaciion" class="form-control col-md-8 ">
+                    <select id="clasificacion" class="form-control col-md-8 ">
                         <?php
                         $consultausuarios = "select * from clasificacionesnotas order by clasificacion";
                         $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
@@ -70,7 +74,7 @@
                         ?>
                     </select>
                 </div>
-                <div class="form-group mediano">
+                <div class="form-group pequeno">
                     <label for="batch">Batch:</label>
                     <input style="text-align:center" class="form-control " id="batch" name="batch" type="number">
                 </div>
@@ -211,7 +215,17 @@
             $('#importe').val(importe);
         });
         $('#cuenta').change(function() {
+            $.ajax({
+                type: "POST",
+                url: "notascontables/obtenerdescripcion.php",
+                data: "cuenta=" + $('#cuenta').val(),
+                success: function(r) {
+                    dato = jQuery.parseJSON(r);
+                    console.log(r)
+                    $('#descripcion').val(dato['descripcion']);
 
+                }
+            });
 
         });
         $('#registrar').click(function() {
@@ -219,25 +233,30 @@
             batch = $('#batch').val();
             clasificaciion = $('#clasificaciion').val();
 
+            totaldebe = 0;
+            totalhaber = 0;
             //grupo
             cuenta = $('#cuenta').val();
             const cuentas = cuenta.split(' ');
             date = $('#date').val();
             const dates = date.split(' ');
             debe = $('#debe').val();
-            const debes = debe.split('   ');
+            const debes = debe.split(' ');
             haber = $('#haber').val();
-            const habers = haber.split('   ');
-            console.log(habers);
+            const habers = haber.split(' ');
             if (cuentas.length > 1) {
                 for (var i = 0; i < cuentas.length; i++) {
                     cuenta = cuentas[i];
-                    if (debes[i] == '-' || debes[i] == '- ' || debes[i] == ' -') {
+                    if (debes[i] == '-' || debes[i] == '- ' || debes[i] == ' -' || debes[i] == undefined) {
                         debes[i] = '0';
                     }
-                    if (habers[i] == '-' || habers[i] == '- ' || habers[i] == ' -') {
+                    if (habers[i] == '-' || habers[i] == '- ' || habers[i] == ' -' || habers[i] == undefined) {
                         habers[i] = '0';
                     }
+
+                    totaldebe = totaldebe + parseFloat(debes[i]);
+                    totalhaber = totalhaber + parseFloat(habers[i]);
+
                     document.getElementById("registrosnotas").insertRow(+1).innerHTML =
                         '<td>' + dates[i] + '</td>' +
                         '<td>' + cuenta + '</td>' +
@@ -249,9 +268,20 @@
                         '<td> </td>' +
                         '<td> </td>' +
                         '<td></td>';
-                    console.log(debes);
+                    // console.log('debes' + debes);
+                    // console.log('habers' + habers);
                     //registrargrupo(cuenta, dates)
                 }
+                totalimporte = totaldebe - totalhaber;
+
+                function separator(numb) {
+                    var str = numb.toString().split(".");
+                    str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    return str.join(".");
+                }
+                $('#totaldebe').val((separator(totaldebe)));
+                $('#totalhaber').val(separator(totalhaber));
+                $('#totalimporte').val(separator(totalimporte));
             } else {
                 //individual
                 a = 0;
@@ -287,6 +317,67 @@
                 }
             }
 
+        });
+        $('#save').click(function() {
+            type = $('#type').val();
+            clasificacion = $('#clasificacion').val();
+
+            totaldebe = 0;
+            totalhaber = 0;
+            //grupo
+            cuenta = $('#cuenta').val();
+            const cuentas = cuenta.split(' ');
+            date = $('#date').val();
+            const dates = date.split(' ');
+            debe = $('#debe').val();
+            const debes = debe.split(' ');
+            haber = $('#haber').val();
+            const habers = haber.split(' ');
+            if (cuentas.length > 1) {
+                for (var i = 0; i < cuentas.length; i++) {
+                    cuenta = cuentas[i];
+                    if (debes[i] == '-' || debes[i] == '- ' || debes[i] == ' -' || debes[i] == undefined) {
+                        debes[i] = '0';
+                    }
+                    if (habers[i] == '-' || habers[i] == '- ' || habers[i] == ' -' || habers[i] == undefined) {
+                        habers[i] = '0';
+                    }
+                    totaldebe = totaldebe + parseFloat(debes[i]);
+                    totalhaber = totalhaber + parseFloat(habers[i]);
+                }
+                totalimporte = totaldebe - totalhaber;
+                console.log('imrpote :' + totalimporte);
+                if (totalimporte == 0) {
+                    a = 0;
+                    if (type == 0) {
+                        a = 1;
+                        alertify.alert('ATENCION!!', 'Favor seleccionar un tipo de documento', function() {
+                            alertify.success('Ok');
+                        });
+                        if (clasificacion == 0) {
+                            a = 1;
+                            alertify.alert('ATENCION!!', 'Favor seleccionar una clasificación para el documento', function() {
+                                alertify.success('Ok');
+                            });
+                        }
+                        if (a == 0) {
+                            revisarruta(ide, pleno, base, cobro, prestamo, gasto, nuevos, entrantes, salientes, clientes, papeleria, efectivo, fecha, valornuevos);
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 1000);
+                        }
+                    } else {
+                        alertify.alert('ATENCION!!', 'El Total del importe debe ser 0', function() {
+                            alertify.success('Ok');
+                        });
+                    }
+
+                }
+            } else {
+                alertify.alert('ATENCION!!', 'Debe ingresar al menos 1 registro de nota', function() {
+                    alertify.success('Ok');
+                });
+            }
         });
         disponible = (<?php echo $relleno ?>);
         $("#cuenta").autocomplete({

@@ -1,5 +1,5 @@
-function agregarnotacontable(valor, descripcion, fecha, encargado, tipogasto) {
-    cadenau = "valor=" + valor + "&descripcion=" + descripcion + "&tipogasto=" + tipogasto + "&fecha=" + fecha + "&encargado=" + encargado;
+function agregarnotacontable(clasificacion, tipo, comentario) {
+    cadenau = "clasificacion=" + clasificacion + "&tipo=" + tipo + "&comentario=" + comentario;
     $.ajax({
         type: "POST",
         url: "gastos/agregargasto.php",

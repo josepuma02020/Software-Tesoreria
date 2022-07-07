@@ -60,6 +60,14 @@ footer>button {
     text-align: center;
 }
 
+.pequeno {
+    width: 10%;
+    display: inline-block;
+    margin-left: 1em;
+    margin-right: 1em;
+    text-align: center;
+}
+
 .completo {
     margin-top: 1.5em;
     margin-left: 1em;
