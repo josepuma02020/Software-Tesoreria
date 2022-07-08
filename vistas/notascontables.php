@@ -16,6 +16,10 @@
     <title>Notas Contables</title>
     <?php
     include('../NotasdePago/conexion/conexion.php');
+    $fecha_actual = date("Y-m-j");
+    $ano = date('Y');
+    $mes = date('m');
+    $dia = date('d');
 
     //autocompletar cliente
     $consulta = "SELECT `idcuenta`  FROM `cuentas` ";
@@ -26,6 +30,16 @@
     }
     array_shift($productos);
     $relleno = json_encode($productos);
+
+    //consulta idnota
+    $consultaconsecutivo = "select count(idnota) 'consecutivo' from notascontables where fecha = '$fecha_actual'";
+    $queryconsecutivo = mysqli_query($link, $consultaconsecutivo) or die($consultaconsecutivo);
+    $filaconsecutivo = mysqli_fetch_array($queryconsecutivo);
+    if (isset($filaconsecutivo)) {
+        $consecutivo = $filaconsecutivo['consecutivo'] + 1;
+    } else {
+        $consecutivo = 1;
+    }
     ?>
 </head>
 
@@ -34,8 +48,8 @@
         <form action="" method="post">
             <div class="form-row formulario">
                 <div class="form-group pequeno">
-                    <label for="user">Id.Documento:</label>
-                    <input style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled value="">
+                    <label for="iddocumento">ID.Documento:</label>
+                    <input value="<?php echo $id = $ano . $mes . $dia . $consecutivo  ?>" style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled>
                 </div>
                 <div class="form-group mediano">
                     <label for="user">Usuario:</label>
@@ -234,9 +248,10 @@
 
         });
         $('#registrar').click(function() {
+            iddoc = $('#iddocumento').val();
             type = $('#type').val();
             batch = $('#batch').val();
-            clasificaciion = $('#clasificaciion').val();
+            clasificacion = $('#clasificacion').val();
 
             totaldebe = 0;
             totalhaber = 0;
@@ -249,11 +264,18 @@
             const debes = debe.split(' ');
             haber = $('#haber').val();
             const habers = haber.split(' ');
-            console.log(dates);
-            console.log(cuentas);
-            console.log(debes);
-            console.log(habers);
+            lm = $('#lm').val();
+            const lms = lm.split(' ');
+            an = $('#an').val();
+            const ans = an.split(' ');
+            // console.log(dates);
+            // console.log(cuentas);
+            // console.log(debes);
+            // console.log(habers);
+            // console.log(lms);
+            // console.log(ans);
             if (cuentas.length > 1) {
+                ///grupo
                 for (var i = 0; i < cuentas.length; i++) {
                     cuenta = cuentas[i];
                     if (debes[i] == '-' || debes[i] == '- ' || debes[i] == ' -' || debes[i] == undefined) {
@@ -266,20 +288,9 @@
                     totaldebe = totaldebe + parseFloat(debes[i]);
                     totalhaber = totalhaber + parseFloat(habers[i]);
 
-                    document.getElementById("registrosnotas").insertRow(+1).innerHTML =
-                        '<td>' + dates[i] + '</td>' +
-                        '<td>' + cuenta + '</td>' +
-                        '<td>' + '</td>' +
-                        '<td> ' + debes[i] + '</td>' +
-                        '<td>' + habers[i] + '</td>' +
-                        '<td> </td>' +
-                        '<td> </td>' +
-                        '<td> </td>' +
-                        '<td> </td>' +
-                        '<td></td>';
                     // console.log('debes' + debes);
                     // console.log('habers' + habers);
-                    //registrargrupo(cuenta, dates)
+
                 }
                 totalimporte = totaldebe - totalhaber;
 
@@ -291,10 +302,11 @@
                 $('#totaldebe').val((separator(totaldebe)));
                 $('#totalhaber').val(separator(totalhaber));
                 $('#totalimporte').val(separator(totalimporte));
+                registrargrupo(cuentas, dates, debes, habers, lms, ans);
+
             } else {
                 //individual
                 a = 0;
-                idnota = $('#idnota').val();
                 cuenta = $('#cuenta').val();
                 fecha = $('#date').val();
                 debe = $('#debe').val();
@@ -314,14 +326,21 @@
                         alertify.success('Ok');
                     });
                 }
-                if (idnota == 0) {
-                    a = 1;
-                    alertify.alert('ATENCION!!', 'Favor llenar campos para la creación de una nueva nota', function() {
-                        alertify.success('Ok');
-                    });
-                }
+
+
                 if (a == 0) {
-                    //registrar(idnota, cuenta, fecha, debe, haber, lm, an, tipolm);
+                    document.getElementById("registrosnotas").insertRow(+1).innerHTML =
+                        '<td>' + fecha + '</td>' +
+                        '<td>' + cuenta + '</td>' +
+                        '<td>' + '</td>' +
+                        '<td> ' + debe + '</td>' +
+                        '<td>' + haber + '</td>' +
+                        '<td> </td>' +
+                        '<td> </td>' +
+                        '<td> </td>' +
+                        '<td> </td>' +
+                        '<td></td>';
+                    registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
                     //window.location.reload(); 
                 }
             }
@@ -330,7 +349,6 @@
         $('#save').click(function() {
             type = $('#type').val();
             clasificacion = $('#clasificacion').val();
-            usuario = $('#user').val();
             comentario = $('#comment').val();
 
             totaldebe = 0;
@@ -344,7 +362,7 @@
             const debes = debe.split(' ');
             haber = $('#haber').val();
             const habers = haber.split(' ');
-            if (cuentas.length > 1) {
+            if (cuentas.length >= 1) {
                 for (var i = 0; i < cuentas.length; i++) {
                     cuenta = cuentas[i];
                     if (debes[i] == '-' || debes[i] == '- ' || debes[i] == ' -' || debes[i] == undefined) {
@@ -372,7 +390,7 @@
                             });
                         }
                         if (a == 0) {
-                            registrarnota(usuario, type, clasificacion, comentario);
+                            registrarnota(type, clasificacion, comentario);
                             setTimeout(function() {
                                 window.location.reload();
                             }, 1000);
