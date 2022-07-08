@@ -16,15 +16,16 @@ if ($_SESSION['usuario']) {
     $ano = date('Y');
     $mes = date('m');
     $dia = date('d');
-    $consultaconsecutivo = "select count(idregistro) 'consecutivo' from registrosdenota where fecha like '%$ano.$mes.$dia%'";
+    echo $consultaconsecutivo = "select count(idregistro) 'consecutivo' from registrosdenota where idregistro like '%$ano$mes$dia%'";
     $queryconsecutivo = mysqli_query($link, $consultaconsecutivo) or die($consultaconsecutivo);
     $filaconsecutivo = mysqli_fetch_array($queryconsecutivo);
     $consecutivo = $filaconsecutivo['consecutivo'] + 1;
     $idregistro = $ano . $mes . $dia . $consecutivo;
+
     //ingresarregistro
-    echo $consultaingresoregistro = "INSERT INTO `registrosdenota`(`idregistro`, `idnota`, `fecha`, `debe`, `haber`, `lm`, `an`, `tipolm`, `idcuenta`) VALUES 
+    $consultaingresoregistro = "INSERT INTO `registrosdenota`(`idregistro`, `idnota`, `fecha`, `debe`, `haber`, `lm`, `an`, `tipolm`, `idcuenta`) VALUES 
     ('$idregistro','$id','$fecha','$debe','$haber','$lm','$an','$tipolm','$cuenta')";
-    $queryregistro = mysqli_query($link, $consultaingresoregistro) or die($consultaingresoregistro);
+    echo $queryregistro = mysqli_query($link, $consultaingresoregistro) or die($consultaingresoregistro);
 } else {
     header('Location: ' . "../usuarios/cerrarsesion.php");
 }

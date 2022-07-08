@@ -116,6 +116,35 @@
                 <th>Acciones</th>
             </thead>
             <tbody>
+                <?php
+                $consultaregistros = "SELECT a.*,b.descripcion FROM `registrosdenota` a INNER JOIN cuentas b on b.idcuenta=a.idcuenta WHERE a.idnota='$id'";
+                $queryregistros = mysqli_query($link, $consultaregistros) or die($consultaregistros);
+                $totaldebe = 0;
+                $totalhaber = 0;
+                while ($filasregistros = mysqli_fetch_array($queryregistros)) {
+                    $totaldebe = $totaldebe + $filasregistros['debe'];
+                    $totalhaber = $totalhaber + $filasregistros['haber'];
+                ?>
+                    <tr>
+                        <TD><?php echo $filasregistros['fecha']; ?> </TD>
+                        <TD><?php echo $filasregistros['idcuenta']; ?> </TD>
+                        <TD><?php echo $filasregistros['descripcion']; ?> </TD>
+                        <TD><?php echo number_format($filasregistros['debe']); ?> </TD>
+                        <TD><?php echo number_format($filasregistros['haber']); ?> </TD>
+                        <TD><?php echo number_format($filasregistros['debe'] -  $filasregistros['haber']); ?> </TD>
+                        <TD><?php echo $filasregistros['tipolm']; ?> </TD>
+                        <TD><?php echo $filasregistros['lm']; ?> </TD>
+                        <td><?php echo $filasregistros['an']; ?> </td>
+                        <td>
+                            <button style="height:25px;padding:0;width:40px" onclick="" type="button" id="eliminarregistro" class="btn btn-danger" data-toggle="modal" data-target="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
+                                    <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z" />
+                                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                <?php } ?>
                 <form id="registros" action="#" method="POST" class="form-registros">
                     <tr>
                         <td style="width: 13%;padding:5">
@@ -129,10 +158,10 @@
                             <input class="  form-control-register" type="text" required id="descripcion" name="descripcion" disabled>
                         </td>
                         <td style="width:8%">
-                            <input style="text-align:center;padding:5" value="0" min="0" class="  form-control-register" type="text" required id="debe" name="debe">
+                            <input style="text-align:center;padding:5" min="0" class="  form-control-register" type="text" required id="debe" name="debe">
                         </td>
                         <td style="width:8%">
-                            <input style="text-align:center;padding:5" value="0" min="0" class="  form-control-register" type="text" required id="haber" name="haber">
+                            <input style="text-align:center;padding:5" min="0" class="  form-control-register" type="text" required id="haber" name="haber">
                         </td>
                         <td style="width:10%">
                             <input style="text-align:center;padding:5" class="  form-control-register" type="number" required id="importe" name="importe" disabled>
@@ -169,15 +198,15 @@
         <div class="form-row formulario">
             <div class="form-group mediano ">
                 <label for="comment">Total Debe:</label>
-                <input style="text-align:center" class="form-control " id="totaldebe" name="totaldebe" type="text" value="0" disabled>
+                <input style="text-align:center" class="form-control " id="totaldebe" name="totaldebe" type="text" value="<?php echo number_format($totaldebe) ?>" disabled>
             </div>
             <div class="form-group mediano ">
                 <label for="comment">Total Haber:</label>
-                <input style="text-align:center" class="form-control " id="totalhaber" name="totalhaber" type="text" value="0" disabled>
+                <input style="text-align:center" class="form-control " id="totalhaber" name="totalhaber" type="text" value="<?php echo number_format($totalhaber) ?>" disabled>
             </div>
             <div class="form-group mediano ">
                 <label for="comment">Total Importe:</label>
-                <input style="text-align:center" class="form-control " id="totalimporte" name="totalimporte" type="text" value="0" disabled>
+                <input style="text-align:center" class="form-control " id="totalimporte" name="totalimporte" type="text" value="<?php echo number_format($totaldebe - $totalhaber) ?>" disabled>
             </div>
         </div>
         <section class="botones">
@@ -232,6 +261,14 @@
             haber = $('#haber').val();
             importe = debe - haber;
             $('#importe').val(importe);
+        });
+        $('#lm').change(function() {
+            lm = $('#lm').val();
+            if (lm.length > 0) {
+                $('#tipolm').val("A");
+            } else {
+                $('#tipolm').val("");
+            }
         });
         $('#cuenta').change(function() {
             // $.ajax({
@@ -326,22 +363,19 @@
                         alertify.success('Ok');
                     });
                 }
-
+                if (fecha == '') {
+                    a = 1;
+                    alertify.alert('ATENCION!!', 'El campo fecha se encuentra vacío', function() {
+                        alertify.success('Ok');
+                    });
+                }
+                console.log("a:" + a);
 
                 if (a == 0) {
-                    document.getElementById("registrosnotas").insertRow(+1).innerHTML =
-                        '<td>' + fecha + '</td>' +
-                        '<td>' + cuenta + '</td>' +
-                        '<td>' + '</td>' +
-                        '<td> ' + debe + '</td>' +
-                        '<td>' + haber + '</td>' +
-                        '<td> </td>' +
-                        '<td> </td>' +
-                        '<td> </td>' +
-                        '<td> </td>' +
-                        '<td></td>';
                     registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
-                    //window.location.reload(); 
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 1000);
                 }
             }
 
