@@ -50,6 +50,9 @@ footer>button {
     margin-right: 10%;
     width: 80%;
     display: inline-block;
+    background-color: #ECEBEB;
+    border-radius: 1.5rem;
+    padding: 2rem;
 }
 
 .mediano {
@@ -74,4 +77,13 @@ footer>button {
     margin-right: 1em;
     width: 90%;
     display: inline-block;
+}
+
+.botones {
+    margin: 1.1rem;
+
+}
+
+.botones>button {
+    margin: 0.3rem;
 }

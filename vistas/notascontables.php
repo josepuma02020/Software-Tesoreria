@@ -51,7 +51,7 @@
                         <?php
                         while ($filas1 = mysqli_fetch_array($query)) {
                         ?>
-                            <option value="<?php echo $filas1['idtipo'] ?>"><?php echo $filas1['documento'] ?></option>
+                            <option value="<?php echo $filas1['idtipo'] ?>"><?php echo  $filas1['idtipo'] . '-' . $filas1['documento'] ?></option>
                         <?php
                         }
                         ?>
@@ -62,13 +62,13 @@
                     <label for="type">Clasificación de Documento</label>
                     <select id="clasificacion" class="form-control col-md-8 ">
                         <?php
-                        $consultausuarios = "select * from clasificacionesnotas order by clasificacion";
+                        $consultausuarios = "select * from clasificaciones order by clasificacion";
                         $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
                         ?> <option value="0"></option>
                         <?php
                         while ($filas1 = mysqli_fetch_array($query)) {
                         ?>
-                            <option value="<?php echo $filas1['idclasificacion'] ?>"><?php echo $filas1['clasificacion'] ?></option>
+                            <option value="<?php echo $filas1['idclasificacion'] ?>"><?php echo  $filas1['clasificacion'] ?></option>
                         <?php
                         }
                         ?>
@@ -87,7 +87,7 @@
             </div>
         </form>
     </header>
-    <main class="tabla-registros">
+    <main class="tabla-registros ">
         <table id="registrosnotas" class="table table-striped  table-responsive-lg">
             <thead>
                 <th>Fecha</th>
@@ -151,8 +151,7 @@
                 </form>
             </tbody>
         </table>
-    </main>
-    <footer>
+
         <div class="form-row formulario">
             <div class="form-group mediano ">
                 <label for="comment">Total Debe:</label>
@@ -167,9 +166,15 @@
                 <input style="text-align:center" class="form-control " id="totalimporte" name="totalimporte" type="text" value="0" disabled>
             </div>
         </div>
-        <button id="save" name="save" class="btn btn-primary">Guardar</button>
-        <button id="cancel" name="cancel" class="btn btn-secondary">Cancelar</button>
-        <button id="delete" name="delete" class="btn btn-danger">Eliminar</button>
+        <section class="botones">
+            <button id="save" name="save" class="btn btn-primary boton">Guardar</button>
+            <button id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button>
+            <button id="delete" name="delete" class="btn btn-danger boton">Eliminar</button>
+        </section>
+
+    </main>
+    <footer>
+
     </footer>
 </body>
 
@@ -215,17 +220,17 @@
             $('#importe').val(importe);
         });
         $('#cuenta').change(function() {
-            $.ajax({
-                type: "POST",
-                url: "notascontables/obtenerdescripcion.php",
-                data: "cuenta=" + $('#cuenta').val(),
-                success: function(r) {
-                    dato = jQuery.parseJSON(r);
-                    console.log(r)
-                    $('#descripcion').val(dato['descripcion']);
+            // $.ajax({
+            //     type: "POST",
+            //     url: "notascontables/obtenerdescripcion.php",
+            //     data: "cuenta=" + $('#cuenta').val(),
+            //     success: function(r) {
+            //         dato = jQuery.parseJSON(r);
+            //         console.log(r)
+            //         $('#descripcion').val(dato['descripcion']);
 
-                }
-            });
+            //     }
+            // });
 
         });
         $('#registrar').click(function() {
@@ -244,6 +249,10 @@
             const debes = debe.split(' ');
             haber = $('#haber').val();
             const habers = haber.split(' ');
+            console.log(dates);
+            console.log(cuentas);
+            console.log(debes);
+            console.log(habers);
             if (cuentas.length > 1) {
                 for (var i = 0; i < cuentas.length; i++) {
                     cuenta = cuentas[i];
@@ -321,6 +330,8 @@
         $('#save').click(function() {
             type = $('#type').val();
             clasificacion = $('#clasificacion').val();
+            usuario = $('#user').val();
+            comentario = $('#comment').val();
 
             totaldebe = 0;
             totalhaber = 0;
@@ -361,7 +372,7 @@
                             });
                         }
                         if (a == 0) {
-                            revisarruta(ide, pleno, base, cobro, prestamo, gasto, nuevos, entrantes, salientes, clientes, papeleria, efectivo, fecha, valornuevos);
+                            registrarnota(usuario, type, clasificacion, comentario);
                             setTimeout(function() {
                                 window.location.reload();
                             }, 1000);

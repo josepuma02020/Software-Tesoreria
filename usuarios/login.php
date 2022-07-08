@@ -11,12 +11,12 @@ $arreglo = mysqli_fetch_array($query);
 if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
     header('Location: ' . "../index.php?m=4");
 } else {
-    if ($arreglo['tipo'] == "4") {
+    if ($arreglo['rol'] == "4") {
         header('Location: ' . "../index.php?m=1");
     } else {
         $clave2 = $arreglo['clave'];
         $fecha = date("Y" . "-" . "m" . "-" . "d");
-        $rol = $arreglo['tipo'];
+        $rol = $arreglo['rol'];
         switch ($rol) {
             case '1':
                 $menu = "./layouts/navadmin.php";
@@ -36,9 +36,8 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
             $_SESSION['rol'] = $rol;
             $_SESSION['menu'] = $menu;
             $_SESSION['nombre'] = $arreglo['nombre'];
-            $_SESSION['tipo'] = $arreglo['tipo'];
             $_SESSION['activo'] = $arreglo['activo'];
-            $consultaactconex = "update usuarios set ult_ingreso = '$fecha' where idusuario = $_SESSION[idusuario] ";
+            $consultaactconex = "update usuarios set ultingreso = '$fecha' where idusuario = $_SESSION[idusuario] ";
             $query = mysqli_query($link, $consultaactconex) or die($consultaactconex);
             header('Location: ' . "../home.php");
         } else {
