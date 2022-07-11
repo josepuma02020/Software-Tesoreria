@@ -39,6 +39,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
         <link type="text/css" href="./librerias/jquery-ui-1.12.1.custom/jquery-ui.min.css" rel=" Stylesheet" />
         <link rel="stylesheet" href="./css/revisionnotas/desktop.css">
         <SCRIPT src="librerias/alertify/alertify.js"></script>
+        <title>Revisión de notas</title>
     </head>
 
     <body>
@@ -51,7 +52,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
             </section>
         </header>
 
-        <main class=" container container-md">
+        <main style="max-width:90% ;" class=" container container-md">
             <form action="" method="post">
                 <div class="form-row formulario">
                     <div class="form-group mediano">
@@ -79,13 +80,14 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
             </form>
 
             <div class="tabla-registros">
-                <table id="registrosnotas" class="table table-striped  table-responsive-lg ">
+                <table id="registrosnotas" class="table table-striped  table-responsive-lg revision-notas ">
                     <THEAD>
                         <tr>
                             <th> Fecha </th>
                             <th> Usuario </th>
                             <th> Tipo</th>
                             <th> Clasificación </th>
+                            <th> Total importe </th>
                             <th> Batch </th>
                             <th> Comentario </th>
                             <th> Acciones </th>
@@ -93,18 +95,25 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                     </THEAD>
                     <TBODY>
                         <?php
-                        $consultanotas = "SELECT a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a INNER JOIN usuarios b on a.idusuario = b.idusuario 
-                    INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion";
+                        $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
+                        INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
+                        INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota GROUP by a.idnota;";
                         $query = mysqli_query($link, $consultanotas) or die($consultanotas);
                         while ($filas1 = mysqli_fetch_array($query)) {
+                            if ($filas1['batch'] == 0) {
+                                $batch = '';
+                            } else {
+                                $batch = $filas1['batch'];
+                            }
                         ?>
                             <TR>
                                 <TD><?php echo $filas1['fecha'] . ' ' . $filas1['hora']; ?> </TD>
                                 <TD><?php echo $filas1['nombre']; ?> </TD>
                                 <TD><?php echo $filas1['documento']; ?> </TD>
                                 <TD><?php echo $filas1['clasificacion']; ?> </TD>
-                                <TD><?php echo $filas1['batch']; ?> </TD>
-                                <TD><?php echo $filas1['comentario']; ?> </TD>
+                                <TD><?php echo number_format($filas1['importe']); ?> </TD>
+                                <TD><?php echo $batch; ?> </TD>
+                                <TD style="width:20% ;"><?php echo $filas1['comentario']; ?> </TD>
                                 <TD>
                                     <!-- <SCRIPT lang="javascript" type="text/javascript" src="funciones/funciones.js"></script> -->
                                     <a href="home.php?id=<?php echo "$filas1[idnota]" ?>">
@@ -122,12 +131,10 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
             </div>
         </main>
         <footer>
-
         </footer>
     </body>
 
     </HTML>
-
 <?php
 } else {
     // header('Location: ' . "usuarios/cerrarsesion.php");

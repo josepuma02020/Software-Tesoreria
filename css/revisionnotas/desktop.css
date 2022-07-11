@@ -3,6 +3,7 @@ body {
     align-items: center !important;
 }
 
+
 form {
     margin-left: 5%;
     margin-right: 5%;
@@ -43,6 +44,10 @@ footer>button {
 
 }
 
+.revision-notas {
+    text-align: center;
+}
+
 .tabla-registros {
     font-size: 0.8rem;
     margin-top: 1.5em;
@@ -50,6 +55,7 @@ footer>button {
     background-color: #ECEBEB;
     border-radius: 1.5rem;
     padding: 2rem;
+    text-align: center;
 }
 
 .mediano {
