@@ -138,7 +138,7 @@
             </div>
         </form>
     </header>
-    <main class="tabla-registros ">
+    <main id="tegistrosdenota" class="tabla-registros ">
         <table id="registrosnotas" class="table table-striped  table-responsive-lg">
             <thead>
                 <th>Fecha</th>
@@ -378,8 +378,10 @@
                 $('#totaldebe').val((separator(totaldebe)));
                 $('#totalhaber').val(separator(totalhaber));
                 $('#totalimporte').val(separator(totalimporte));
-                registrargrupo(cuentas, dates, debes, habers, lms, ans);
-
+                registrargrupo(iddoc, cuentas, dates, debes, habers, lms, ans);
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000 + (cuentas.length * 50));
             } else {
                 //individual
                 a = 0;
