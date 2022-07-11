@@ -16,7 +16,7 @@ if ($_SESSION['usuario']) {
     $ano = date('Y');
     $mes = date('m');
     $dia = date('d');
-    echo $consultaconsecutivo = "select count(idregistro) 'consecutivo' from registrosdenota where idregistro like '%$ano$mes$dia%'";
+    $consultaconsecutivo = "select count(idregistro) 'consecutivo' from registrosdenota where idregistro like '%$ano$mes$dia%'";
     $queryconsecutivo = mysqli_query($link, $consultaconsecutivo) or die($consultaconsecutivo);
     $filaconsecutivo = mysqli_fetch_array($queryconsecutivo);
     $consecutivo = $filaconsecutivo['consecutivo'] + 1;

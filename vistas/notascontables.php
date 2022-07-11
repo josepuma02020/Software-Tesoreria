@@ -410,8 +410,8 @@
                 }
 
                 if (a == 0) {
-                    registrarnota(type, clasificacion, comentario, batch);
-                    // registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
+                    //registrarnota(type, clasificacion, comentario, batch);
+                    registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
                     setTimeout(function() {
                         window.location.reload();
                     }, 1000);
@@ -423,9 +423,9 @@
             type = $('#type').val();
             clasificacion = $('#clasificacion').val();
             comentario = $('#comment').val();
-
-            totaldebe = 0;
-            totalhaber = 0;
+            totaldebe = $('#totaldebe').val();
+            totalhaber = $('#totalhaber').val();
+            totalimporte = parseInt(totaldebe) - parseInt(totalhaber);
             //grupo
             cuenta = $('#cuenta').val();
             const cuentas = cuenta.split(' ');
@@ -444,35 +444,35 @@
                     if (habers[i] == '-' || habers[i] == '- ' || habers[i] == ' -' || habers[i] == undefined) {
                         habers[i] = '0';
                     }
-                    totaldebe = totaldebe + parseFloat(debes[i]);
-                    totalhaber = totalhaber + parseFloat(habers[i]);
-                }
-                totalimporte = totaldebe - totalhaber;
-                console.log('importe :' + totalimporte);
 
+                }
+                console.log(totalimporte);
                 a = 0;
                 if (type == 0) {
                     a = 1;
                     alertify.alert('ATENCION!!', 'Favor seleccionar un tipo de documento', function() {
                         alertify.success('Ok');
                     });
-                    if (clasificacion == 0) {
-                        a = 1;
-                        alertify.alert('ATENCION!!', 'Favor seleccionar una clasificación para el documento', function() {
-                            alertify.success('Ok');
-                        });
-                    }
-                    if (a == 0) {
-                        registrarnota(type, clasificacion, comentario, batch);
-                        setTimeout(function() {
-                            // window.location.reload();
-                        }, 1000);
-                    }
-                    // } else {
-                    //     alertify.alert('ATENCION!!', 'El Total del importe debe ser 0', function() {
-                    //         alertify.success('Ok');
-                    //     });
                 }
+                if (clasificacion == 0) {
+                    a = 1;
+                    alertify.alert('ATENCION!!', 'Favor seleccionar una clasificación para el documento', function() {
+                        alertify.success('Ok');
+                    });
+                }
+                if (totalimporte != 0) {
+                    a = 1;
+                    alertify.alert('ATENCION!!', 'Favor verificar valores en los registros.El valor total del importe debe ser 0.', function() {
+                        alertify.success('Ok');
+                    });
+                }
+                if (a == 0) {
+                    registrarnota(type, clasificacion, comentario, batch);
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 1000);
+                }
+
             } else {
                 alertify.alert('ATENCION!!', 'Debe ingresar al menos 1 registro de nota', function() {
                     alertify.success('Ok');

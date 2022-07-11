@@ -6,15 +6,14 @@ function registrarnota(type, clasificacion, comentario, batch) {
         data: cadenau,
         success: function (r) {
             if (r == 111) {
-                console.log(r);
-                debugger;
+                // console.log(r);
+                // debugger;
             } else {
-                console.log(r);
-                debugger;
+                // console.log(r);
+                // debugger;
             }
         }
     });
-    "&encargado=" + encargado;
 }
 function registrar(idnota, cuenta, fecha, debe, haber, lm, an, tipolm) {
     cadenau = "idnota=" + idnota + "&cuenta=" + cuenta + "&debe=" + debe + "&fecha=" + fecha + "&haber=" + haber + "&lm=" + lm + "&an=" + an + "&tipolm=" + tipolm;
@@ -23,14 +22,14 @@ function registrar(idnota, cuenta, fecha, debe, haber, lm, an, tipolm) {
         url: "notascontables/registrar.php",
         data: cadenau,
         success: function (r) {
-            if (r == 111) {
+            if (r == 1) {
 
-                console.log(r);
-                debugger;
+                // console.log(r);
+                // debugger;
                 //window.location.reload();
             } else {
-                console.log(r);
-                debugger;
+                //     console.log(r);
+                //     debugger;
             }
         }
     });
