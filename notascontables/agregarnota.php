@@ -11,16 +11,17 @@ if ($_SESSION['usuario']) {
     $dia = date('d');
     $fecha_actual = date("Y-m-j");
     $hora = date('h:i a');
-
-    $consultaconsecutivo = "select count(idnota) 'consecutivo' from notascontables where fecha = '$fecha_actual'";
+    $usuario = $_SESSION['usuario'];
+    $consultaconsecutivo = "select count(idregistro) 'consecutivo' from registrosdenota where idregistro like '%$ano$mes$dia%'";
     $queryconsecutivo = mysqli_query($link, $consultaconsecutivo) or die($consultaconsecutivo);
     $filaconsecutivo = mysqli_fetch_array($queryconsecutivo);
-    if (isset($filaconsecutivo)) {
-        $consecutivo = $filaconsecutivo['consecutivo'] + 1;
-    } else {
-        $consecutivo = 1;
-    }
-    echo $consecutivo;
+    $consecutivo = $filaconsecutivo['consecutivo'] + 1;
+    $idnota = $ano . $mes . $dia . $consecutivo;
+
+    //ingresarnota
+    $consultaingresonota = "INSERT INTO `notascontables`(`idnota`, `idusuario`, `idtipodocumento`, `idclasificacion`, `batch`, `comentario`, `fecha`, `hora`) VALUES 
+    ('$idnota','$usuario','$type','$clasificacion','$batch','$comentario','$fecha_actual','$hora')";
+    echo $querynota = mysqli_query($link, $consultaingresonota) or die($consultaingresonota);
 } else {
     header('Location: ' . "usuarios/cerrarsesion.php");
 }

@@ -1,5 +1,5 @@
-function registrarnota(type, clasificacion, comentario) {
-    cadenau = "type=" + type + "&clasificacion=" + clasificacion + "&comentario=" + comentario;
+function registrarnota(type, clasificacion, comentario, batch) {
+    cadenau = "type=" + type + "&clasificacion=" + clasificacion + "&comentario=" + comentario + "&batch=" + batch;
     $.ajax({
         type: "POST",
         url: "notascontables/agregarnota.php",
