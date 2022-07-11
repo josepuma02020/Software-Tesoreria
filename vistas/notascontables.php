@@ -59,12 +59,16 @@
         $clasificacion = $filadatosnota['idclasificacion'];
         $comentario = $filadatosnota['comentario'];
         $batch = $filadatosnota['batch'];
+        $fecha = $filadatosnota['fecha'];
+        $hora = $filadatosnota['hora'];
     } else {
         $usuario = $_SESSION['nombre'];
         $tipodocumento = '';
         $clasificacion = '';
         $comentario = '';
         $batch = '';
+        $hora = '';
+        $fecha = '';
     }
     ?>
 
@@ -105,7 +109,6 @@
                         ?>
                     </select>
                 </div>
-
                 <div class="form-group mediano-grande">
                     <label for="type">Clasificación de Documento</label>
                     <select style="text-align: center;" id="clasificacion" class="form-control col-md-8 ">
@@ -132,6 +135,10 @@
                 <div class="form-group pequeno">
                     <label for="batch">Batch:</label>
                     <input value="<?php echo $batch ?>" style="text-align:center" class="form-control " id="batch" name="batch" type="number">
+                </div>
+                <div class="form-group mediano-pequeno">
+                    <label for="user">Fecha creación:</label>
+                    <input style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
                 </div>
                 <div class="form-group grande ">
                     <label for="comment">Comentario:</label>
