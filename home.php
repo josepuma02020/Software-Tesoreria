@@ -1,6 +1,33 @@
 <?php
 session_start();
+if (time() - $_SESSION['tiempo'] > 500) {
+    //session_destroy();
+    /* Aquí redireccionas a la url especifica */
+    session_destroy();
+    header('Location: ' . "index.php?m=5");
+    //die();
+} else {
+    $_SESSION['tiempo'] = time();
+}
 if ($_SESSION['usuario']) {
+    include_once('conexion/conexion.php');
+    date_default_timezone_set('America/Bogota');
+    setlocale(LC_ALL, "es_CO");
+    $fecha_actual = date("Y-m-j");
+    $ano = date('Y');
+    $mes = date('m');
+    $dia = date('d');
+    if (isset($_GET['desde'])) {
+        $desde = $_GET['desde'];
+    } else {
+        $desde = date("Y-m-01");
+    }
+    if (isset($_GET['hasta'])) {
+        $hasta = $_GET['hasta'];
+    } else {
+        $hasta = date("Y-m-d");
+    }
+    $fechahoyval = date("Y") . '-' . date("m") . '-' . date("j");
 ?>
     <!DOCTYPE html>
     <html lang="es">

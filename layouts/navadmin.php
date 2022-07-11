@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/nav/desktop.css">
-    <title>Document</title>
 </head>
 
 <body>
@@ -23,10 +22,10 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Creación de Notas</a>
+                            <a class="nav-link" href="home.php">Creación de Notas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Revisión de Notas</a>
+                            <a class="nav-link" href="revisionnotas.php">Revisión de Notas</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Configuración</a>

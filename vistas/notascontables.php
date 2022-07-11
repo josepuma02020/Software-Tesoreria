@@ -32,15 +32,42 @@
     $relleno = json_encode($productos);
 
     //consulta idnota
-    $consultaconsecutivo = "select count(idnota) 'consecutivo' from notascontables where fecha = '$fecha_actual'";
-    $queryconsecutivo = mysqli_query($link, $consultaconsecutivo) or die($consultaconsecutivo);
-    $filaconsecutivo = mysqli_fetch_array($queryconsecutivo);
-    if (isset($filaconsecutivo)) {
-        $consecutivo = $filaconsecutivo['consecutivo'] + 1;
+
+    if (isset($_GET['id'])) {
+        $idnota = $_GET['id'];
     } else {
-        $consecutivo = 1;
+        $consultaconsecutivo = "select count(idnota) 'consecutivo' from notascontables where fecha = '$fecha_actual'";
+        $queryconsecutivo = mysqli_query($link, $consultaconsecutivo) or die($consultaconsecutivo);
+        $filaconsecutivo = mysqli_fetch_array($queryconsecutivo);
+        if (isset($filaconsecutivo)) {
+            $consecutivo = $filaconsecutivo['consecutivo'] + 1;
+        } else {
+            $consecutivo = 1;
+        }
+        $idnota = $ano . $mes . $dia . $consecutivo;
+    }
+
+    //consulta datos notas
+    $consultadatosnota = "SELECT a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a INNER JOIN usuarios b on a.idusuario = b.idusuario 
+    INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion where a.idnota = $idnota";
+    $querydatosnota = mysqli_query($link, $consultadatosnota) or die($consultadatosnota);
+    $filadatosnota = mysqli_fetch_array($querydatosnota);
+    if (isset($filadatosnota)) {
+        $usuario = $filadatosnota['nombre'];
+        $tipodocumento = $filadatosnota['idtipodocumento'];
+        $clasificacion = $filadatosnota['idclasificacion'];
+        $comentario = $filadatosnota['comentario'];
+        $batch = $filadatosnota['batch'];
+    } else {
+        $usuario = $_SESSION['nombre'];
+        $tipodocumento = '';
+        $clasificacion = '';
+        $comentario = '';
+        $batch = '';
     }
     ?>
+
+
 </head>
 
 <body>
@@ -49,54 +76,64 @@
             <div class="form-row formulario">
                 <div class="form-group pequeno">
                     <label for="iddocumento">ID.Documento:</label>
-                    <input value="<?php echo $id = $ano . $mes . $dia . $consecutivo  ?>" style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled>
+                    <input value="<?php echo $idnota  ?>" style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled>
                 </div>
-                <div class="form-group mediano">
+                <div class="form-group mediano-pequeno">
                     <label for="user">Usuario:</label>
-                    <input style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $_SESSION['nombre']; ?>">
+                    <input style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
                 </div>
-                <div class="form-group mediano">
+                <div class="form-group mediano-grande">
                     <label for="type">Tipo de Documento</label>
-                    <select id="type" class="form-control col-md-8 ">
+                    <select style="text-align: center;" id="type" class="form-control col-md-8 ">
                         <?php
+                        $selected = '';
                         $consultausuarios = "select * from tiposdocumento order by documento";
                         $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
                         ?> <option value="0"></option>
                         <?php
                         while ($filas1 = mysqli_fetch_array($query)) {
+                            if ($filas1['idtipo'] == $filadatosnota['idtipodocumento']) {
+                                $selected = 'selected';
+                            }
                         ?>
-                            <option value="<?php echo $filas1['idtipo'] ?>"><?php echo  $filas1['idtipo'] . '-' . $filas1['documento'] ?></option>
+                            <option <?php echo $selected ?> value="<?php echo $filas1['idtipo'] ?>"><?php echo  $filas1['idtipo'] . '-' . $filas1['documento'] ?></option>
                         <?php
+                            $selected = '';
                         }
                         ?>
                     </select>
                 </div>
 
-                <div class="form-group mediano">
+                <div class="form-group mediano-grande">
                     <label for="type">Clasificación de Documento</label>
-                    <select id="clasificacion" class="form-control col-md-8 ">
+                    <select style="text-align: center;" id="clasificacion" class="form-control col-md-8 ">
                         <?php
                         $consultausuarios = "select * from clasificaciones order by clasificacion";
                         $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
                         ?> <option value="0"></option>
                         <?php
                         while ($filas1 = mysqli_fetch_array($query)) {
+                            if ($filas1['idclasificacion'] == $filadatosnota['idclasificacion']) {
+                                $selected = 'selected';
+                            }
                         ?>
-                            <option value="<?php echo $filas1['idclasificacion'] ?>"><?php echo  $filas1['clasificacion'] ?></option>
+                            <option <?php echo $selected ?> value="<?php echo $filas1['idclasificacion'] ?>"><?php echo  $filas1['clasificacion'] ?></option>
                         <?php
                         }
+                        $selected = '';
                         ?>
                     </select>
                 </div>
-                <div class="form-group pequeno">
-                    <label for="batch">Batch:</label>
-                    <input style="text-align:center" class="form-control " id="batch" name="batch" type="number">
-                </div>
+
             </div>
             <div class="form-row formulario">
-                <div class="form-group completo ">
+                <div class="form-group pequeno">
+                    <label for="batch">Batch:</label>
+                    <input value="<?php echo $batch ?>" style="text-align:center" class="form-control " id="batch" name="batch" type="number">
+                </div>
+                <div class="form-group grande ">
                     <label for="comment">Comentario:</label>
-                    <input style="text-align:center" class="form-control " id="comment" name="comment" type="text">
+                    <input value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
                 </div>
             </div>
         </form>
@@ -117,7 +154,7 @@
             </thead>
             <tbody>
                 <?php
-                $consultaregistros = "SELECT a.*,b.descripcion FROM `registrosdenota` a INNER JOIN cuentas b on b.idcuenta=a.idcuenta WHERE a.idnota='$id'";
+                $consultaregistros = "SELECT a.*,b.descripcion FROM `registrosdenota` a INNER JOIN cuentas b on b.idcuenta=a.idcuenta WHERE a.idnota='$idnota'";
                 $queryregistros = mysqli_query($link, $consultaregistros) or die($consultaregistros);
                 $totaldebe = 0;
                 $totalhaber = 0;
@@ -144,6 +181,7 @@
                             </button>
                         </td>
                     </tr>
+
                 <?php } ?>
                 <form id="registros" action="#" method="POST" class="form-registros">
                     <tr>

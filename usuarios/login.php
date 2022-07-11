@@ -37,6 +37,7 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
             $_SESSION['menu'] = $menu;
             $_SESSION['nombre'] = $arreglo['nombre'];
             $_SESSION['activo'] = $arreglo['activo'];
+            $_SESSION['tiempo'] = time();
             $consultaactconex = "update usuarios set ultingreso = '$fecha' where idusuario = $_SESSION[idusuario] ";
             $query = mysqli_query($link, $consultaactconex) or die($consultaactconex);
             header('Location: ' . "../home.php");

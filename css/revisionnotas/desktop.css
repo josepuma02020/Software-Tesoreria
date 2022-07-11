@@ -46,10 +46,7 @@ footer>button {
 .tabla-registros {
     font-size: 0.8rem;
     margin-top: 1.5em;
-    margin-left: 10%;
-    margin-right: 10%;
-    width: 80%;
-    display: inline-block;
+    width: 100%;
     background-color: #ECEBEB;
     border-radius: 1.5rem;
     padding: 2rem;
@@ -63,23 +60,6 @@ footer>button {
     text-align: center;
 }
 
-.mediano-pequeno {
-    width: 15%;
-    display: inline-block;
-    margin-left: 1em;
-    margin-right: 1em;
-    text-align: center;
-}
-
-.mediano-grande {
-    width: 30%;
-    display: inline-block;
-    margin-left: 1em;
-    margin-right: 1em;
-    text-align: center;
-    text-align: center;
-}
-
 .pequeno {
     width: 10%;
     display: inline-block;
@@ -88,14 +68,13 @@ footer>button {
     text-align: center;
 }
 
-.grande {
+.completo {
     margin-top: 1.5em;
     margin-left: 1em;
     margin-right: 1em;
-    width: 70%;
+    width: 90%;
     display: inline-block;
 }
-
 
 .botones {
     margin: 1.1rem;
@@ -104,4 +83,9 @@ footer>button {
 
 .botones>button {
     margin: 0.3rem;
+}
+
+.titulo-pagina {
+    text-align: center;
+    margin: 1rem;
 }
