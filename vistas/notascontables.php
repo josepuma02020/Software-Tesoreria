@@ -32,9 +32,9 @@
     $relleno = json_encode($productos);
 
     //consulta idnota
-
     if (isset($_GET['id'])) {
         $idnota = $_GET['id'];
+        $creado = 1;
     } else {
         $consultaconsecutivo = "select count(idnota) 'consecutivo' from notascontables where fecha = '$fecha_actual'";
         $queryconsecutivo = mysqli_query($link, $consultaconsecutivo) or die($consultaconsecutivo);
@@ -45,6 +45,7 @@
             $consecutivo = 1;
         }
         $idnota = $ano . $mes . $dia . $consecutivo;
+        $creado = 0;
     }
 
     //consulta datos notas
@@ -76,6 +77,7 @@
             <div class="form-row formulario">
                 <div class="form-group pequeno">
                     <label for="iddocumento">ID.Documento:</label>
+                    <input value="<?php echo $creado  ?>" style="text-align:center" class="form-control " id="creado" name="creado" type="hidden" disabled>
                     <input value="<?php echo $idnota  ?>" style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled>
                 </div>
                 <div class="form-group mediano-pequeno">
@@ -173,7 +175,7 @@
                         <TD><?php echo $filasregistros['lm']; ?> </TD>
                         <td><?php echo $filasregistros['an']; ?> </td>
                         <td>
-                            <button style="height:25px;padding:0;width:40px" onclick="" type="button" id="eliminarregistro" class="btn btn-danger" data-toggle="modal" data-target="">
+                            <button onclick="agregaridregistro(<?php echo $filasregistros['idregistro'] ?>)" type="button" id="eliminarregistro" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
                                     <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z" />
                                     <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
@@ -181,7 +183,6 @@
                             </button>
                         </td>
                     </tr>
-
                 <?php } ?>
                 <form id="registros" action="#" method="POST" class="form-registros">
                     <tr>
@@ -232,6 +233,7 @@
                 </form>
             </tbody>
         </table>
+        <input type="hidden" id="idu" name="idu">
 
         <div class="form-row formulario">
             <div class="form-group mediano ">
@@ -425,61 +427,87 @@
             type = $('#type').val();
             clasificacion = $('#clasificacion').val();
             comentario = $('#comment').val();
-            totaldebe = $('#totaldebe').val();
-            totalhaber = $('#totalhaber').val();
-            totalimporte = parseInt(totaldebe) - parseInt(totalhaber);
-            //grupo
-            cuenta = $('#cuenta').val();
-            const cuentas = cuenta.split(' ');
-            date = $('#date').val();
-            const dates = date.split(' ');
-            debe = $('#debe').val();
-            const debes = debe.split(' ');
-            haber = $('#haber').val();
-            const habers = haber.split(' ');
-            if (cuentas.length >= 1) {
-                for (var i = 0; i < cuentas.length; i++) {
-                    cuenta = cuentas[i];
-                    if (debes[i] == '-' || debes[i] == '- ' || debes[i] == ' -' || debes[i] == undefined) {
-                        debes[i] = '0';
-                    }
-                    if (habers[i] == '-' || habers[i] == '- ' || habers[i] == ' -' || habers[i] == undefined) {
-                        habers[i] = '0';
-                    }
+            creado = $('#creado').val();
 
-                }
-                console.log(totalimporte);
+
+            if (creado == 1) {
+                iddocumento = $('#iddocumento').val();
+                totaldebe = $('#totaldebe').val();
+                totalhaber = $('#totalhaber').val();
+                usuario = $('#user').val();
+                batch = $('#batch').val();
                 a = 0;
-                if (type == 0) {
-                    a = 1;
-                    alertify.alert('ATENCION!!', 'Favor seleccionar un tipo de documento', function() {
-                        alertify.success('Ok');
-                    });
-                }
-                if (clasificacion == 0) {
-                    a = 1;
-                    alertify.alert('ATENCION!!', 'Favor seleccionar una clasificación para el documento', function() {
-                        alertify.success('Ok');
-                    });
-                }
-                if (totalimporte != 0) {
-                    a = 1;
-                    alertify.alert('ATENCION!!', 'Favor verificar valores en los registros.El valor total del importe debe ser 0.', function() {
-                        alertify.success('Ok');
-                    });
-                }
                 if (a == 0) {
-                    registrarnota(type, clasificacion, comentario, batch);
+                    editarnota(iddocumento, usuario, type, clasificacion, comentario, batch);
                     setTimeout(function() {
-                        window.location.reload();
+                        // window.location.reload();
                     }, 1000);
                 }
-
             } else {
-                alertify.alert('ATENCION!!', 'Debe ingresar al menos 1 registro de nota', function() {
-                    alertify.success('Ok');
-                });
+                totaldebe = $('#totaldebe').val();
+                totalhaber = $('#totalhaber').val();
+                totalimporte = parseInt(totaldebe) - parseInt(totalhaber);
+
+                //grupo
+                cuenta = $('#cuenta').val();
+                const cuentas = cuenta.split(' ');
+                date = $('#date').val();
+                const dates = date.split(' ');
+                debe = $('#debe').val();
+                const debes = debe.split(' ');
+                haber = $('#haber').val();
+                const habers = haber.split(' ');
+                if (cuentas.length >= 1) {
+                    for (var i = 0; i < cuentas.length; i++) {
+                        cuenta = cuentas[i];
+                        if (debes[i] == '-' || debes[i] == '- ' || debes[i] == ' -' || debes[i] == undefined) {
+                            debes[i] = '0';
+                        }
+                        if (habers[i] == '-' || habers[i] == '- ' || habers[i] == ' -' || habers[i] == undefined) {
+                            habers[i] = '0';
+                        }
+
+                    }
+                    console.log(totalimporte);
+                    a = 0;
+                    if (type == 0) {
+                        a = 1;
+                        alertify.alert('ATENCION!!', 'Favor seleccionar un tipo de documento', function() {
+                            alertify.success('Ok');
+                        });
+                    }
+                    if (clasificacion == 0) {
+                        a = 1;
+                        alertify.alert('ATENCION!!', 'Favor seleccionar una clasificación para el documento', function() {
+                            alertify.success('Ok');
+                        });
+                    }
+                    if (totalimporte != 0) {
+                        a = 1;
+                        alertify.alert('ATENCION!!', 'Favor verificar valores en los registros.El valor total del importe debe ser 0.', function() {
+                            alertify.success('Ok');
+                        });
+                    }
+                    if (a == 0) {
+                        registrarnota(type, clasificacion, comentario, batch);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1000);
+                    }
+
+                } else {
+                    alertify.alert('ATENCION!!', 'Debe ingresar al menos 1 registro de nota', function() {
+                        alertify.success('Ok');
+                    });
+                }
             }
+        });
+        $('#eliminarregistro').click(function() {
+            idu = $('#idu').val();
+            elminarregistro(idu);
+            setTimeout(function() {
+                window.location.reload();
+            }, 1000);
         });
         disponible = (<?php echo $relleno ?>);
         $("#cuenta").autocomplete({
