@@ -496,7 +496,7 @@
                 if (a == 0) {
                     editarnota(iddocumento, usuario, type, clasificacion, comentario, batch);
                     setTimeout(function() {
-                        // window.location.reload();
+                        window.location.reload();
                     }, 1000);
                 }
             } else {

@@ -15,6 +15,20 @@ function editarnota(id, usuario, type, clasificacion, comentario, batch) {
         }
     });
 }
+function verificar(desde, hasta, batch) {
+    cadenau = "desde=" + desde + "&hasta=" + hasta + "&batch=" + batch;
+    $.ajax({
+        type: "POST",
+        url: "notascontables/verificarbatch.php",
+        data: cadenau,
+        success: function (r) {
+            // console.log(r);
+            // debugger;
+
+        }
+    });
+}
+
 
 function cambiarseleccionnota(id) {
     $.ajax({
@@ -22,8 +36,8 @@ function cambiarseleccionnota(id) {
         url: "notascontables/cambiarseleccion.php",
         data: "id=" + id,
         success: function (r) {
-            console.log(r);
-            debugger;
+            // console.log(r);
+            // debugger;
 
         }
     });
