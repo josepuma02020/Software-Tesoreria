@@ -284,7 +284,14 @@
             </div>
             <div class="form-group mediano ">
                 <label for="comment">Total Importe:</label>
-                <input style="text-align:center" class="form-control " id="totalimporte" name="totalimporte" type="text" value="<?php echo number_format($totaldebe - $totalhaber) ?>" disabled>
+                <?php
+                $totalimporte = $totaldebe - $totalhaber;
+                if ($totalimporte != 0) {
+                    $color = '#FC9999';
+                }
+
+                ?>
+                <input style="text-align:center;background-color:<?php echo $color ?>" class="form-control " id="totalimporte" name="totalimporte" type="text" value="<?php echo number_format($totaldebe - $totalhaber) ?>" disabled>
             </div>
         </div>
         <section class="botones">

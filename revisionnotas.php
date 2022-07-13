@@ -121,7 +121,13 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                 <TD><?php echo $filas1['nombre']; ?> </TD>
                                 <TD><?php echo $filas1['documento']; ?> </TD>
                                 <TD><?php echo $filas1['clasificacion']; ?> </TD>
-                                <TD><?php echo number_format($filas1['importe']); ?> </TD>
+                                <?php
+                                $totalimporte = $filas1['importe'];
+                                if ($totalimporte != 0) {
+                                    $color = '#FC9999';
+                                }
+                                ?>
+                                <TD style="background-color:<?php echo $color ?>"><?php echo number_format($totalimporte); ?> </TD>
                                 <TD><?php echo $batch; ?> </TD>
                                 <TD style="width:20% ;"><?php echo $filas1['comentario']; ?> </TD>
                                 <TD>
