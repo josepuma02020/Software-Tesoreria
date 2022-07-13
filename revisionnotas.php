@@ -25,6 +25,31 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
     }
     $fechahoyval = date("Y") . '-' . date("m") . '-' . date("j");
 
+    //consultanotas
+    if (isset($_GET['m'])) {
+        $mostrar = $_GET['m'];
+    } else {
+        $mostrar = 't';
+    }
+
+    switch ($mostrar) {
+        case 't':
+            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
+            INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
+            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where a.fecha between '$desde' and '$hasta' GROUP by a.idnota;";
+            break;
+        case 'a':
+            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
+            INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
+            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where a.batch IS NULL and a.fecha between '$desde' and '$hasta' GROUP by a.idnota;";
+            break;
+        case 'c':
+            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
+            INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
+            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where a.batch IS NOT NULL  and a.fecha between '$desde' and '$hasta' GROUP by a.idnota;";
+            break;
+    }
+
 ?>
     <HTML>
 
@@ -66,9 +91,29 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                     <div class="form-group pequeno">
                         <label for="mostrar">Mostrar</label>
                         <select style="text-align: center;" id="mostrar" class="form-control col-md-8 ">
-                            <option value="t" selected>Todo</option>
-                            <option value="c">Cerradas</option>
-                            <option value="a">Abiertas</option>
+                            <?php
+                            switch ($mostrar) {
+                                case 't':
+                            ?>
+                                    <option value="t" selected>Todo</option>
+                                    <option value="c">Cerradas</option>
+                                    <option value="a">Abiertas</option>
+                                <?php break;
+                                case 'a':
+                                ?>
+                                    <option value="t">Todo</option>
+                                    <option value="c">Cerradas</option>
+                                    <option value="a" selected>Abiertas</option>
+                                <?php break;
+                                case 'c':
+                                ?>
+                                    <option value="t">Todo</option>
+                                    <option value="c" selected>Cerradas</option>
+                                    <option value="a">Abiertas</option>
+                            <?php break;
+                            }
+                            ?>
+
                         </select>
                     </div>
                     <button type="button" id="buscar" class="btn btn-primary">
@@ -106,9 +151,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                     </THEAD>
                     <TBODY>
                         <?php
-                        $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
-                        INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-                        INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota GROUP by a.idnota;";
+
                         $query = mysqli_query($link, $consultanotas) or die($consultanotas);
                         while ($filas1 = mysqli_fetch_array($query)) {
                             if ($filas1['batch'] == 0) {
@@ -220,7 +263,8 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
             a = 0;
             desde = $('#desde').val();
             hasta = $('#hasta').val();
-            location.href = `prestamoscerrados.php?desde=${desde}&hasta=${hasta}`;
+            mostrar = $('#mostrar').val();
+            location.href = `revisionnotas.php?desde=${desde}&hasta=${hasta}&m=${mostrar}`;
         });
         $('#detalles').click(function() {
             a = 0;
