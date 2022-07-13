@@ -38,6 +38,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css" />
         <link type="text/css" href="./librerias/jquery-ui-1.12.1.custom/jquery-ui.min.css" rel=" Stylesheet" />
         <link rel="stylesheet" href="./css/revisionnotas/desktop.css">
+        <SCRIPT lang="javascript" type="text/javascript" src="notascontables/notascontables.js"></script>
         <SCRIPT src="librerias/alertify/alertify.js"></script>
         <title>Revisión de notas</title>
     </head>
@@ -51,7 +52,6 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                 <h3>Notas Registradas</h3>
             </section>
         </header>
-
         <main style="max-width:90% ;" class=" container container-md">
             <form action="" method="post">
                 <div class="form-row formulario">
@@ -83,6 +83,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                 <table id="registrosnotas" class="table table-striped  table-responsive-lg revision-notas ">
                     <THEAD>
                         <tr>
+                            <th> Sel. </th>
                             <th> Fecha </th>
                             <th> Usuario </th>
                             <th> Tipo</th>
@@ -107,6 +108,15 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                             }
                         ?>
                             <TR>
+                                <TD>
+                                    <?php
+                                    $estadocheck = 'checked';
+                                    if ($filas1['seleccion'] == 1) {
+                                        $estadocheck = '';
+                                    }
+                                    ?>
+                                    <input <?php echo $estadocheck; ?> onchange="cambiarseleccionnota(<?php echo $filas1['idnota'] ?>)" id="check" type="checkbox" aria-label="Checkbox for following text input">
+                                </TD>
                                 <TD><?php echo $filas1['fecha'] . ' ' . $filas1['hora']; ?> </TD>
                                 <TD><?php echo $filas1['nombre']; ?> </TD>
                                 <TD><?php echo $filas1['documento']; ?> </TD>
@@ -169,6 +179,11 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
 <script type="text/javascript" src="librerias/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+        $('#idnota').change(function() {
+            idnota = $('#idnota').val();
+            console.log(idnota);
+            debugger;
+        });
         $('#buscar').click(function() {
             a = 0;
             desde = $('#desde').val();

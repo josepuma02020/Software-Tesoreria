@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="./css/notas/desktop.css">
     <SCRIPT lang="javascript" type="text/javascript" src="notascontables/notascontables.js"></script>
     <SCRIPT src="librerias/alertify/alertify.js"></script>
-
     <title>Notas Contables</title>
     <?php
     include('../NotasdePago/conexion/conexion.php');
@@ -20,7 +19,6 @@
     $ano = date('Y');
     $mes = date('m');
     $dia = date('d');
-
     //autocompletar cliente
     $consulta = "SELECT `idcuenta`  FROM `cuentas` ";
     $queryt = mysqli_query($link, $consulta) or die($consulta);
@@ -30,7 +28,6 @@
     }
     array_shift($productos);
     $relleno = json_encode($productos);
-
     //consulta idnota
     if (isset($_GET['id'])) {
         $idnota = $_GET['id'];
@@ -71,8 +68,6 @@
         $fecha = '';
     }
     ?>
-
-
 </head>
 
 <body>
@@ -308,9 +303,7 @@
                 }
             }
             ?>
-
         </section>
-
     </main>
     <footer>
 

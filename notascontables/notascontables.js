@@ -14,7 +14,20 @@ function editarnota(id, usuario, type, clasificacion, comentario, batch) {
             }
         }
     });
-} s
+}
+
+function cambiarseleccionnota(id) {
+    $.ajax({
+        type: "POST",
+        url: "notascontables/cambiarseleccion.php",
+        data: "id=" + id,
+        success: function (r) {
+            console.log(r);
+            debugger;
+
+        }
+    });
+}
 
 function agregaridregistro(id) {
     $.ajax({
