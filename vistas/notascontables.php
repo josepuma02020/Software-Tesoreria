@@ -78,19 +78,26 @@
 <body>
     <header>
         <form action="" method="post">
+            <?php
+            if ($batch != '') {
+                $estado = 'disabled';
+            } else {
+                $estado = '';
+            }
+            ?>
             <div class="form-row formulario">
                 <div class="form-group pequeno">
                     <label for="iddocumento">ID.Documento:</label>
                     <input value="<?php echo $creado  ?>" style="text-align:center" class="form-control " id="creado" name="creado" type="hidden" disabled>
-                    <input value="<?php echo $idnota  ?>" style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled>
+                    <input <?php echo $estado ?> value="<?php echo $idnota  ?>" style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled>
                 </div>
                 <div class="form-group mediano-pequeno">
                     <label for="user">Usuario:</label>
-                    <input style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
+                    <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
                 </div>
                 <div class="form-group mediano-grande">
                     <label for="type">Tipo de Documento</label>
-                    <select style="text-align: center;" id="type" class="form-control col-md-8 ">
+                    <select <?php echo $estado ?> style="text-align: center;" id="type" class="form-control col-md-8 ">
                         <?php
                         $selected = '';
                         $consultausuarios = "select * from tiposdocumento order by documento";
@@ -111,7 +118,7 @@
                 </div>
                 <div class="form-group mediano-grande">
                     <label for="type">Clasificación de Documento</label>
-                    <select style="text-align: center;" id="clasificacion" class="form-control col-md-8 ">
+                    <select <?php echo $estado ?> style="text-align: center;" id="clasificacion" class="form-control col-md-8 ">
                         <?php
                         $consultausuarios = "select * from clasificaciones order by clasificacion";
                         $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
@@ -134,7 +141,18 @@
             <div class="form-row formulario">
                 <div class="form-group pequeno">
                     <label for="batch">Batch:</label>
-                    <input value="<?php echo $batch ?>" style="text-align:center" class="form-control " id="batch" name="batch" type="number">
+                    <?php
+                    $estado = 'disabled';
+                    if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
+                        $estado = '';
+                    } ?>
+                    <input <?php echo $estado ?> value="<?php echo $batch ?>" style="text-align:center" class="form-control " id="batch" name="batch" type="number">
+                    <?php if ($batch != '') {
+                        $estado = 'disabled';
+                    } else {
+                        $estado = '';
+                    }
+                    ?>
                 </div>
                 <div class="form-group mediano-pequeno">
                     <label for="user">Fecha creación:</label>
@@ -142,7 +160,7 @@
                 </div>
                 <div class="form-group grande ">
                     <label for="comment">Comentario:</label>
-                    <input value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
+                    <input <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
                 </div>
             </div>
         </form>
@@ -159,7 +177,14 @@
                 <th>T.LM</th>
                 <th>LM</th>
                 <th>AN8</th>
-                <th>Acciones</th>
+                <?php
+                if ($batch == '') {
+                ?>
+                    <th>Acciones</th>
+                <?php
+                }
+                ?>
+
             </thead>
             <tbody>
                 <?php
@@ -181,63 +206,74 @@
                         <TD><?php echo $filasregistros['tipolm']; ?> </TD>
                         <TD><?php echo $filasregistros['lm']; ?> </TD>
                         <td><?php echo $filasregistros['an']; ?> </td>
-                        <td>
-                            <button onclick="agregaridregistro(<?php echo $filasregistros['idregistro'] ?>)" type="button" id="eliminarregistro" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
-                                    <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z" />
-                                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
-                                </svg>
-                            </button>
-                        </td>
+                        <?php
+                        if ($batch == '') {
+                        ?>
+                            <td>
+                                <button onclick="agregaridregistro(<?php echo $filasregistros['idregistro'] ?>)" type="button" id="eliminarregistro" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
+                                        <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z" />
+                                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
+                                    </svg>
+                                </button>
+                            </td>
+                        <?php
+                        }
+                        ?>
+
                     </tr>
-                <?php } ?>
-                <form id="registros" action="#" method="POST" class="form-registros">
-                    <tr>
-                        <td style="width: 13%;padding:5">
-                            <input class="form-control" type="hidden" required id="idnota" name="idnota" value="0">
-                            <input class="  form-control-register" type="text" required id="date" name="date">
-                        </td>
-                        <td style="width: 13%;padding:5">
-                            <input class="  form-control-register" type="text" required id="cuenta" name="cuenta">
-                        </td>
-                        <td style="width: 15% ;padding:5">
-                            <input class="  form-control-register" type="text" required id="descripcion" name="descripcion" disabled>
-                        </td>
-                        <td style="width:8%">
-                            <input style="text-align:center;padding:5" min="0" class="  form-control-register" type="text" required id="debe" name="debe">
-                        </td>
-                        <td style="width:8%">
-                            <input style="text-align:center;padding:5" min="0" class="  form-control-register" type="text" required id="haber" name="haber">
-                        </td>
-                        <td style="width:10%">
-                            <input style="text-align:center;padding:5" class="  form-control-register" type="number" required id="importe" name="importe" disabled>
-                        </td>
-                        <td>
-                            <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="tipolm" name="tipolm" disabled>
-                        </td>
-                        <td style="width:10%">
-                            <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="lm" name="lm" required>
-                        </td>
-                        <td style="width:10%">
-                            <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="an" name="an" required>
-                        </td>
-                        <td style="width: 8%">
-                            <SCRIPT lang="javascript" type="text/javascript" src="  "></script>
-                            <button style="height:25px;padding:0;width:40px" onclick="" type="button" id="registrar" class="btn btn-primary" data-toggle="modal" data-target="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
-                                    <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
-                                    <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
-                                </svg>
-                            </button>
-                            <!-- <button onclick="" type="button" id="eeeee" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
+                <?php }
+                if ($batch == '') {
+
+                ?>
+                    <form id="registros" action="#" method="POST" class="form-registros">
+                        <tr>
+                            <td style="width: 13%;padding:5">
+                                <input class="form-control" type="hidden" required id="idnota" name="idnota" value="0">
+                                <input class="  form-control-register" type="text" required id="date" name="date">
+                            </td>
+                            <td style="width: 13%;padding:5">
+                                <input class="  form-control-register" type="text" required id="cuenta" name="cuenta">
+                            </td>
+                            <td style="width: 15% ;padding:5">
+                                <input class="  form-control-register" type="text" required id="descripcion" name="descripcion" disabled>
+                            </td>
+                            <td style="width:8%">
+                                <input style="text-align:center;padding:5" min="0" class="  form-control-register" type="text" required id="debe" name="debe">
+                            </td>
+                            <td style="width:8%">
+                                <input style="text-align:center;padding:5" min="0" class="  form-control-register" type="text" required id="haber" name="haber">
+                            </td>
+                            <td style="width:10%">
+                                <input style="text-align:center;padding:5" class="  form-control-register" type="number" required id="importe" name="importe" disabled>
+                            </td>
+                            <td>
+                                <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="tipolm" name="tipolm" disabled>
+                            </td>
+                            <td style="width:10%">
+                                <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="lm" name="lm" required>
+                            </td>
+                            <td style="width:10%">
+                                <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="an" name="an" required>
+                            </td>
+                            <td style="width: 8%">
+                                <SCRIPT lang="javascript" type="text/javascript" src="  "></script>
+                                <button style="height:25px;padding:0;width:40px" onclick="" type="button" id="registrar" class="btn btn-primary" data-toggle="modal" data-target="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+                                        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
+                                        <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
+                                    </svg>
+                                </button>
+                                <!-- <button onclick="" type="button" id="eeeee" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
                                     <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z" />
                                     <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
                                 </svg>
                             </button> -->
-                        </td>
-                    </tr>
-                </form>
+                            </td>
+                        </tr>
+                    </form>
+                <?php } ?>
             </tbody>
         </table>
         <input type="hidden" id="idu" name="idu">
@@ -257,9 +293,22 @@
             </div>
         </div>
         <section class="botones">
-            <button id="save" name="save" class="btn btn-primary boton">Guardar</button>
-            <button id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button>
-            <button id="delete" name="delete" class="btn btn-danger boton">Eliminar</button>
+            <?php
+            if ($batch == '') {
+            ?>
+                <button id="save" name="save" class="btn btn-primary boton">Guardar</button>
+                <button id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button>
+                <button id="delete" name="delete" class="btn btn-danger boton">Eliminar</button>
+                <?php
+            } else {
+                if ($_SESSION['rol'] == 1) {
+                ?>
+                    <button id="edit" name="edit" class="btn btn-primary boton">Editar</button>
+            <?php
+                }
+            }
+            ?>
+
         </section>
 
     </main>
