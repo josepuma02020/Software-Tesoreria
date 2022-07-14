@@ -254,10 +254,16 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                 });
             }
             if (a == 0) {
-                verificar(desde, hasta, batch);
-                setTimeout(function() {
-                    // window.location.reload();
-                }, 1000);
+                alertify.confirm('Esta seguro que desea registrar este batch?', function() {
+                    verificar(desde, hasta, batch);
+                    alertify.success('Registrado Correctamente');
+                    setTimeout(function() {
+                        // window.location.reload();
+                    }, 1000);
+                }, function() {
+                    alertify.error('Regitro cancelado');
+                });
+
             }
 
         });
