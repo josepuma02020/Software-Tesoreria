@@ -63,7 +63,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css" />
         <link type="text/css" href="./librerias/jquery-ui-1.12.1.custom/jquery-ui.min.css" rel=" Stylesheet" />
         <link rel="stylesheet" href="./css/configuracion/desktop.css">
-        <SCRIPT lang="javascript" type="text/javascript" src="notascontables/notascontables.js"></script>
+        <SCRIPT lang="javascript" type="text/javascript" src="./cuentas/cuentas.js"></script>
         <SCRIPT src="librerias/alertify/alertify.js"></script>
         <title>Revisión de notas</title>
     </head>
@@ -83,29 +83,61 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                     <h2>Cuentas</h2>
                 </div>
                 <section class="parametros">
-                    <span class="btn btn-primary boton-parametro" data-toggle="modal" data-target="#nuevousuario">
-                        <b> Nuevo Usuario</b>
+                    <span class="btn btn-primary boton-parametro" data-toggle="modal" data-target="#nuevacuenta">
+                        <b> Nueva cuenta</b>
                     </span>
                 </section>
+                <div class="modal fade" id="nuevacuenta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Editar cuenta</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="">
+                                    <div class="form-row formulario">
+                                        <div class="form-group mediano-grande">
+                                            <label for="desde">Cuenta contable:</label>
+                                            <input style="text-align:center" class=" form-control " id="cuentan" name="cuentan" type="text">
+                                        </div>
+                                        <div class="form-group mediano-grande">
+                                            <label for="hasta">Descipcion de Cuenta:</label>
+                                            <input style="text-align:center" class="form-control " id="descripcionn" name="descripcionn" type="text">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerar</button>
+                                <button type="button" id="registrar" class="btn btn-primary">Registrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <table id="registrosnotas" class="table table-striped  table-responsive-lg usuarios ">
                     <thead>
                         <tr>
                             <th> Cuenta Contable </th>
-                            <th> Descripcion </th>
+                            <th> Descripcion de cuenta </th>
                             <th> Acciones </th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $consultausuarios = "select * from cuentas";
-                        $queryusuarios = mysqli_query($link, $consultausuarios) or die($consultausuarios);
-                        while ($filasusuarios = mysqli_fetch_array($queryusuarios)) {
+                        $consultacuentas = "select * from cuentas";
+                        $querycuentas = mysqli_query($link, $consultacuentas) or die($consultacuentas);
+                        while ($filascuentas = mysqli_fetch_array($querycuentas)) {
                         ?>
                             <tr>
-                                <td> <?php echo $filasusuarios['idcuenta'] ?> </td>
-                                <td> <?php echo $filasusuarios['descripcion'] ?> </td>
+                                <td> <?php echo $filascuentas['idcuenta'] ?> </td>
+                                <td> <?php echo $filascuentas['descripcion'] ?> </td>
                                 <td>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editar"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <SCRIPT lang="javascript" type="text/javascript" src="./cuentas/cuentas.js"></script>
+                                    <button onclick="datoscuenta('<?php echo $filascuentas['idcuenta'] ?>','<?php echo $filascuentas['descripcion'] ?>')" type="button" title="Editar cuenta" id="detalles" class="btn btn-primary" data-toggle="modal" data-target="#editar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                                         </svg>
                                     </button>
@@ -116,19 +148,32 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                         ?>
                     </tbody>
                 </table>
-                <div class="modal fade" id="editar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="editar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <h5 class="modal-title" id="exampleModalLabel">Editar cuenta</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
                             <div class="modal-body">
-                                ...
+                                <form action="">
+                                    <div class="form-row formulario">
+                                        <div class="form-group mediano-grande">
+                                            <label for="desde">Cuenta contable:</label>
+                                            <input disabled style="text-align:center" class=" form-control " id="cuenta" name="cuenta" type="text">
+                                        </div>
+                                        <div class="form-group mediano-grande">
+                                            <label for="hasta">Descipcion de Cuenta:</label>
+                                            <input style="text-align:center" class="form-control " id="descripcion" name="descripcion" type="text">
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerar</button>
+                                <button type="button" id="guardar" class="btn btn-primary">Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -174,20 +219,47 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
 <script type="text/javascript" src="librerias/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-
-
-        $('#buscar').click(function() {
+        $('#registrar').click(function() {
             a = 0;
-            desde = $('#desde').val();
-            hasta = $('#hasta').val();
-            mostrar = $('#mostrar').val();
-            location.href = `revisionnotas.php?desde=${desde}&hasta=${hasta}&m=${mostrar}`;
+            descripcion = $('#descripcionn').val();
+            cuenta = $('#cuentan').val();
+            if (descripcion == '') {
+                a = 1;
+                alertify.alert('ATENCION!!', 'Favor llenar el campo de descripcion de cuenta. ', function() {
+                    alertify.success('Ok');
+                });
+            }
+            if (cuenta == '') {
+                a = 1;
+                alertify.alert('ATENCION!!', 'Favor llenar el campo de cuenta contable. ', function() {
+                    alertify.success('Ok');
+                });
+            }
+            if (a == 0) {
+                registrarcuenta(cuenta, descripcion);
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000);
+            }
+
         });
-        $('#detalles').click(function() {
+        $('#guardar').click(function() {
             a = 0;
-            desde = $('#desde').val();
-            hasta = $('#hasta').val();
-            location.href = `prestamoscerrados.php?desde=${desde}&hasta=${hasta}`;
+            descripcion = $('#descripcion').val();
+            cuenta = $('#cuenta').val();
+            if (descripcion == '') {
+                a = 1;
+                alertify.alert('ATENCION!!', 'Favor llenar el campo de descripcion de cuenta. ', function() {
+                    alertify.success('Ok');
+                });
+            }
+            if (a == 0) {
+                editarcuenta(cuenta, descripcion);
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000);
+            }
+
         });
     });
 </script>

@@ -29,7 +29,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
     if (isset($_GET['m'])) {
         $mostrar = $_GET['m'];
     } else {
-        $mostrar = 't';
+        $mostrar = 'a';
     }
 
     switch ($mostrar) {
@@ -188,7 +188,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                 <TD>
                                     <!-- <SCRIPT lang="javascript" type="text/javascript" src="funciones/funciones.js"></script> -->
                                     <a href="home.php?id=<?php echo "$filas1[idnota]" ?>">
-                                        <button onclick="" type="button" id="detalles" class="btn btn-primary" data-toggle="modal" data-target="#editar">
+                                        <button title="Ver Nota" onclick="" type="button" id="detalles" class="btn btn-primary" data-toggle="modal" data-target="#editar">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                                             </svg>
@@ -254,14 +254,14 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                 });
             }
             if (a == 0) {
-                alertify.confirm('Esta seguro que desea registrar este batch?', function() {
+                alertify.confirm('Confirmación', 'Esta seguro que desea registrar este batch?', function() {
                     verificar(desde, hasta, batch);
                     alertify.success('Registrado Correctamente');
                     setTimeout(function() {
-                        // window.location.reload();
+                        window.location.reload();
                     }, 1000);
                 }, function() {
-                    alertify.error('Regitro cancelado');
+                    alertify.error('Registro cancelado');
                 });
 
             }
