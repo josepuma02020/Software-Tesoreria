@@ -36,7 +36,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" href="./cuentas.php">Cuentas</a>
-                                <a class="dropdown-item" href="#">Tipos de documento</a>
+                                <a class="dropdown-item" href="./tiposdocumento.php">Tipos de documento</a>
                                 <a class="dropdown-item" href="#">Clasificacion de documentos</a>
                                 <a class="dropdown-item" href="#">Usuarios</a>
                             </div>

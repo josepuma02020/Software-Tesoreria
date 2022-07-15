@@ -63,7 +63,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css" />
         <link type="text/css" href="./librerias/jquery-ui-1.12.1.custom/jquery-ui.min.css" rel=" Stylesheet" />
         <link rel="stylesheet" href="./css/configuracion/desktop.css">
-        <SCRIPT lang="javascript" type="text/javascript" src="./cuentas/cuentas.js"></script>
+        <SCRIPT lang="javascript" type="text/javascript" src="./tiposdocumento/tiposdocumento.js"></script>
         <SCRIPT src="librerias/alertify/alertify.js"></script>
         <title>Revisión de notas</title>
     </head>
@@ -80,18 +80,18 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
 
             <div class="tabla-registros">
                 <div class="titulo-tabla">
-                    <h2>Cuentas</h2>
+                    <h2>Tipos de documento</h2>
                 </div>
                 <section class="parametros">
                     <span class="btn btn-primary boton-parametro" data-toggle="modal" data-target="#nuevacuenta">
-                        <b> Nueva cuenta</b>
+                        <b> Nuevo Tipo</b>
                     </span>
                 </section>
                 <div class="modal fade" id="nuevacuenta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Nueva cuenta</h5>
+                                <h5 class="modal-title" id="exampleModalLabel">Registrar nuevo tipo de documento</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -100,18 +100,18 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                 <form action="">
                                     <div class="form-row formulario">
                                         <div class="form-group mediano-grande">
-                                            <label for="desde">Cuenta contable:</label>
-                                            <input style="text-align:center" class=" form-control " id="cuentan" name="cuentan" type="text">
+                                            <label for="desde">ID.Tipo:</label>
+                                            <input style="text-align:center" class=" form-control " id="idn" name="idn" type="text">
                                         </div>
                                         <div class="form-group mediano-grande">
-                                            <label for="hasta">Descipción de Cuenta:</label>
-                                            <input style="text-align:center" class="form-control " id="descripcionn" name="descripcionn" type="text">
+                                            <label for="hasta">Tipo de documento:</label>
+                                            <input style="text-align:center" class="form-control " id="tipon" name="tipon" type="text">
                                         </div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerar</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                 <button type="button" id="registrar" class="btn btn-primary">Registrar</button>
                             </div>
                         </div>
@@ -120,25 +120,30 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                 <table id="registrosnotas" class="table table-striped  table-responsive-lg usuarios ">
                     <thead>
                         <tr>
-                            <th> Cuenta Contable </th>
-                            <th> Descripcion de cuenta </th>
+                            <th> ID</th>
+                            <th> Tipo de Documento </th>
                             <th> Acciones </th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $consultacuentas = "select * from cuentas";
-                        $querycuentas = mysqli_query($link, $consultacuentas) or die($consultacuentas);
-                        while ($filascuentas = mysqli_fetch_array($querycuentas)) {
+                        $consultatipos = "select * from tiposdocumento";
+                        $query = mysqli_query($link, $consultatipos) or die($consultatipos);
+                        while ($filas = mysqli_fetch_array($query)) {
                         ?>
                             <tr>
-                                <td> <?php echo $filascuentas['idcuenta'] ?> </td>
-                                <td> <?php echo $filascuentas['descripcion'] ?> </td>
+                                <td> <?php echo $filas['idtipo'] ?> </td>
+                                <td> <?php echo $filas['documento'] ?> </td>
                                 <td>
-                                    <SCRIPT lang="javascript" type="text/javascript" src="./cuentas/cuentas.js"></script>
-                                    <button onclick="datoscuenta('<?php echo $filascuentas['idcuenta'] ?>','<?php echo $filascuentas['descripcion'] ?>')" type="button" title="Editar cuenta" id="detalles" class="btn btn-primary" data-toggle="modal" data-target="#editar">
+                                    <button onclick="datostipo('<?php echo $filas['idtipo'] ?>','<?php echo $filas['documento'] ?>')" type="button" title="Editar tipo de documento" id="detalles" class="btn btn-primary" data-toggle="modal" data-target="#editar">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                        </svg>
+                                    </button>
+                                    <button onclick="datostipo('<?php echo $filas['idtipo'] ?>','<?php echo $filas['documento'] ?>')" type="button" title="Eliminar tipo de documento" id="delete" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
                                         </svg>
                                     </button>
                                 </td>
@@ -148,11 +153,30 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                         ?>
                     </tbody>
                 </table>
+                <div class="modal fade" id="eliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Eliminar tipo de documento</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h6>Esta seguro que desea eliminar este tipo de documento?</h6>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="button" id="eliminar" class="btn btn-danger">Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="modal fade" id="editar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Editar cuenta</h5>
+                                <h5 class="modal-title" id="exampleModalLabel">Editar tipo</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -162,17 +186,17 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                     <div class="form-row formulario">
                                         <div class="form-group mediano-grande">
                                             <label for="desde">Cuenta contable:</label>
-                                            <input disabled style="text-align:center" class=" form-control " id="cuenta" name="cuenta" type="text">
+                                            <input disabled style="text-align:center" class=" form-control " id="id" name="id" type="text">
                                         </div>
                                         <div class="form-group mediano-grande">
                                             <label for="hasta">Descipcion de Cuenta:</label>
-                                            <input style="text-align:center" class="form-control " id="descripcion" name="descripcion" type="text">
+                                            <input style="text-align:center" class="form-control " id="tipodocumento" name="tipodocumento" type="text">
                                         </div>
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerar</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                 <button type="button" id="guardar" class="btn btn-primary">Guardar</button>
                             </div>
                         </div>
@@ -221,22 +245,22 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
     $(document).ready(function() {
         $('#registrar').click(function() {
             a = 0;
-            descripcion = $('#descripcionn').val();
-            cuenta = $('#cuentan').val();
-            if (descripcion == '') {
+            id = $('#idn').val();
+            tipo = $('#tipon').val();
+            if (id == '') {
                 a = 1;
                 alertify.alert('ATENCION!!', 'Favor llenar el campo de descripcion de cuenta. ', function() {
                     alertify.success('Ok');
                 });
             }
-            if (cuenta == '') {
+            if (tipo == '') {
                 a = 1;
                 alertify.alert('ATENCION!!', 'Favor llenar el campo de cuenta contable. ', function() {
                     alertify.success('Ok');
                 });
             }
             if (a == 0) {
-                registrarcuenta(cuenta, descripcion);
+                registrartipo(id, tipo);
                 setTimeout(function() {
                     window.location.reload();
                 }, 1000);
@@ -245,20 +269,29 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
         });
         $('#guardar').click(function() {
             a = 0;
-            descripcion = $('#descripcion').val();
-            cuenta = $('#cuenta').val();
-            if (descripcion == '') {
+            id = $('#id').val();
+            tipodocumento = $('#tipodocumento').val();
+            if (tipodocumento == '') {
                 a = 1;
                 alertify.alert('ATENCION!!', 'Favor llenar el campo de descripcion de cuenta. ', function() {
                     alertify.success('Ok');
                 });
             }
             if (a == 0) {
-                editarcuenta(cuenta, descripcion);
+                editartipo(id, tipodocumento);
                 setTimeout(function() {
                     window.location.reload();
                 }, 1000);
             }
+
+        });
+        $('#eliminar').click(function() {
+
+            id = $('#id').val();
+            eliminartipo(id);
+            setTimeout(function() {
+                window.location.reload();
+            }, 1000);
 
         });
     });
