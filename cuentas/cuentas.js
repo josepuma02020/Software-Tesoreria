@@ -38,3 +38,21 @@ function editarcuenta(cuenta, descripcion) {
         }
     });
 }
+
+function eliminarcuenta(cuenta) {
+    cadenau = "cuenta=" + cuenta;
+    $.ajax({
+        type: "POST",
+        url: "cuentas/eliminarcuenta.php",
+        data: cadenau,
+        success: function (r) {
+            if (r == 1) {
+                // console.log(r);
+                // debugger;
+            } else {
+                // console.log(r);
+                // debugger;
+            }
+        }
+    });
+}
