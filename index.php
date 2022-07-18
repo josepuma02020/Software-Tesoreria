@@ -52,6 +52,15 @@
                             alertify.success('Ok');
                         });
                     </script>
+                <?php
+                    break;
+                case 5:
+                ?>
+                    <script>
+                        alertify.alert('Atencion!!', 'Sesión cerrada correctamente', function() {
+                            alertify.success('Ok');
+                        });
+                    </script>
         <?php
                     break;
             }

@@ -42,7 +42,7 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="revisionnotas.php">Salir</a>
+                            <a class="nav-link" href="usuarios/cerrarsesion.php">Salir</a>
                         </li>
                     </ul>
                 </div>

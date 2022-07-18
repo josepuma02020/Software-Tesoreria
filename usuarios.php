@@ -236,7 +236,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
     </HTML>
 <?php
 } else {
-    // header('Location: ' . "usuarios/cerrarsesion.php");
+    header('Location: ' . "usuarios/cerrarsesion.php");
 }
 ?>
 

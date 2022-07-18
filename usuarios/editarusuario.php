@@ -17,7 +17,7 @@ if ($_SESSION['usuario']) {
     $correo = $_POST['correo'];
     $rol = $_POST['rol'];
     $usuario = $_POST['usuario'];
-    $clave = $_POST['clave'];
+    echo $clave = $_POST['clave'];
 
     if ($clave != '') {
         $claveh = password_hash($clave, PASSWORD_DEFAULT);

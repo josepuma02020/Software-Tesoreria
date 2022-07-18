@@ -5,7 +5,7 @@ include('../conexion/conexion.php');
 date_default_timezone_set('America/Bogota');
 $usuario = htmlentities($_POST['user']);
 $clave1 = htmlentities($_POST['password']);
-$consulta = "SELECT * from  usuarios where usuario = '$usuario'";
+echo $consulta = "SELECT * from  usuarios where usuario = '$usuario'";
 $query = mysqli_query($link, $consulta) or die($consulta);
 $arreglo = mysqli_fetch_array($query);
 if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
@@ -28,7 +28,7 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
                 $menu = "diseno/navegadorcobrador.php";
                 break;
         }
-        //ruta
+        //autenticacion
         if (password_verify($clave1, $clave2)) {
             echo 1;
             $_SESSION['idusuario'] = $arreglo['idusuario'];
@@ -42,6 +42,7 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
             $query = mysqli_query($link, $consultaactconex) or die($consultaactconex);
             header('Location: ' . "../home.php");
         } else {
+            echo 'no';
             header('Location: ' . "../index.php?m=2");
         }
     }
