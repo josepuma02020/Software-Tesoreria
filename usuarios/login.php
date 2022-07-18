@@ -25,7 +25,7 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
                 $menu = "./layouts/navverificador.php";
                 break;
             case 3:
-                $menu = "./layouts/navregistrador.php";
+                $menu = "./layouts/navverificador.php";
                 break;
         }
         //autenticacion

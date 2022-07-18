@@ -9,7 +9,7 @@ if (time() - $_SESSION['tiempo'] > 500) {
 } else {
     $_SESSION['tiempo'] = time();
 }
-if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
+if ($_SESSION['usuario']) {
     include_once('conexion/conexion.php');
     setlocale(LC_ALL, "es_CO");
     date_default_timezone_set('America/Bogota');
@@ -125,16 +125,22 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                             </svg>
                         </button>
-                        <div class="form-group mediano">
-                            <label for="batch">Batch:</label>
-                            <input value="<?php echo $hasta ?>" min=0 style="text-align:center" class="form-control " id="batch" name="batch" type="number" value="<?php  ?>">
-                        </div>
-                        <button title="Verificar Batch" type="button" id="verificar" class="btn btn-warning">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square" viewBox="0 0 16 16">
-                                <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
-                                <path d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.235.235 0 0 1 .02-.022z" />
-                            </svg>
-                        </button>
+                        <?php if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
+                        ?>
+                            <div class="form-group mediano">
+                                <label for="batch">Batch:</label>
+                                <input value="<?php echo $hasta ?>" min=0 style="text-align:center" class="form-control " id="batch" name="batch" type="number" value="<?php  ?>">
+                            </div>
+                            <button title="Verificar Batch" type="button" id="verificar" class="btn btn-warning">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square" viewBox="0 0 16 16">
+                                    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                                    <path d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.235.235 0 0 1 .02-.022z" />
+                                </svg>
+                            </button>
+
+                        <?php
+                        } ?>
+
                     </div>
                 </form>
                 <table id="registrosnotas" class="table table-striped  table-responsive-lg revision-notas ">
