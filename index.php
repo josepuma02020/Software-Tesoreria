@@ -12,7 +12,7 @@
     <title>Notas de Pagos</title>
 </head>
 
-<body>
+<body class="login">
     <header>
         <?php
         if (isset($_GET['m'])) {
@@ -68,26 +68,30 @@
         ?>
     </header>
     <main class="container">
-        <h2>Bienvenido a Notas de Pagos</h2>
-        <div>
+        <div class="m-login">
+            <img class="logo" src="./img/Logologin.png" alt="Logo ESSA">
+        </div>
+        <div class="m-login">
+            <h2 style="font-weight: bolder ;">Programa de Registros Contables</h2>
             <form action="./usuarios/login.php" method="post">
                 <div class="form-group centrado">
                     <label for="user">Usuario:</label>
-                    <input type="text" class="form-control" id="user" name="user" required>
+                    <input type="text" class="form-login" id=" user" name="user" required>
                 </div>
                 <div class="form-group centrado">
                     <label for="password">Clave:</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
+                    <input type="password" class="form-login" id="password" name="password" required>
                 </div>
                 <div class="form-group centrado">
-                    <button class="btn btn-primary" type="submit">Iniciar Sesión </button>
+                    <button class="btn btn-primary btn-login" type="submit">Iniciar Sesión </button>
+
                 </div>
             </form>
+            <h6>Olvido su contraseña?</h6>
         </div>
     </main>
     <footer>
 
-        <img class="logo" src="./img/logo.png" alt="Logo ESSA">
 
     </footer>
     <script src="./css/bootstrap/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">

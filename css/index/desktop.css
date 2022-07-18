@@ -6,32 +6,64 @@ body {
 }
 
 form {
-    margin: 1.8em;
+    margin: 1.5em 1.5em 0.7em 1em;
+    text-align: left;
+
 }
 
-.logo {
-    width: 6em;
-    height: 5em;
+.login {
+    background-position: top;
+    background-size: cover;
+    background-image: url("../../img/Login.png");
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
 }
+
+.btn-login {
+    width: 100%;
+    background-color: #0026B1;
+}
+
+.form-login {
+    display: block;
+    background-color: transparent;
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
 
 .form-group {
     margin: 1em;
 }
 
+.m-login {
+    margin: 2%;
+    width: 46%;
+    height: 100%;
+
+}
+
 .container {
-    margin-top: 5em;
+    font-family: Tahoma, sans-serif;
+    color: blue;
+    display: flex;
+    align-items: center;
+    margin-top: 12em;
     margin-bottom: 2em;
     padding: 3em;
     border-radius: 2em;
     width: 50%;
     height: 50%;
     text-align: center;
-    background-color: #96A5A4;
-    color: whitesmoke;
+    background-color: #E6E7E4;
+    color: #0026B1;
 }
 
 .centrado {
-    margin-left: 20%;
-    margin-right: 20%;
-    width: 60%;
+    margin-left: 5%;
+    margin-right: 5%;
+    width: 90%;
 }
