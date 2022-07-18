@@ -13,42 +13,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
     include_once('conexion/conexion.php');
     setlocale(LC_ALL, "es_CO");
     date_default_timezone_set('America/Bogota');
-    if (isset($_GET['desde'])) {
-        $desde = $_GET['desde'];
-    } else {
-        $desde = date("Y-m-01");
-    }
-    if (isset($_GET['hasta'])) {
-        $hasta = $_GET['hasta'];
-    } else {
-        $hasta = date("Y-m-d");
-    }
-    $fechahoyval = date("Y") . '-' . date("m") . '-' . date("j");
 
-    //consultanotas
-    if (isset($_GET['m'])) {
-        $mostrar = $_GET['m'];
-    } else {
-        $mostrar = 't';
-    }
-
-    switch ($mostrar) {
-        case 't':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
-            INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where a.fecha between '$desde' and '$hasta' GROUP by a.idnota;";
-            break;
-        case 'a':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
-            INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where a.batch IS NULL and a.fecha between '$desde' and '$hasta' GROUP by a.idnota;";
-            break;
-        case 'c':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
-            INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where a.batch IS NOT NULL  and a.fecha between '$desde' and '$hasta' GROUP by a.idnota;";
-            break;
-    }
 
 ?>
     <HTML>

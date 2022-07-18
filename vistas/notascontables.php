@@ -97,7 +97,7 @@
                         $selected = '';
                         $consultausuarios = "select * from tiposdocumento order by documento";
                         $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
-                        ?> <option value="0"></option>
+                        ?> <option value="0">Seleccionar</option>
                         <?php
                         while ($filas1 = mysqli_fetch_array($query)) {
                             if ($filas1['idtipo'] == $filadatosnota['idtipodocumento']) {
@@ -117,7 +117,7 @@
                         <?php
                         $consultausuarios = "select * from clasificaciones order by clasificacion";
                         $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
-                        ?> <option value="0"></option>
+                        ?> <option value="0">Seleccionar</option>
                         <?php
                         while ($filas1 = mysqli_fetch_array($query)) {
                             if ($filas1['idclasificacion'] == $filadatosnota['idclasificacion']) {

@@ -38,7 +38,7 @@
                                 <a class="dropdown-item" href="./cuentas.php">Cuentas</a>
                                 <a class="dropdown-item" href="./tiposdocumento.php">Tipos de documento</a>
                                 <a class="dropdown-item" href="./clasificacion.php">Clasificacion de documentos</a>
-                                <a class="dropdown-item" href="#">Usuarios</a>
+                                <a class="dropdown-item" href="./usuarios.php">Usuarios</a>
                             </div>
                         </li>
                         <li class="nav-item">
