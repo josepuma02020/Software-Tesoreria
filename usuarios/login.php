@@ -22,10 +22,10 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
                 $menu = "./layouts/navadmin.php";
                 break;
             case 2:
-                $menu = "diseno/navegadorsupervisor.php";
+                $menu = "./layouts/navverificador.php";
                 break;
             case 3:
-                $menu = "diseno/navegadorcobrador.php";
+                $menu = "./layouts/navregistrador.php";
                 break;
         }
         //autenticacion
