@@ -270,7 +270,7 @@
                 <?php } ?>
             </tbody>
         </table>
-        <input type="text" id="idu" name="idu">
+        <input type="hidden" id="idu" name="idu">
 
         <div class="form-row formulario">
             <div class="form-group mediano ">
