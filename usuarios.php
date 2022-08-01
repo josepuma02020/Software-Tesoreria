@@ -4,7 +4,7 @@ if (time() - $_SESSION['tiempo'] > 500) {
     //session_destroy();
     /* Aquí redireccionas a la url especifica */
     session_destroy();
-    header('Location: ' . "index.php?m=5");
+    header('Location: ' . "index.php?m=6");
     //die();
 } else {
     $_SESSION['tiempo'] = time();
