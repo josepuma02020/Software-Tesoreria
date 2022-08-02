@@ -17,7 +17,8 @@ if ($_SESSION['usuario']) {
     $correo = $_POST['correo'];
     $rol = $_POST['rol'];
     $usuario = $_POST['usuario'];
-    echo $clave = $_POST['clave'];
+    $clave = $_POST['clave'];
+    $proceso = $_POST['proceso'];
 
     if ($clave != '') {
         $claveh = password_hash($clave, PASSWORD_DEFAULT);
@@ -26,6 +27,10 @@ if ($_SESSION['usuario']) {
     }
     if ($rol != 0) {
         echo   $consulta = "UPDATE `usuarios` SET `rol`='$rol' WHERE  idusuario = '$id'";
+        echo $query = mysqli_query($link, $consulta) or die($consulta);
+    }
+    if ($proceso != 0) {
+        echo   $consulta = "UPDATE `usuarios` SET `idproceso`='$proceso' WHERE  idusuario = '$id'";
         echo $query = mysqli_query($link, $consulta) or die($consulta);
     }
 

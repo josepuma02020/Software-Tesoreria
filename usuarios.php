@@ -162,7 +162,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Registrar nuevo usuario</h5>
+                                <h5 class="modal-title" id="exampleModalLabel">Editar usuario</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -193,6 +193,28 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                     </div>
                                     <div class="form-row formulario">
                                         <div class="form-group mediano-grande">
+                                            <label for="hasta">Proceso actual:</label>
+                                            <input disabled style="text-align:center" class="form-control " id="procesoa" name="procesoa" type="text">
+                                        </div>
+                                        <div class="form-group mediano-grande">
+                                            <label for="desde">Nuevo proceso:</label>
+                                            <select style="text-align: center;" id="proceson" name="proceson" class="form-control col-md-8 ">
+                                                <?php
+                                                $consultaequipos = "select a.*,b.equipo from procesos a inner join equipos b on b.idequipo=a.idequipo";
+                                                $query = mysqli_query($link, $consultaequipos) or die($consultaequipos);
+                                                ?> <option value="0">Seleccionar</option>
+                                                <?php
+                                                while ($filas1 = mysqli_fetch_array($query)) {
+                                                ?>
+                                                    <option value="<?php echo $filas1['idproceso'] ?>"><?php echo  $filas1['proceso'] . '-' . $filas1['equipo'] ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row formulario">
+                                        <div class="form-group mediano-grande">
                                             <label for="hasta">Rol actual:</label>
                                             <input disabled style="text-align:center" class="form-control " id="rola" name="rola" type="text">
                                         </div>
@@ -206,7 +228,6 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                                 <option style="background-color: yellow ;" value="4">Inactivo</option>s
                                             </select>
                                         </div>
-
                                     </div>
                                     <div class="form-row formulario">
                                         <div class="form-group mediano-grande">
@@ -322,6 +343,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
             usuario = $('#usuariou').val();
             clave = $('#claveu').val();
             id = $('#idu').val();
+            proceso = $('#proceson').val();
             a = 0;
             if (clave != confirmarclave) {
                 a = 1;
@@ -348,7 +370,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                 });
             }
             if (a == 0) {
-                editarusuario(id, correo, rol, usuario, clave);
+                editarusuario(id, correo, rol, usuario, clave, proceso);
                 setTimeout(function() {
                     window.location.reload();
                 }, 1000);

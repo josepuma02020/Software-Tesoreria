@@ -30,11 +30,12 @@ function datosusuario(id) {
             $('#usuariou').val(dato['usuario']);
             $('#ultconexion').val(dato['ultconexion']);
             $('#ultconexion').val(dato['ultconexion']);
+            $('#procesoa').val(dato['proceso']);
         }
     });
 }
-function editarusuario(id, correo, rol, usuario, clave) {
-    cadenau = "nombre=" + nombre + "&correo=" + correo + "&rol=" + rol + "&usuario=" + usuario + "&clave=" + clave + "&id=" + id;
+function editarusuario(id, correo, rol, usuario, clave, proceso) {
+    cadenau = "nombre=" + nombre + "&proceso=" + proceso + "&correo=" + correo + "&rol=" + rol + "&usuario=" + usuario + "&clave=" + clave + "&id=" + id;
     $.ajax({
         type: "POST",
         url: "usuarios/editarusuario.php",

@@ -4,9 +4,8 @@ class usuarios
 
     public function obtenerdatosusuario($id)
     {
-
         include('../conexion/conexion.php');
-        $consultadatos = "select * from usuarios where idusuario = $id";
+        $consultadatos = "select a.*,b.proceso from usuarios a inner join procesos b on a.idproceso=b.idproceso where idusuario = $id";
         $query = mysqli_query($link, $consultadatos) or die($consultadatos);
         $ver = mysqli_fetch_row($query);
         switch ($ver[5]) {
@@ -27,6 +26,7 @@ class usuarios
             'usuario' => $ver[3],
             'Rol' => $rol,
             'Correo' => $ver[2],
+            'proceso' => $ver[9],
         );
         return $datos;
     }
