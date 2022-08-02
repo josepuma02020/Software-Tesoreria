@@ -1,0 +1,149 @@
+body {
+    text-align: center;
+    align-items: center !important;
+}
+
+
+
+form {
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 1em;
+    width: 90%;
+    text-align: center;
+
+}
+
+label {
+    font-weight: bolder;
+}
+
+footer {
+    text-align: center;
+}
+
+footer>button {
+    margin: 1rem;
+}
+
+.form-registros {
+    font-size: small;
+}
+
+.titulo-tabla {
+    border-top: #E0DCDC 4px solid;
+    border-bottom: #E0DCDC 4px solid;
+    margin-bottom: 1rem;
+    color: #006ECA;
+}
+
+.form-control-register {
+    display: block;
+    width: 100%;
+    padding: .2rem .75rem;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .375rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.boton-parametro {
+    height: 2rem;
+}
+
+.parametros {
+    display: flex;
+    height: 10%;
+    margin: 1rem;
+}
+
+.tabla-procesos {
+    font-size: 0.8rem;
+    margin-top: 1.5em;
+    margin-left: 3.33%;
+    margin-right: 3.33%;
+    width: 90%;
+    display: inline-block;
+    background-color: #F3F0F0;
+    border-radius: 1.5rem;
+    padding: 1rem;
+    text-align: center;
+    height: max-content;
+}
+
+.tabla-registros {
+    font-size: 0.8rem;
+    margin-top: 1.5em;
+    margin-left: 3.33%;
+    margin-right: 3.33%;
+    width: 43%;
+    display: inline-block;
+    background-color: #F3F0F0;
+    border-radius: 1.5rem;
+    padding: 1rem;
+    text-align: center;
+    height: max-content;
+}
+
+.usuarios {
+    text-align: center;
+}
+
+.mediano {
+    width: 20%;
+    display: inline-block;
+    margin-left: 1em;
+    margin-right: 1em;
+    text-align: center;
+}
+
+.mediano-pequeno {
+    width: 15%;
+    display: inline-block;
+    margin-left: 1em;
+    margin-right: 1em;
+    text-align: center;
+}
+
+.mediano-grande {
+    width: 40%;
+    display: inline-block;
+    margin-left: 1em;
+    margin-right: 1em;
+    text-align: center;
+    text-align: center;
+}
+
+.pequeno {
+    width: 10%;
+    display: inline-block;
+    margin-left: 1em;
+    margin-right: 1em;
+    text-align: center;
+}
+
+.grande {
+    margin-top: 1.5em;
+    margin-left: 1em;
+    margin-right: 1em;
+    width: 63%;
+    display: inline-block;
+}
+
+
+.botones {
+    margin: 1.1rem;
+
+}
+
+.botones>button {
+    margin: 0.3rem;
+}

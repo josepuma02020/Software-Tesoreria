@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/nav/desktop.css">
-    <link rel="stylesheet" href="../css/bootstrap/css/bootstrap.css">
-    <script src="../css/bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="./css/bootstrap/css/bootstrap.css">
+    <script src="./css/bootstrap/js/bootstrap.js"></script>
 </head>
 
 <body>
@@ -29,13 +29,24 @@
                         <li class="nav-item">
                             <a class="nav-link" href="revisionnotas.php">Revisión de Notas</a>
                         </li>
-
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Informes
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="./cuentas.php">Cuentas</a>
+                                <a class="dropdown-item" href="./tiposdocumento.php">Tipos de documento</a>
+                                <a class="dropdown-item" href="./clasificacion.php">Clasificacion de documentos</a>
+                                <a class="dropdown-item" href="./usuarios.php">Usuarios</a>
+                            </div>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Configuración
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" href="./cuentas.php">Cuentas</a>
+                                <a class="dropdown-item" href="./procesos.php">Procesos</a>
                                 <a class="dropdown-item" href="./tiposdocumento.php">Tipos de documento</a>
                                 <a class="dropdown-item" href="./clasificacion.php">Clasificacion de documentos</a>
                                 <a class="dropdown-item" href="./usuarios.php">Usuarios</a>
