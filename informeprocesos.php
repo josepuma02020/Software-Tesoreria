@@ -39,7 +39,7 @@ if ($_SESSION['usuario']) {
         <link rel="stylesheet" href="./css/revisionnotas/desktop.css">
         <SCRIPT lang="javascript" type="text/javascript" src="notascontables/notascontables.js"></script>
         <SCRIPT src="librerias/alertify/alertify.js"></script>
-        <title>Informe de registros por cuentas </title>
+        <title> Procesos registrados </title>
     </head>
 
     <body>
@@ -54,7 +54,7 @@ if ($_SESSION['usuario']) {
 
             <div class="tabla-registros">
                 <section class="titulo-pagina">
-                    <h2>Cuentas registradas</h2>
+                    <h2>Informe de procesos registrados</h2>
                 </section>
                 <form action="" method="post">
                     <div class="form-row formulario">
@@ -76,29 +76,30 @@ if ($_SESSION['usuario']) {
                 <table id="registrosnotas" class="table table-striped  table-responsive-lg revision-notas ">
                     <THEAD>
                         <tr>
-                            <th> Id.Cuenta. </th>
-                            <th> Descripción </th>
                             <th> Fecha </th>
-                            <th> Debe</th>
-                            <th> Haber </th>
-                            <th> Batch </th>
+                            <th> Área </th>
+                            <th> Equipo </th>
+                            <th> Proceso </th>
                             <th> Id.Nota </th>
+                            <th> Batch </th>
                         </tr>
                     </THEAD>
                     <TBODY>
                         <?php
-                        $consultanotas = "select c.batch,a.idcuenta,a.descripcion,b.fecha,b.debe,b.haber,c.idnota from cuentas a inner join registrosdenota b on b.idcuenta=a.idcuenta INNER join notascontables c on c.idnota=b.idnota where c.batch > 0 and c.fecha between '$desde' and  '$hasta'";
+                        $consultanotas = "SELECT a.fecha,a.batch,a.idnota,b.nombre,c.proceso,d.equipo,e.area 
+                        from notascontables a inner join usuarios b on b.idusuario=a.idusuario 
+                        inner join procesos c on c.idproceso=b.idproceso INNER join equipos d on d.idequipo=c.idequipo 
+                        inner join areas e on e.idarea=d.idarea where a.batch>0 and a.fecha between '$desde' and '$hasta'";
                         $query = mysqli_query($link, $consultanotas) or die($consultanotas);
                         while ($filas1 = mysqli_fetch_array($query)) {
                         ?>
                             <TR>
-                                <TD><?php echo $filas1['idcuenta']; ?> </TD>
-                                <TD><?php echo $filas1['descripcion']; ?> </TD>
                                 <TD><?php echo $filas1['fecha']; ?> </TD>
-                                <TD><?php echo $filas1['debe']; ?> </TD>
-                                <TD><?php echo $filas1['haber']; ?> </TD>
+                                <TD><?php echo $filas1['area']; ?> </TD>
+                                <TD><?php echo $filas1['equipo']; ?> </TD>
+                                <TD><?php echo $filas1['proceso']; ?> </TD>
+                                <TD><a href="home.php?id=<?php echo "$filas1[idnota]" ?>"><?php echo $filas1['idnota']; ?></a> </TD>
                                 <TD><?php echo $filas1['batch']; ?> </TD>
-                                <TD> <a href="home.php?id=<?php echo "$filas1[idnota]" ?>"> <?php echo $filas1['idnota']; ?></a> </TD>
                             </TR>
                         <?php } ?>
                     </tbody>
@@ -150,7 +151,7 @@ if ($_SESSION['usuario']) {
             desde = $('#desde').val();
             hasta = $('#hasta').val();
             mostrar = $('#mostrar').val();
-            location.href = `informecuentas.php?desde=${desde}&hasta=${hasta}&m=${mostrar}`;
+            location.href = `informeprocesos.php?desde=${desde}&hasta=${hasta}&m=${mostrar}`;
         });
         $('#detalles').click(function() {
             a = 0;

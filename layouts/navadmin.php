@@ -35,7 +35,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" href="./informecuentas.php">Registros de cuentas</a>
-                                <a class="dropdown-item" href="./tiposdocumento.php">Registros por proceso</a>
+                                <a class="dropdown-item" href="./informeprocesos.php">Registros por proceso</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
