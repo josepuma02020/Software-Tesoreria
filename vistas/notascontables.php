@@ -141,7 +141,7 @@
                     if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
                         $estado = '';
                     } ?>
-                    <input <?php echo $estado ?> value="<?php echo $batch ?>" style="text-align:center" class="form-control " id="batch" name="batch" type="number">
+                    <input <?php echo $estado ?> min="0" value="<?php echo $batch ?>" style="text-align:center" class="form-control " id="batch" name="batch" type="number">
                     <?php if ($batch != '') {
                         $estado = 'disabled';
                     } else {
@@ -298,8 +298,12 @@
         <section class="botones">
             <?php
             if ($batch == '') {
+                $estado = "";
+                if ($totalimporte != 0) {
+                    $estado = 'disabled';
+                }
             ?>
-                <button title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button>
+                <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button>
                 <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
                 <button title="Borrar Nota" id="delete" name="delete" class="btn btn-danger boton">Eliminar</button>
                 <?php
