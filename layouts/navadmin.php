@@ -29,14 +29,8 @@
                         <li class="nav-item">
                             <a class="nav-link" href="revisionnotas.php">Revisión de Notas</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Informes
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="./informecuentas.php">Registros de cuentas</a>
-                                <a class="dropdown-item" href="./informeprocesos.php">Registros por proceso</a>
-                            </div>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./informes.php">Informes</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
