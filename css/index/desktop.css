@@ -6,6 +6,7 @@ body {
     align-items: center;
     text-align: center;
     align-content: center;
+    height: 100%;
 }
 
 form {
@@ -13,9 +14,11 @@ form {
     text-align: left;
 
 }
-label{
+
+label {
     font-size: 1rem;
 }
+
 .login {
     background-position: top;
     background-size: cover;
@@ -46,7 +49,6 @@ label{
 .m-login {
     margin: 2%;
     width: 46%;
-    height: 100%;
 
 }
 
