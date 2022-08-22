@@ -305,7 +305,7 @@
             ?>
                 <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button>
                 <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
-                <button title="Borrar Nota" id="delete" name="delete" class="btn btn-danger boton">Eliminar</button>
+                <button title="Borrar Nota" id="delete" name="delete" class="btn btn-danger boton">Limpiar</button>
                 <?php
             } else {
                 if ($_SESSION['rol'] == 1) {
@@ -562,6 +562,22 @@
                     });
                 }
             }
+        });
+        $('#delete').click(function() {
+            a = 0;
+            iddocumento = $('#iddocumento').val();
+            alertify.confirm('Confirmación', 'Esta seguro que desea limpiar los registros de esta nota?', function() {
+                limpiarnota(iddocumento)
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000);
+                alertify.success('Operación exitosa. ');
+            }, function() {
+
+            }).set('labels', {
+                ok: 'Continuar',
+                cancel: 'Cancelar'
+            });
         });
         $('#eliminarregistro').click(function() {
             idu = $('#idu').val();

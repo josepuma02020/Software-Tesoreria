@@ -30,6 +30,18 @@ function verificar(desde, hasta, batch) {
 }
 
 
+function limpiarnota(id) {
+    $.ajax({
+        type: "POST",
+        url: "notascontables/limpiarnota.php",
+        data: "id=" + id,
+        success: function (r) {
+            // console.log(r);
+            // debugger;
+
+        }
+    });
+}
 function cambiarseleccionnota(id) {
     $.ajax({
         type: "POST",
