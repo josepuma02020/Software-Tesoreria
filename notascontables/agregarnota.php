@@ -29,7 +29,7 @@ if ($_SESSION['usuario']) {
 
     //ingresarnota
     $consultaingresonota = "INSERT INTO `notascontables`(`idnota`, `idusuario`, `idtipodocumento`, `idclasificacion`, `batch`, `comentario`, `fecha`, `hora`) VALUES 
-    ('$idnota','$usuario','$type','$clasificacion','NULL','$comentario','$fecha_actual','$hora')";
+    ('$idnota','$usuario','$type','$clasificacion','','$comentario','$fecha_actual','$hora')";
     $querynota = mysqli_query($link, $consultaingresonota) or die($consultaingresonota);
 } else {
     header('Location: ' . "usuarios/cerrarsesion.php");

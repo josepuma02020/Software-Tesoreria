@@ -28,8 +28,6 @@ function verificar(desde, hasta, batch) {
         }
     });
 }
-
-
 function limpiarnota(id) {
     $.ajax({
         type: "POST",
@@ -92,11 +90,11 @@ function registrarnota(type, clasificacion, comentario, batch) {
         data: cadenau,
         success: function (r) {
             if (r == 111) {
-                // console.log(r);
-                // debugger;
+                console.log(batch);
+                debugger;
             } else {
-                // console.log(r);
-                // debugger;
+                console.log(batch);
+                debugger;
             }
         }
     });

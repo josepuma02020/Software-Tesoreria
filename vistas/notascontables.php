@@ -139,7 +139,6 @@
                     <?php
                     $estado = 'disabled';
                     if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
-                        $estado = '';
                     } ?>
                     <input <?php echo $estado ?> min="0" value="<?php echo $batch ?>" style="text-align:center" class="form-control " id="batch" name="batch" type="number">
                     <?php if ($batch != '') {
@@ -305,7 +304,7 @@
             ?>
                 <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button>
                 <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
-                <button title="Borrar Nota" id="delete" name="delete" class="btn btn-danger boton">Limpiar</button>
+                <button title="Borrar Nota" id="delete" name="delete" class="btn btn-secondary boton">Limpiar</button>
                 <?php
             } else {
                 if ($_SESSION['rol'] == 1) {
@@ -496,7 +495,7 @@
                 totaldebe = $('#totaldebe').val();
                 totalhaber = $('#totalhaber').val();
                 usuario = $('#user').val();
-                batch = $('#batch').val();
+                batch = '';
                 a = 0;
                 if (a == 0) {
                     editarnota(iddocumento, usuario, type, clasificacion, comentario, batch);
@@ -508,7 +507,6 @@
                 totaldebe = $('#totaldebe').val();
                 totalhaber = $('#totalhaber').val();
                 totalimporte = parseInt(totaldebe) - parseInt(totalhaber);
-
                 //grupo
                 cuenta = $('#cuenta').val();
                 const cuentas = cuenta.split(' ');
@@ -550,7 +548,7 @@
                         });
                     }
                     if (a == 0) {
-                        registrarnota(type, clasificacion, comentario, batch);
+                        registrarnota(type, clasificacion, comentario, '');
                         setTimeout(function() {
                             window.location.reload();
                         }, 1000);
