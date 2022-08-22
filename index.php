@@ -93,15 +93,12 @@
                 </div>
                 <div class="form-group centrado">
                     <button class="btn btn-primary btn-login" type="submit">Iniciar Sesión </button>
-
                 </div>
             </form>
             <h6>Olvido su contraseña?</h6>
         </div>
     </main>
     <footer>
-
-
     </footer>
     <script src="./css/bootstrap/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
     </script>
