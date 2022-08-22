@@ -6,7 +6,6 @@ body {
     align-items: center;
     text-align: center;
     align-content: center;
-
 }
 
 form {
@@ -14,7 +13,9 @@ form {
     text-align: left;
 
 }
-
+label{
+    font-size: 1rem;
+}
 .login {
     background-position: top;
     background-size: cover;
