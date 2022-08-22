@@ -113,6 +113,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                         <tr>
                             <th> Nombre</th>
                             <th> Usuario </th>
+                            <th> Proceso </th>
                             <th> Rol </th>
                             <th> Correo </th>
                             <th> Acciones </th>
@@ -120,13 +121,14 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                     </thead>
                     <tbody>
                         <?php
-                        $consultatipos = "select * from usuarios";
+                        $consultatipos = "select a.*,b.proceso from usuarios a INNER JOIN procesos b on b.idproceso=a.idproceso ";
                         $query = mysqli_query($link, $consultatipos) or die($consultatipos);
                         while ($filas = mysqli_fetch_array($query)) {
                         ?>
                             <tr>
                                 <td> <?php echo $filas['nombre'] ?> </td>
                                 <td> <?php echo $filas['usuario'] ?> </td>
+                                <td> <?php echo $filas['proceso'] ?> </td>
                                 <td> <?php
                                         switch ($filas['rol']) {
                                             case 1:
@@ -200,13 +202,13 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                             <label for="desde">Nuevo proceso:</label>
                                             <select style="text-align: center;" id="proceson" name="proceson" class="form-control col-md-8 ">
                                                 <?php
-                                                $consultaequipos = "select a.*,b.equipo from procesos a inner join equipos b on b.idequipo=a.idequipo";
+                                                $consultaequipos = "select a.*,b.equipo,c.area from procesos a inner join equipos b on b.idequipo=a.idequipo inner join areas c on c.idarea = b.idarea;";
                                                 $query = mysqli_query($link, $consultaequipos) or die($consultaequipos);
                                                 ?> <option value="0">Seleccionar</option>
                                                 <?php
                                                 while ($filas1 = mysqli_fetch_array($query)) {
                                                 ?>
-                                                    <option value="<?php echo $filas1['idproceso'] ?>"><?php echo  $filas1['proceso'] . '-' . $filas1['equipo'] ?></option>
+                                                    <option value="<?php echo $filas1['idproceso'] ?>"><?php echo  $filas1['area'] . ' - ' . $filas1['equipo'] . ' - ' . $filas1['proceso'] ?></option>
                                                 <?php
                                                 }
                                                 ?>
@@ -220,7 +222,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                         </div>
                                         <div class="form-group mediano-grande">
                                             <label for="desde">Nuevo rol:</label>
-                                            <select class="form-control col-md-8 " name="rolu" id="rolu">
+                                            <select style="text-align:center" class="form-control col-md-8 " name="rolu" id="rolu">
                                                 <option value="0">Seleccionar</option>
                                                 <option value="1">Administrador</option>
                                                 <option value="2">Verificador de Notas</option>
