@@ -1,8 +1,12 @@
+html {
+    height: 100%;
+}
+
 body {
     align-items: center;
     text-align: center;
     align-content: center;
-
+    height: 100%;
 }
 
 form {
@@ -11,12 +15,15 @@ form {
 
 }
 
+label {
+    font-size: 2rem;
+}
+
 .login {
     background-position: top;
     background-size: cover;
     background-image: url("../../img/Login.png");
     background-repeat: no-repeat;
-    image-rendering: pixelated;
 }
 
 .btn-login {
@@ -31,6 +38,7 @@ form {
     border-right: 0;
     border-left: 0;
     width: 100%;
+    font-size: 1.2rem;
     margin-bottom: 2rem;
 }
 
@@ -42,7 +50,6 @@ form {
 .m-login {
     margin: 2%;
     width: 46%;
-    height: 100%;
 
 }
 
