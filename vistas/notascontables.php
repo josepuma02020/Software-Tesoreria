@@ -443,7 +443,7 @@
                 registrargrupo(iddoc, cuentas, dates, debes, habers, lms, ans);
                 setTimeout(function() {
                     window.location.reload();
-                }, 1000 + (cuentas.length * 50));
+                }, 1000 + (cuentas.length * 10));
             } else {
                 //individual
                 a = 0;

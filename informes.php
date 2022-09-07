@@ -105,6 +105,12 @@ if ($_SESSION['usuario']) {
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                             </svg>
                         </button>
+                        <button title="Exportar excel" type="button" id="excel" class="btn btn-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-ruled" viewBox="0 0 16 16">
+                                <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V2a1 1 0 0 1 1-1h5.5v2zM3 12v-2h2v2H3zm0 1h2v2H4a1 1 0 0 1-1-1v-1zm3 2v-2h7v1a1 1 0 0 1-1 1H6zm7-3H6v-2h7v2z" />
+                            </svg>
+
+                        </button>
                     </div>
                 </form>
                 <?php
@@ -239,6 +245,12 @@ if ($_SESSION['usuario']) {
             desde = $('#desde').val();
             hasta = $('#hasta').val();
             location.href = `prestamoscerrados.php?desde=${desde}&hasta=${hasta}`;
+        });
+        $('#excel').click(function() {
+            a = 0;
+            desde = $('#desde').val();
+            hasta = $('#hasta').val();
+            location.href = `exportarexcel.php?desde=${desde}&hasta=${hasta}`;
         });
     });
 </script>

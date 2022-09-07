@@ -81,7 +81,7 @@
             <img class="logo" src="./img/Logologin.png" alt="Logo ESSA">
         </div>
         <div class="m-login">
-            <h1 style="font-weight: bolder ;">Programa de Registros Contables</h1>
+            <h2 style="font-weight: bolder ;">Programa de Registros Contables</h2>
             <form action="./usuarios/login.php" method="post">
                 <div class="form-group centrado">
                     <label for="user">Usuario:</label>
