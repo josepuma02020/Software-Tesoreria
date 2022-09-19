@@ -39,11 +39,8 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
             <?php
             include_once($_SESSION['menu']);
             ?>
-
         </header>
         <main style="max-width:90% ;" class=" container container-md">
-
-
             <div class="tabla-registros">
                 <div class="titulo-tabla">
                     <h2>Usuarios</h2>
@@ -77,24 +74,41 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                     <div class="form-row formulario">
                                         <div class="form-group mediano-grande">
                                             <label for="desde">Rol:</label>
-                                            <select class="form-control col-md-8 " name="roln" id="roln">
+                                            <select style="text-align: center;" class="form-control col-md-8 " name="roln" id="roln">
                                                 <option value="0">Seleccionar</option>
                                                 <option value="1">Administrador</option>
-                                                <option value="2">Verificador de Notas</option>
-                                                <option value="0">Registrador de Notas</option>
+                                                <option value="2">Verificador</option>
+                                                <option value="3">Registrador</option>
+                                                <option value="4">Aprobador</option>
                                             </select>
                                         </div>
                                         <div class="form-group mediano-grande">
-                                            <label for="hasta">Usuario:</label>
-                                            <input value="" autocomplete="off" style="text-align:center" class="form-control " id="usuarion" name="usuarion" type="text">
+                                            <label for="desde">Proceso:</label>
+                                            <select style="text-align: center;" id="proceso" name="proceso" class="form-control col-md-8 ">
+                                                <?php
+                                                $consultaequipos = "select a.*,b.equipo,c.area from procesos a inner join equipos b on b.idequipo=a.idequipo inner join areas c on c.idarea = b.idarea;";
+                                                $query = mysqli_query($link, $consultaequipos) or die($consultaequipos);
+                                                ?> <option value="0">Seleccionar</option>
+                                                <?php
+                                                while ($filas1 = mysqli_fetch_array($query)) {
+                                                ?>
+                                                    <option value="<?php echo $filas1['idproceso'] ?>"><?php echo  $filas1['area'] . ' - ' . $filas1['equipo'] . ' - ' . $filas1['proceso'] ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-row formulario">
                                         <div class="form-group mediano-grande">
+                                            <label for="hasta">Usuario:</label>
+                                            <input value="" autocomplete="off" style="text-align:center" class="form-control " id="usuarion" name="usuarion" type="text">
+                                        </div>
+                                        <div class="form-group mediano">
                                             <label for="desde">Clave:</label>
                                             <input style="text-align:center" class=" form-control " id="claven" name="claven" type="password">
                                         </div>
-                                        <div class="form-group mediano-grande">
+                                        <div class="form-group mediano">
                                             <label for="hasta">Confirmar Clave:</label>
                                             <input style="text-align:center" class="form-control " id="confirmarclaven" name="confirmarclaven" type="password">
                                         </div>
@@ -297,6 +311,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
             nombre = $('#nombren').val();
             correo = $('#correon').val();
             rol = $('#roln').val();
+            proceso = $('#proceso').val();
             usuario = $('#usuarion').val();
             clave = $('#claven').val();
             if (clave != confirmarclave) {
@@ -330,7 +345,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                 });
             }
             if (a == 0) {
-                registrarusuario(nombre, correo, rol, usuario, clave);
+                registrarusuario(nombre, correo, rol, usuario, clave, proceso);
                 setTimeout(function() {
                     window.location.reload();
                 }, 1000);

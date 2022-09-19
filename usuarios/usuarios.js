@@ -1,16 +1,16 @@
-function registrarusuario(nombre, correo, rol, usuario, clave) {
-    cadenau = "nombre=" + nombre + "&correo=" + correo + "&rol=" + rol + "&usuario=" + usuario + "&clave=" + clave;
+function registrarusuario(nombre, correo, rol, usuario, clave, proceso) {
+    cadenau = "nombre=" + nombre + "&correo=" + correo + "&rol=" + rol + "&usuario=" + usuario + "&clave=" + clave + "&proceso=" + proceso;
     $.ajax({
         type: "POST",
         url: "usuarios/registrarusuario.php",
         data: cadenau,
         success: function (r) {
             if (r == 1) {
-                // console.log(r);
-                // debugger;
+                //console.log(r);
+                //debugger;
             } else {
                 // console.log(r);
-                // debugger;
+                //debugger;
             }
         }
     });
