@@ -25,7 +25,7 @@ header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
         <tr style="font-weight:100 ;">
             <td>
                 <?php
-                $consultabatch = "select distinct(batch) from notascontables where  fecha between '$desde' and '$hasta' and batch >0";
+                $consultabatch = "select distinct(batch) from notascontables where  fecha between '$desde' and '$hasta' order by batch ";
                 $querybatch = mysqli_query($link, $consultabatch) or die($consultabatch);
                 while ($batchs = mysqli_fetch_array($querybatch)) {
                     $a = 0;
@@ -79,10 +79,11 @@ header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
             <td><?php echo $registros['idcuenta']; ?> </td>
             <td>
                 <?php
+                            echo number_format($registros['debe'] - $registros['haber']);
                             if ($registros['debe'] > 0) {
-                                echo number_format($registros['debe']);
+                                // echo number_format($registros['debe']);
                             } else {
-                                echo "-" . number_format($registros['haber']);
+                                // echo "-" . number_format($registros['haber']);
                             } ?>
             </td>
             <td><?php echo $registros['tipolm']; ?> </td>
