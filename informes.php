@@ -56,7 +56,7 @@ if ($_SESSION['usuario']) {
         <main style="max-width:90% ;" class=" container container-md">
             <div class="tabla-registros">
                 <section class="titulo-pagina">
-                    <h2>Cuentas registradas</h2>
+                    <h2>Informes</h2>
                 </section>
                 <form action="" method="post">
                     <div class="form-row formulario">

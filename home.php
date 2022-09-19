@@ -47,7 +47,15 @@ if ($_SESSION['usuario']) {
         </header>
         <main>
             <?php
-            include('./vistas/notascontables.php');
+            switch ($_GET['n']) {
+                case 1:
+                    include('./vistas/notascontables.php');
+                    break;
+                case 2:
+                    include('./vistas/notascontablesgestioncontable.php');
+                    break;
+            }
+
             ?>
         </main>
     </body>
