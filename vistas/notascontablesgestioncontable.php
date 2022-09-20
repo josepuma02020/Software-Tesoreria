@@ -135,10 +135,6 @@
 
             </div>
             <div class="form-row formulario">
-                <div class="form-group mediano-pequeno">
-                    <label for="user">Aprobado por:</label>
-                    <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
-                </div>
                 <div class="form-group pequeno">
                     <label for="batch">Batch:</label>
                     <?php
@@ -157,7 +153,11 @@
                     <label for="user">Fecha creación:</label>
                     <input style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
                 </div>
-                <div class="form-group mediano-grande ">
+                <div class="form-group mediano">
+                    <label for="user">Aprobado por:</label>
+                    <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
+                </div>
+                <div class="form-group mediano ">
                     <label for="comment">Comentario:</label>
                     <input <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
                 </div>
