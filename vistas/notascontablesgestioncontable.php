@@ -90,7 +90,8 @@
                     <label for="user">Usuario:</label>
                     <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
                 </div>
-                <div class="form-group mediano-grande">
+
+                <div class="form-group mediano">
                     <label for="type">Tipo de Documento</label>
                     <select <?php echo $estado ?> style="text-align: center;" id="type" class="form-control col-md-8 ">
                         <?php
@@ -111,7 +112,7 @@
                         ?>
                     </select>
                 </div>
-                <div class="form-group mediano-grande">
+                <div class="form-group mediano">
                     <label for="type">Clasificación de Documento</label>
                     <select <?php echo $estado ?> style="text-align: center;" id="clasificacion" class="form-control col-md-8 ">
                         <?php
@@ -134,6 +135,10 @@
 
             </div>
             <div class="form-row formulario">
+                <div class="form-group mediano-pequeno">
+                    <label for="user">Aprobado por:</label>
+                    <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
+                </div>
                 <div class="form-group pequeno">
                     <label for="batch">Batch:</label>
                     <?php
@@ -152,7 +157,7 @@
                     <label for="user">Fecha creación:</label>
                     <input style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
                 </div>
-                <div class="form-group grande ">
+                <div class="form-group mediano-grande ">
                     <label for="comment">Comentario:</label>
                     <input <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
                 </div>
@@ -163,13 +168,10 @@
         <table id="registrosnotas" class="table table-striped  table-responsive-lg">
             <thead>
                 <th>Fecha</th>
-                <th>Cuenta</th>
-                <th>Descripción</th>
-                <th>Debe</th>
-                <th>Haber</th>
+                <th>Concepto</th>
                 <th>Importe</th>
-                <th>T.LM</th>
-                <th>LM</th>
+                <th>L.M Auxiliar</th>
+                <th>T.M</th>
                 <th>AN8</th>
                 <?php
                 if ($batch == '') {
@@ -226,26 +228,17 @@
                                 <input class="form-control" type="hidden" required id="idnota" name="idnota" value="0">
                                 <input class="  form-control-register" type="text" required id="date" name="date">
                             </td>
-                            <td style="width: 13%;padding:5">
-                                <input class="  form-control-register" type="text" required id="cuenta" name="cuenta">
-                            </td>
-                            <td style="width: 15% ;padding:5">
-                                <input class="  form-control-register" type="text" required id="descripcion" name="descripcion" disabled>
-                            </td>
-                            <td style="width:8%">
-                                <input style="text-align:center;padding:5" min="0" class="  form-control-register" type="text" required id="debe" name="debe">
-                            </td>
-                            <td style="width:8%">
-                                <input style="text-align:center;padding:5" min="0" class="  form-control-register" type="text" required id="haber" name="haber">
+                            <td>
+                                <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="concepto" name="concepto" disabled>
                             </td>
                             <td style="width:10%">
                                 <input style="text-align:center;padding:5" class="  form-control-register" type="number" required id="importe" name="importe" disabled>
                             </td>
                             <td>
-                                <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="tipolm" name="tipolm" disabled>
+                                <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="lmauxiliar" name="lmauxiliar" disabled>
                             </td>
                             <td style="width:10%">
-                                <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="lm" name="lm" required>
+                                <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="tm" name="tm" required>
                             </td>
                             <td style="width:10%">
                                 <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="an" name="an" required>
