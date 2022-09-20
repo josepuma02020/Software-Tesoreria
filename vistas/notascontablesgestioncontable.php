@@ -20,7 +20,7 @@
     $mes = date('m');
     $dia = date('d');
     //autocompletar cliente
-    $consulta = "SELECT `idcuenta`  FROM `cuentas` ";
+    $consulta = "SELECT distinct(concepto)  FROM `cuentas` where concepto != '' ";
     $queryt = mysqli_query($link, $consulta) or die($consulta);
     $productos[] = array();
     while ($arregloproductos = mysqli_fetch_row($queryt)) {
@@ -155,7 +155,7 @@
                 </div>
                 <div class="form-group mediano">
                     <label for="user">Aprobado por:</label>
-                    <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
+                    <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
                 </div>
                 <div class="form-group mediano ">
                     <label for="comment">Comentario:</label>
@@ -184,21 +184,18 @@
             </thead>
             <tbody>
                 <?php
-                $consultaregistros = "SELECT a.*,b.descripcion FROM `registrosdenota` a INNER JOIN cuentas b on b.idcuenta=a.idcuenta WHERE a.idnota='$idnota'";
+                $consultaregistros = "SELECT a.idregistro, a.fecha,b.concepto,a.haber,a.tipolm,a.lm,a.an FROM `registrosdenota` a INNER JOIN cuentas b on b.idcuenta=a.idcuenta WHERE a.idnota='$idnota'  and b.tipo = 'c'";
                 $queryregistros = mysqli_query($link, $consultaregistros) or die($consultaregistros);
                 $totaldebe = 0;
                 $totalhaber = 0;
+                $totalimporte = 2;
                 while ($filasregistros = mysqli_fetch_array($queryregistros)) {
-                    $totaldebe = $totaldebe + $filasregistros['debe'];
-                    $totalhaber = $totalhaber + $filasregistros['haber'];
+                    $totalimporte = $totalimporte + $filasregistros['haber'];
                 ?>
                     <tr>
                         <TD><?php echo $filasregistros['fecha']; ?> </TD>
-                        <TD><?php echo $filasregistros['idcuenta']; ?> </TD>
-                        <TD><?php echo $filasregistros['descripcion']; ?> </TD>
-                        <TD><?php echo number_format($filasregistros['debe']); ?> </TD>
+                        <TD><?php echo $filasregistros['concepto']; ?> </TD>
                         <TD><?php echo number_format($filasregistros['haber']); ?> </TD>
-                        <TD><?php echo number_format($filasregistros['debe'] -  $filasregistros['haber']); ?> </TD>
                         <TD><?php echo $filasregistros['tipolm']; ?> </TD>
                         <TD><?php echo $filasregistros['lm']; ?> </TD>
                         <td><?php echo $filasregistros['an']; ?> </td>
@@ -226,19 +223,19 @@
                         <tr>
                             <td style="width: 13%;padding:5">
                                 <input class="form-control" type="hidden" required id="idnota" name="idnota" value="0">
-                                <input class="  form-control-register" type="text" required id="date" name="date">
+                                <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="date" name="date">
                             </td>
                             <td>
-                                <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="concepto" name="concepto" disabled>
+                                <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="concepto" name="concepto">
                             </td>
                             <td style="width:10%">
-                                <input style="text-align:center;padding:5" class="  form-control-register" type="number" required id="importe" name="importe" disabled>
+                                <input style="text-align:center;padding:5" class="  form-control-register" type="number" required id="importe" name="importe">
                             </td>
                             <td>
                                 <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="lmauxiliar" name="lmauxiliar" disabled>
                             </td>
                             <td style="width:10%">
-                                <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="tm" name="tm" required>
+                                <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="tm" name="tm">
                             </td>
                             <td style="width:10%">
                                 <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="an" name="an" required>
@@ -263,28 +260,12 @@
             </tbody>
         </table>
         <input type="hidden" id="idu" name="idu">
-
         <div class="form-row formulario">
-            <div class="form-group mediano ">
-                <label for="comment">Total Debe:</label>
-                <input style="text-align:center" class="form-control " id="totaldebe" name="totaldebe" type="text" value="<?php echo number_format($totaldebe) ?>" disabled>
-            </div>
-            <div class="form-group mediano ">
-                <label for="comment">Total Haber:</label>
-                <input style="text-align:center" class="form-control " id="totalhaber" name="totalhaber" type="text" value="<?php echo number_format($totalhaber) ?>" disabled>
-            </div>
             <div class="form-group mediano ">
                 <label for="comment">Total Importe:</label>
                 <?php
-                $totalimporte = $totaldebe - $totalhaber;
-                if ($totalimporte != 0) {
-                    $color = '#FC9999';
-                } else {
-                    $color = '#CDFC9A';
-                }
-
                 ?>
-                <input style="text-align:center;background-color:<?php echo $color ?>" class="form-control " id="totalimporte" name="totalimporte" type="text" value="<?php echo number_format($totaldebe - $totalhaber) ?>" disabled>
+                <input style="text-align:center;background-color:<?php echo $color ?>" class="form-control " id="totalimporte" name="totalimporte" type="text" value="<?php echo number_format($totalimporte) ?>" disabled>
             </div>
         </div>
         <section class="botones">
@@ -355,12 +336,12 @@
             importe = debe - haber;
             $('#importe').val(importe);
         });
-        $('#lm').change(function() {
-            lm = $('#lm').val();
-            if (lm.length > 0) {
-                $('#tipolm').val("A");
+        $('#tm').change(function() {
+            tm = $('#tm').val();
+            if (tm.length > 0) {
+                $('#lmauxiliar').val("A");
             } else {
-                $('#tipolm').val("");
+                $('#lmauxiliar').val("");
             }
         });
         $('#cuenta').change(function() {
@@ -383,20 +364,17 @@
             batch = $('#batch').val();
             clasificacion = $('#clasificacion').val();
             comentario = $('#comment').val();
-
             totaldebe = 0;
             totalhaber = 0;
             //grupo
-            cuenta = $('#cuenta').val();
-            const cuentas = cuenta.split(' ');
-            date = $('#date').val();
-            const dates = date.split(' ');
-            debe = $('#debe').val();
-            const debes = debe.split(' ');
-            haber = $('#haber').val();
-            const habers = haber.split(' ');
-            lm = $('#lm').val();
-            const lms = lm.split(' ');
+            concepto = $('#concepto').val();
+            const conceptos = concepto.split(' ');
+            fecha = $('#date').val();
+            const fechas = fecha.split(' ');
+            importe = $('#importe').val();
+            const importes = importe.split(' ');
+            tm = $('#tm').val();
+            const tms = tm.split(' ');
             an = $('#an').val();
             const ans = an.split(' ');
             // console.log(dates);
@@ -405,7 +383,7 @@
             // console.log(habers);
             // console.log(lms);
             // console.log(ans);
-            if (cuentas.length > 1) {
+            if (conceptos.length > 1) {
                 ///grupo
                 for (var i = 0; i < cuentas.length; i++) {
                     cuenta = cuentas[i];
@@ -433,29 +411,34 @@
                 $('#totaldebe').val((separator(totaldebe)));
                 $('#totalhaber').val(separator(totalhaber));
                 $('#totalimporte').val(separator(totalimporte));
-                registrargrupo(iddoc, cuentas, dates, debes, habers, lms, ans);
+                // registrargrupo(iddoc, cuentas, dates, debes, habers, lms, ans);
                 setTimeout(function() {
-                    window.location.reload();
+                    //  window.location.reload();
                 }, 1000 + (cuentas.length * 10));
             } else {
                 //individual
                 a = 0;
-                cuenta = $('#cuenta').val();
+                concepto = $('#concepto').val();
                 fecha = $('#date').val();
-                debe = $('#debe').val();
-                haber = $('#haber').val();
-                lm = $('#lm').val();
+                importe = $('#importe').val();
+                tm = $('#tm').val();
                 an = $('#an').val();
-                tipolm = $('#tipolm').val();
-                if (debe <= 0 && haber <= 0) {
+                lmauxiliar = $('#lmauxiliar').val();
+                if (an == '') {
                     a = 1;
-                    alertify.alert('ATENCION!!', 'Debe llenar el campo de Debe o Haber(Los dos no pueden registrarse en valor menor o igual a cero). ', function() {
+                    alertify.alert('ATENCION!!', 'Debe ingresar valor de AN8.', function() {
                         alertify.success('Ok');
                     });
                 }
-                if (cuenta == '') {
+                if (importe == 0) {
                     a = 1;
-                    alertify.alert('ATENCION!!', 'El campo de Cuenta se encuentra vacío', function() {
+                    alertify.alert('ATENCION!!', 'El importe debe ser mayor a 0.', function() {
+                        alertify.success('Ok');
+                    });
+                }
+                if (concepto == '') {
+                    a = 1;
+                    alertify.alert('ATENCION!!', 'El campo concepto es obligatorio.', function() {
                         alertify.success('Ok');
                     });
                 }
@@ -465,10 +448,9 @@
                         alertify.success('Ok');
                     });
                 }
-
                 if (a == 0) {
                     //registrarnota(type, clasificacion, comentario, batch);
-                    registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
+                    registrogestioncontable(iddoc, concepto, fecha, importe, tm, an, lmauxiliar);
                     setTimeout(function() {
                         window.location.reload();
                     }, 1000);
@@ -578,7 +560,7 @@
             }, 1000);
         });
         disponible = (<?php echo $relleno ?>);
-        $("#cuenta").autocomplete({
+        $("#concepto").autocomplete({
             source: disponible,
             lookup: disponible,
             minLength: 4

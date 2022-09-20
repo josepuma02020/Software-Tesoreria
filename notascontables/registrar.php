@@ -20,7 +20,6 @@ if ($_SESSION['usuario']) {
     $lm = $_POST['lm'];
     $an = $_POST['an'];
     $tipolm = $_POST['tipolm'];
-
     //consultaidregistro
     $ano = date('Y');
     $mes = date('m');

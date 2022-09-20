@@ -1,3 +1,21 @@
+function registrogestioncontable(iddoc, concepto, fecha, importe, tm, an, lmauxiliar) {
+    cadenau = "iddoc=" + iddoc + "&concepto=" + concepto + "&importe=" + importe + "&fecha=" + fecha + "&tm=" + tm + "&lmauxiliar=" + lmauxiliar + "&an=" + an;
+    $.ajax({
+        type: "POST",
+        url: "notascontables/registrogestioncontable.php",
+        data: cadenau,
+        success: function (r) {
+            if (r == 1) {
+                //console.log(r);
+                //debugger;
+            } else {
+                //console.log(r);
+                // debugger;
+            }
+        }
+    });
+}
+
 function editarnota(id, usuario, type, clasificacion, comentario, batch) {
     cadenau = "type=" + type + "&clasificacion=" + clasificacion + "&comentario=" + comentario + "&batch=" + batch + "&usuario=" + usuario + "&id=" + id;
     $.ajax({
