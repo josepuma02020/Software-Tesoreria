@@ -225,7 +225,7 @@ if ($_SESSION['usuario']) {
 <script type="text/javascript">
     $(document).ready(function() {
 
-        $('#buscar').click(function() {
+        $('#textobuscar').click(function() {
             a = 0;
             desde = $('#desde').val();
             hasta = $('#hasta').val();
@@ -240,12 +240,7 @@ if ($_SESSION['usuario']) {
                 location.href = `informes.php?desde=${desde}&hasta=${hasta}&informe=${informe}`;
             }
         });
-        $('#detalles').click(function() {
-            a = 0;
-            desde = $('#desde').val();
-            hasta = $('#hasta').val();
-            location.href = `prestamoscerrados.php?desde=${desde}&hasta=${hasta}`;
-        });
+
         $('#excel').click(function() {
             a = 0;
             desde = $('#desde').val();

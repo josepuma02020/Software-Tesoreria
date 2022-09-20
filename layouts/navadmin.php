@@ -25,7 +25,7 @@
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Cración de notas contables
+                                Creación de notas contables
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="nav-link" href="home.php?n=1">Flujo de caja y Financiación</a>
@@ -46,6 +46,7 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="dropdown-item" href="./cuentas.php">Cuentas</a>
                                 <a class="dropdown-item" href="./procesos.php">Procesos</a>
+                                <a class="dropdown-item" href="./listaan.php">Lista de AN8</a>
                                 <a class="dropdown-item" href="./tiposdocumento.php">Tipos de documento</a>
                                 <a class="dropdown-item" href="./clasificacion.php">Clasificacion de documentos</a>
                                 <a class="dropdown-item" href="./usuarios.php">Usuarios</a>
