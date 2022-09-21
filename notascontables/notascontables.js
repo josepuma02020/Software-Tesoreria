@@ -100,8 +100,8 @@ function elminarregistro(id) {
     });
 }
 
-function registrarnota(type, clasificacion, comentario, batch) {
-    cadenau = "type=" + type + "&clasificacion=" + clasificacion + "&comentario=" + comentario + "&batch=" + batch;
+function registrarnota(type, clasificacion, comentario, batch, tipo) {
+    cadenau = "type=" + type + "&clasificacion=" + clasificacion + "&comentario=" + comentario + "&batch=" + batch + "&tipo=" + tipo;
     $.ajax({
         type: "POST",
         url: "notascontables/agregarnota.php",

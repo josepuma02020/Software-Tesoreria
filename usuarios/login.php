@@ -18,7 +18,7 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
         $fecha = date("Y" . "-" . "m" . "-" . "d");
         $rol = $arreglo['rol'];
         switch ($rol) {
-            case '1':
+            case 1:
                 $menu = "./layouts/navadmin.php";
                 break;
             case 2:
@@ -30,7 +30,6 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
         }
         //autenticacion
         if (password_verify($clave1, $clave2)) {
-            echo 1;
             $_SESSION['idusuario'] = $arreglo['idusuario'];
             $_SESSION['usuario'] = $usuario;
             $_SESSION['rol'] = $rol;
@@ -41,7 +40,7 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
             $_SESSION['tiempo'] = time();
             $consultaactconex = "update usuarios set ultingreso = '$fecha' where idusuario = $_SESSION[idusuario] ";
             $query = mysqli_query($link, $consultaactconex) or die($consultaactconex);
-            header('Location: ' . "../informes.php");
+            header('Location: ' . "../revisionnotas.php");
         } else {
             echo 'no';
             header('Location: ' . "../index.php?m=2");

@@ -15,21 +15,21 @@ if ($_SESSION['usuario']) {
     $type = $_POST['type'];
     $clasificacion = $_POST['clasificacion'];
     $comentario = $_POST['comentario'];
+    $tipo = $_POST['tipo'];
     $usuario = $_SESSION['idusuario'];
     $ano = date('Y');
     $mes = date('m');
     $dia = date('d');
     $fecha_actual = date("Y-m-d");
     $hora = date('h:i a');
-    echo $consultaconsecutivo = "select count(idnota) 'consecutivo' from notascontables where idnota like '%$ano$mes$dia%'";
+    $consultaconsecutivo = "select count(idnota) 'consecutivo' from notascontables where idnota like '%$ano$mes$dia%'";
     $queryconsecutivo = mysqli_query($link, $consultaconsecutivo) or die($consultaconsecutivo);
     $filaconsecutivo = mysqli_fetch_array($queryconsecutivo);
     $consecutivo = $filaconsecutivo['consecutivo'] + 1;
-    echo $idnota = $ano . $mes . $dia . $consecutivo;
-
+    $idnota = $ano . $mes . $dia . $consecutivo;
     //ingresarnota
-    $consultaingresonota = "INSERT INTO `notascontables`(`idnota`, `idusuario`, `idtipodocumento`, `idclasificacion`, `batch`, `comentario`, `fecha`, `hora`) VALUES 
-    ('$idnota','$usuario','$type','$clasificacion','','$comentario','$fecha_actual','$hora')";
+    $consultaingresonota = "INSERT INTO `notascontables`(`idnota`, `idusuario`, `idtipodocumento`, `idclasificacion`, `batch`, `comentario`, `fecha`, `hora`, `tipo`) VALUES 
+    ('$idnota','$usuario','$type','$clasificacion','','$comentario','$fecha_actual','$hora','$tipo')";
     $querynota = mysqli_query($link, $consultaingresonota) or die($consultaingresonota);
 } else {
     header('Location: ' . "usuarios/cerrarsesion.php");

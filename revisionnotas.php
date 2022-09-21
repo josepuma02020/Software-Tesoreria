@@ -31,24 +31,26 @@ if ($_SESSION['usuario']) {
     } else {
         $mostrar = 'a';
     }
-
-    switch ($mostrar) {
-        case 't':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
+    if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
+        switch ($mostrar) {
+            case 't':
+                $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where a.fecha between '$desde' and '$hasta' GROUP by a.idnota;";
-            break;
-        case 'a':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
+            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where a.fecha between '$desde' and '$hasta' and tipo = $_SESSION[idproceso] GROUP by a.idnota;";
+                break;
+            case 'a':
+                $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where (a.batch is null or a.batch = '' or a.batch='NULL') and a.fecha between '$desde' and '$hasta' GROUP by a.idnota;";
-            break;
-        case 'c':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
+            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where (a.batch is null or a.batch = '' or a.batch='NULL') and a.fecha between '$desde' and '$hasta'  and tipo = $_SESSION[idproceso] GROUP by a.idnota;";
+                break;
+            case 'c':
+                $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where a.batch IS NOT NULL  and a.fecha between '$desde' and '$hasta' GROUP by a.idnota;";
-            break;
+            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where a.batch > 0  and a.fecha between '$desde' and '$hasta'  and tipo = $_SESSION[idproceso] GROUP by a.idnota;";
+                break;
+        }
     }
+
 
 ?>
     <HTML>
@@ -175,9 +177,18 @@ if ($_SESSION['usuario']) {
                                     if ($filas1['seleccion'] == 1) {
                                         $estadocheck = '';
                                     }
+
+                                    if ($batch > 0 && $_SESSION['rol'] != 1) {
+                                    } else {
                                     ?>
-                                    <input <?php echo $estadocheck; ?> onchange="cambiarseleccionnota(<?php echo $filas1['idnota'] ?>)" id="check" type="checkbox" aria-label="Checkbox for following text input">
+                                        <input <?php echo $estadocheck; ?> onchange="cambiarseleccionnota(<?php echo $filas1['idnota'] ?>)" id="check" type="checkbox" aria-label="Checkbox for following text input">
+                                    <?php
+                                    }
+
+                                    ?>
                                 </TD>
+
+
                                 <TD><?php echo $filas1['fecha'] . ' ' . $filas1['hora']; ?> </TD>
                                 <TD><?php echo $filas1['nombre']; ?> </TD>
                                 <TD><?php echo $filas1['documento']; ?> </TD>

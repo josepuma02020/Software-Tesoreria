@@ -19,7 +19,7 @@ if ($_SESSION['usuario']) {
     $consultanotas = "select idnota from notascontables where seleccion=0 and fecha between '$desde' and '$hasta'";
     $querynotas = mysqli_query($link, $consultanotas) or die($consultanotas);
     while ($filasnotas = mysqli_fetch_array($querynotas)) {
-        $consulta = "UPDATE `notascontables` SET `batch`= '$batch'
+        $consulta = "UPDATE `notascontables` SET `batch`= '$batch',idverificador = '$_SESSION[idusuario]',seleccion = 1
         WHERE idnota = '$filasnotas[idnota]'";
         $query = mysqli_query($link, $consulta) or die($consulta);
     }

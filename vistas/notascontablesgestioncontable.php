@@ -188,7 +188,7 @@
                 $queryregistros = mysqli_query($link, $consultaregistros) or die($consultaregistros);
                 $totaldebe = 0;
                 $totalhaber = 0;
-                $totalimporte = 2;
+                $totalimporte = 0;
                 while ($filasregistros = mysqli_fetch_array($queryregistros)) {
                     $totalimporte = $totalimporte + $filasregistros['haber'];
                 ?>
@@ -449,11 +449,35 @@
                     });
                 }
                 if (a == 0) {
-                    //registrarnota(type, clasificacion, comentario, batch);
-                    registrogestioncontable(iddoc, concepto, fecha, importe, tm, an, lmauxiliar);
-                    setTimeout(function() {
-                        window.location.reload();
-                    }, 1000);
+                    b = 0
+                    creado = $('#creado').val();
+                    if (creado == 0) {
+                        if (type == 0) {
+                            b = 1;
+                            alertify.alert('ATENCION!!', 'Favor seleccionar un tipo de documento', function() {
+                                alertify.success('Ok');
+                            });
+                        }
+                        if (clasificacion == 0) {
+                            b = 1;
+                            alertify.alert('ATENCION!!', 'Favor seleccionar una clasificación para el documento', function() {
+                                alertify.success('Ok');
+                            });
+                        }
+                        if (b == 0) {
+                            registrarnota(type, clasificacion, comentario, '', 4);
+                            registrogestioncontable(iddoc, concepto, fecha, importe, tm, an, lmauxiliar);
+                            setTimeout(function() {
+                                window.location.reload();
+                            }, 1000);
+                        }
+                    } else {
+                        registrogestioncontable(iddoc, concepto, fecha, importe, tm, an, lmauxiliar);
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1000);
+                    }
+
                 }
             }
 
@@ -502,7 +526,6 @@
                         }
 
                     }
-                    console.log(totalimporte);
                     a = 0;
                     if (type == 0) {
                         a = 1;
