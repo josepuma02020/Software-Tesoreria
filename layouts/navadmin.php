@@ -44,6 +44,7 @@
                                 Configuración
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="./generales.php">Generales</a>
                                 <a class="dropdown-item" href="./cuentas.php">Cuentas</a>
                                 <a class="dropdown-item" href="./procesos.php">Procesos</a>
                                 <a class="dropdown-item" href="./listaan.php">Lista de AN8</a>

@@ -35,7 +35,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
         <link rel="stylesheet" href="./css/configuracion/desktop.css">
         <SCRIPT lang="javascript" type="text/javascript" src="./an/an.js"></script>
         <SCRIPT src="librerias/alertify/alertify.js"></script>
-        <title>Cuentas</title>
+        <title>Configuración AN8</title>
     </head>
 
     <body>
