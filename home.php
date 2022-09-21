@@ -51,7 +51,7 @@ if ($_SESSION['usuario']) {
                 case 1:
                     include('./vistas/notascontables.php');
                     break;
-                case 2:
+                case 4:
                     include('./vistas/notascontablesgestioncontable.php');
                     break;
             }
