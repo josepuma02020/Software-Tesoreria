@@ -29,7 +29,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <a class="nav-link" href="home.php?n=1">Flujo de caja y Financiación</a>
-                                <a class="nav-link" href="home.php?n=2">Gestión contable</a>
+                                <a class="nav-link" href="home.php?n=4">Gestión contable</a>
                             </div>
                         </li>
 

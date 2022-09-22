@@ -55,7 +55,6 @@ if ($_SESSION['usuario']) {
                     include('./vistas/notascontablesgestioncontable.php');
                     break;
             }
-
             ?>
         </main>
     </body>

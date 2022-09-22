@@ -10,7 +10,7 @@ function registrogestioncontable(iddoc, concepto, fecha, importe, tm, an, lmauxi
                 //debugger;
             } else {
                 //console.log(r);
-                // debugger;
+                //debugger;
             }
         }
     });

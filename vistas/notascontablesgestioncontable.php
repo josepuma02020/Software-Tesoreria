@@ -184,21 +184,46 @@
             </thead>
             <tbody>
                 <?php
-                $consultaregistros = "SELECT a.idregistro, a.fecha,b.concepto,a.haber,a.tipolm,a.lm,a.an FROM `registrosdenota` a INNER JOIN cuentas b on b.idcuenta=a.idcuenta WHERE a.idnota='$idnota'  and b.tipo = 'c'";
+                $consultaregistros = "SELECT  a.idcuenta,a.idregistro, a.fecha,b.concepto,a.haber,a.tipolm,a.lm,a.an FROM `registrosdenota` a left JOIN cuentas b on b.idcuenta=a.idcuenta WHERE a.idnota='$idnota'  and  (a.idcuenta = 0 or a.haber > 0);";
                 $queryregistros = mysqli_query($link, $consultaregistros) or die($consultaregistros);
                 $totaldebe = 0;
                 $totalhaber = 0;
                 $totalimporte = 0;
                 while ($filasregistros = mysqli_fetch_array($queryregistros)) {
-                    $totalimporte = $totalimporte + $filasregistros['haber'];
+                    $a = 0;
                 ?>
                     <tr>
                         <TD><?php echo $filasregistros['fecha']; ?> </TD>
-                        <TD><?php echo $filasregistros['concepto']; ?> </TD>
+                        <?php
+                        if ($filasregistros['concepto'] == '') {
+                            $concepto = $filasregistros['idcuenta'];
+                            $color = "#F57272";
+                            $a++;
+                        } else {
+                            $concepto = $filasregistros['concepto'];
+                            $color = '';
+                        }
+                        ?>
+                        <TD style="background-color: <?php echo $color; ?> ;"><?php echo $concepto; ?> </TD>
                         <TD><?php echo number_format($filasregistros['haber']); ?> </TD>
                         <TD><?php echo $filasregistros['tipolm']; ?> </TD>
                         <TD><?php echo $filasregistros['lm']; ?> </TD>
-                        <td><?php echo $filasregistros['an']; ?> </td>
+                        <?php
+                        $consultaan = "select * from listaan where idan = $filasregistros[an]";
+                        $queryan = mysqli_query($link, $consultaan) or die($consultaan);
+                        $numan = mysqli_num_rows($queryan);
+                        if ($numan == 0) {
+
+                            $color = "#F57272";
+                            $a++;
+                        } else {
+                            $color = '';
+                        }
+                        if ($a == 0) {
+                            $totalimporte = $totalimporte + $filasregistros['haber'];
+                        }
+                        ?>
+                        <td style="background-color: <?php echo $color; ?> ;"><?php echo $filasregistros['an']; ?> </td>
                         <?php
                         if ($batch == '') {
                         ?>
@@ -265,16 +290,13 @@
                 <label for="comment">Total Importe:</label>
                 <?php
                 ?>
-                <input style="text-align:center;background-color:<?php echo $color ?>" class="form-control " id="totalimporte" name="totalimporte" type="text" value="<?php echo number_format($totalimporte) ?>" disabled>
+                <input style="text-align:center;background-color:<?php echo "white" ?>" class="form-control " id="totalimporte" name="totalimporte" type="text" value="<?php echo number_format($totalimporte) ?>" disabled>
             </div>
         </div>
         <section class="botones">
             <?php
             if ($batch == '') {
                 $estado = "";
-                if ($totalimporte != 0) {
-                    $estado = 'disabled';
-                }
             ?>
                 <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button>
                 <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
