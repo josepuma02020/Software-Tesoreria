@@ -34,17 +34,17 @@ if ($_SESSION['usuario']) {
     if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
         switch ($mostrar) {
             case 't':
-                $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
+                $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber' FROM notascontables a 
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
             INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where a.fecha between '$desde' and '$hasta' and tipo = $_SESSION[idproceso] GROUP by a.idnota;";
                 break;
             case 'a':
-                $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
+                $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber' FROM notascontables a 
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
             INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where (a.batch is null or a.batch = '' or a.batch='NULL') and a.fecha between '$desde' and '$hasta'  and tipo = $_SESSION[idproceso] GROUP by a.idnota;";
                 break;
             case 'c':
-                $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a 
+                $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber' FROM notascontables a 
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
             INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where a.batch > 0  and a.fecha between '$desde' and '$hasta'  and tipo = $_SESSION[idproceso] GROUP by a.idnota;";
                 break;
@@ -78,8 +78,6 @@ if ($_SESSION['usuario']) {
 
         </header>
         <main style="max-width:90% ;" class=" container container-md">
-
-
             <div class="tabla-registros">
                 <section class="titulo-pagina">
                     <h2>Notas Registradas</h2>
@@ -119,7 +117,6 @@ if ($_SESSION['usuario']) {
                                 <?php break;
                                 }
                                 ?>
-
                             </select>
                         </div>
                         <button title="Buscar" type="button" id="buscar" class="btn btn-primary">
@@ -139,7 +136,6 @@ if ($_SESSION['usuario']) {
                                     <path d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.235.235 0 0 1 .02-.022z" />
                                 </svg>
                             </button>
-
                         <?php
                         } ?>
 
@@ -148,6 +144,7 @@ if ($_SESSION['usuario']) {
                 <table id="registrosnotas" class="table table-striped  table-responsive-lg revision-notas ">
                     <THEAD>
                         <tr>
+
                             <th> Sel. </th>
                             <th> Fecha </th>
                             <th> Usuario </th>
@@ -161,7 +158,6 @@ if ($_SESSION['usuario']) {
                     </THEAD>
                     <TBODY>
                         <?php
-
                         $query = mysqli_query($link, $consultanotas) or die($consultanotas);
                         while ($filas1 = mysqli_fetch_array($query)) {
                             if ($filas1['batch'] == 0) {
@@ -187,8 +183,6 @@ if ($_SESSION['usuario']) {
 
                                     ?>
                                 </TD>
-
-
                                 <TD><?php echo $filas1['fecha'] . ' ' . $filas1['hora']; ?> </TD>
                                 <TD><?php echo $filas1['nombre']; ?> </TD>
                                 <TD><?php echo $filas1['documento']; ?> </TD>
@@ -198,8 +192,19 @@ if ($_SESSION['usuario']) {
                                 if ($totalimporte != 0) {
                                     $color = '#FC9999';
                                 }
+                                switch ($_SESSION['idproceso']) {
+                                    case 1:
+                                        $importe = $filas1['importe'];
+                                        break;
+                                    case 4:
+                                        $consultaimporte = "select SUM(haber) 'importe' from registrosdenota where idcuenta > 0 and idnota = '$filas1[idnota]'";
+                                        $queryimporte = mysqli_query($link, $consultaimporte) or die($consultaimporte);
+                                        $filaimporte = mysqli_fetch_array($queryimporte);
+                                        $importe = $filaimporte['importe'];
+                                        break;
+                                }
                                 ?>
-                                <TD style="background-color:<?php echo $color ?>"><?php echo number_format($filas1['importe']); ?> </TD>
+                                <TD style="background-color:<?php echo $color ?>"><?php echo number_format($importe); ?> </TD>
                                 <TD><?php echo $batch; ?> </TD>
                                 <TD style="width:20% ;"><?php echo $filas1['comentario']; ?> </TD>
                                 <TD>
