@@ -1,3 +1,23 @@
+function registrargrupogestioncontable(iddoc, conceptos, fechas, importes, ans, tms) {
+    console.log("inicio funcion grupo de registros");
+    debugger;
+    cadenau = "conceptos=" + conceptos + "&iddoc=" + iddoc + "&fechas=" + fechas + "&importes=" + importes + "&ans=" + ans + "&tms=" + tms;
+    $.ajax({
+        type: "POST",
+        url: "notascontables/registragrupogestioncontable.php",
+        data: cadenau,
+        success: function (r) {
+            if (r == 111) {
+                // console.log(r);
+                // debugger;
+            } else {
+                // console.log(r);
+                // debugger;
+            }
+        }
+    });
+}
+
 function registrogestioncontable(iddoc, concepto, fecha, importe, tm, an, lmauxiliar) {
     cadenau = "iddoc=" + iddoc + "&concepto=" + concepto + "&importe=" + importe + "&fecha=" + fecha + "&tm=" + tm + "&lmauxiliar=" + lmauxiliar + "&an=" + an;
     $.ajax({

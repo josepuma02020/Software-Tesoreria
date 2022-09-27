@@ -254,7 +254,7 @@
                                 <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="concepto" name="concepto">
                             </td>
                             <td style="width:10%">
-                                <input style="text-align:center;padding:5" class="  form-control-register" type="number" required id="importe" name="importe">
+                                <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="importe" name="importe">
                             </td>
                             <td>
                                 <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="lmauxiliar" name="lmauxiliar" disabled>
@@ -399,44 +399,22 @@
             const tms = tm.split(' ');
             an = $('#an').val();
             const ans = an.split(' ');
-            // console.log(dates);
-            // console.log(cuentas);
-            // console.log(debes);
-            // console.log(habers);
-            // console.log(lms);
-            // console.log(ans);
+
             if (conceptos.length > 1) {
                 ///grupo
-                for (var i = 0; i < cuentas.length; i++) {
-                    cuenta = cuentas[i];
-                    if (debes[i] == '-' || debes[i] == '- ' || debes[i] == ' -' || debes[i] == undefined) {
-                        debes[i] = '0';
-                    }
-                    if (habers[i] == '-' || habers[i] == '- ' || habers[i] == ' -' || habers[i] == undefined) {
-                        habers[i] = '0';
-                    }
-
-                    totaldebe = totaldebe + parseFloat(debes[i]);
-                    totalhaber = totalhaber + parseFloat(habers[i]);
-
+                for (var i = 0; i < conceptos.length; i++) {
+                    conceptos[i] = conceptos[i].replace(/-/g, " ");
                     // console.log('debes' + debes);
                     // console.log('habers' + habers);
-
                 }
-                totalimporte = totaldebe - totalhaber;
-
-                function separator(numb) {
-                    var str = numb.toString().split(".");
-                    str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    return str.join(".");
-                }
-                $('#totaldebe').val((separator(totaldebe)));
-                $('#totalhaber').val(separator(totalhaber));
-                $('#totalimporte').val(separator(totalimporte));
-                // registrargrupo(iddoc, cuentas, dates, debes, habers, lms, ans);
+                console.log(conceptos);
+                console.log(importes);
+                console.log(ans);
+                //debugger;
+                registrargrupogestioncontable(iddoc, conceptos, fechas, importes, ans, tms);
                 setTimeout(function() {
-                    //  window.location.reload();
-                }, 1000 + (cuentas.length * 10));
+                    window.location.reload();
+                }, 1000 + (conceptos.length * 10));
             } else {
                 //individual
                 a = 0;
@@ -502,7 +480,6 @@
 
                 }
             }
-
         });
         $('#save').click(function() {
             type = $('#type').val();

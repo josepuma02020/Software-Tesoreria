@@ -157,7 +157,7 @@ if ($_SESSION['usuario']) {
                         </tr>
                     </THEAD>
                     <TBODY>
-                        <?php
+                        <?php   
                         $query = mysqli_query($link, $consultanotas) or die($consultanotas);
                         while ($filas1 = mysqli_fetch_array($query)) {
                             if ($filas1['batch'] == 0) {

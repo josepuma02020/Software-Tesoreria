@@ -29,10 +29,10 @@ if ($_SESSION['usuario']) {
     $filaconsecutivo = mysqli_fetch_array($queryconsecutivo);
     $consecutivo = $filaconsecutivo['consecutivo'] + 1;
     $idregistro = $ano . $mes . $dia . $consecutivo;
-
+    $consecutivo++;
     //ingresarregistro
-    $consultaingresoregistro = "INSERT INTO `registrosdenota`(`idregistro`, `idnota`, `fecha`, `debe`, `haber`, `lm`, `an`, `tipolm`, `idcuenta`) VALUES 
-    ('$idregistro','$id','$fecha','$debe','$haber','$lm','$an','$tipolm','$cuenta')";
+    $consultaingresoregistro = "INSERT INTO `registrosdenota`(`idregistro`, `idnota`, `fecha`, `debe`, `haber`, `lm`, `an`, `tipolm`, `idcuenta`,`consecutivo`) VALUES 
+    ('$idregistro','$id','$fecha','$debe','$haber','$lm','$an','$tipolm','$cuenta','$consecutivo')";
     echo $queryregistro = mysqli_query($link, $consultaingresoregistro) or die($consultaingresoregistro);
 } else {
     header('Location: ' . "../usuarios/cerrarsesion.php");

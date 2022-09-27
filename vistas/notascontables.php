@@ -390,7 +390,6 @@
             batch = $('#batch').val();
             clasificacion = $('#clasificacion').val();
             comentario = $('#comment').val();
-
             totaldebe = 0;
             totalhaber = 0;
             //grupo
@@ -409,9 +408,6 @@
             // console.log(dates);
             // console.log(cuentas);
             // console.log(debes);
-            // console.log(habers);
-            // console.log(lms);
-            // console.log(ans);
             if (cuentas.length > 1) {
                 ///grupo
                 for (var i = 0; i < cuentas.length; i++) {
