@@ -1,6 +1,17 @@
+function aprobarnota(iddocumento) {
+    cadenau = "iddocumento=" + iddocumento;
+    $.ajax({
+        type: "POST",
+        url: "notascontables/aprobarnota.php",
+        data: cadenau,
+        success: function (r) {
+            //console.log(r);
+            //debugger;
+        }
+    });
+}
+
 function registrargrupogestioncontable(iddoc, conceptos, fechas, importes, ans, tms) {
-    console.log("inicio funcion grupo de registros");
-    debugger;
     cadenau = "conceptos=" + conceptos + "&iddoc=" + iddoc + "&fechas=" + fechas + "&importes=" + importes + "&ans=" + ans + "&tms=" + tms;
     $.ajax({
         type: "POST",
@@ -9,10 +20,10 @@ function registrargrupogestioncontable(iddoc, conceptos, fechas, importes, ans, 
         success: function (r) {
             if (r == 111) {
                 // console.log(r);
-                // debugger;
+                //  debugger;
             } else {
-                // console.log(r);
-                // debugger;
+                //console.log(r);
+                //debugger;
             }
         }
     });
@@ -104,17 +115,20 @@ function agregaridregistro(id) {
 }
 
 function elminarregistro(id) {
+
     $.ajax({
         type: "POST",
         url: "notascontables/eliminarregistro.php",
         data: "id=" + id,
         success: function (r) {
             if (r == 1) {
-                // console.log(r);
-                // debugger;
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
             } else {
-                // console.log(r);
-                // debugger;
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
             }
         }
     });

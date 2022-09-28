@@ -66,10 +66,14 @@ if ($_SESSION['usuario']) {
                 }
             }
         } else {
-            $consultaconsecutivo = "select count(idregistro) 'consecutivo' from registrosdenota where idregistro like '%$ano$mes$dia%'";
+            $consultaconsecutivo = "select max(consecutivo) 'consecutivo' from registrosdenota where idregistro like '%$ano$mes$dia%'";
             $queryconsecutivo = mysqli_query($link, $consultaconsecutivo) or die($consultaconsecutivo);
             $filaconsecutivo = mysqli_fetch_array($queryconsecutivo);
-            $consecutivo = $filaconsecutivo['consecutivo'] + 1;
+            if (mysqli_num_rows($queryconsecutivo) == 0) {
+                $consecutivo = 0;
+            } else {
+                $consecutivo = $filaconsecutivo['consecutivo'];
+            }
             $idregistro = $ano . $mes . $dia . $consecutivo;
             $consecutivo++;
             $consultaingresoregistro = "INSERT INTO `registrosdenota`(`idregistro`, `idnota`, `fecha`, `debe`, `haber`, `lm`, `an`, `tipolm`, `idcuenta`, `consecutivo`) VALUES 

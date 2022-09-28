@@ -33,18 +33,23 @@ if ($_SESSION['usuario']) {
     $querycuentas = mysqli_query($link, $consultacuentas) or die($consultacuentas);
     if (mysqli_num_rows($querycuentas) > 0) {
         while ($filascuentas = mysqli_fetch_array($querycuentas)) {
-            $consultaconsecutivo = "select count(idregistro) 'consecutivo' from registrosdenota where idregistro like '%$ano$mes$dia%'";
+            $consultaconsecutivo = "select max(consecutivo) 'consecutivo' from registrosdenota where idregistro like '%$ano$mes$dia%'";
             $queryconsecutivo = mysqli_query($link, $consultaconsecutivo) or die($consultaconsecutivo);
             $filaconsecutivo = mysqli_fetch_array($queryconsecutivo);
-            $consecutivo = $filaconsecutivo['consecutivo'] + 1;
+            if (mysqli_num_rows($queryconsecutivo) == 0) {
+                $consecutivo = 0;
+            } else {
+                $consecutivo = $filaconsecutivo['consecutivo'];
+            }
             $idregistro = $ano . $mes . $dia . $consecutivo;
+            $consecutivo++;
             if ($filascuentas['tipo'] == 'c') {
-                $consultaingresoregistro = "INSERT INTO `registrosdenota`(`idregistro`, `idnota`, `fecha`, `debe`, `haber`, `lm`, `an`, `tipolm`, `idcuenta`) VALUES 
-            ('$idregistro','$id','$fecha','0','$importe','$tm','$an','$lmauxiliar','$filascuentas[idcuenta]')";
+                $consultaingresoregistro = "INSERT INTO `registrosdenota`(`idregistro`, `idnota`, `fecha`, `debe`, `haber`, `lm`, `an`, `tipolm`, `idcuenta`, `consecutivo`) VALUES 
+            ('$idregistro','$id','$fecha','0','$importe','$tm','$an','$lmauxiliar','$filascuentas[idcuenta]','$consecutivo')";
                 echo   $queryregistro = mysqli_query($link, $consultaingresoregistro) or die($consultaingresoregistro);
             } else {
-                $consultaingresoregistro = "INSERT INTO `registrosdenota`(`idregistro`, `idnota`, `fecha`, `debe`, `haber`, `lm`, `an`, `tipolm`, `idcuenta`) VALUES 
-            ('$idregistro','$id','$fecha','$importe','0','$tm','$an','$lmauxiliar','$filascuentas[idcuenta]')";
+                $consultaingresoregistro = "INSERT INTO `registrosdenota`(`idregistro`, `idnota`, `fecha`, `debe`, `haber`, `lm`, `an`, `tipolm`, `idcuenta`, `consecutivo`) VALUES 
+            ('$idregistro','$id','$fecha','$importe','0','$tm','$an','$lmauxiliar','$filascuentas[idcuenta]','$consecutivo')";
                 echo   $queryregistro = mysqli_query($link, $consultaingresoregistro) or die($consultaingresoregistro);
             }
         }

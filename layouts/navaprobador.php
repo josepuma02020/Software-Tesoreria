@@ -31,8 +31,14 @@
                                 <a class="nav-link" href="home.php?n=4">Gestión contable</a>
                             </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="revisionnotas.php">Revisión de Notas</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Revisión de Notas
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="nav-link" href="revisionnotas.php?n=1">Flujo de caja y Financiación</a>
+                                <a class="nav-link" href="revisionnotas.php?n=4">Gestión contable</a>
+                            </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="./informes.php">Informes</a>

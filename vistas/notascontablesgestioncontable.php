@@ -46,8 +46,9 @@
     }
 
     //consulta datos notas
-    $consultadatosnota = "SELECT a.*,b.nombre,c.documento,d.clasificacion FROM notascontables a INNER JOIN usuarios b on a.idusuario = b.idusuario 
-    INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion where a.idnota = $idnota";
+    $consultadatosnota = "SELECT a.*,b.nombre,c.documento,d.clasificacion,e.nombre 'aprobador',a.fechaaprobacion,a.horaaprobacion FROM notascontables a 
+    INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion
+     left join usuarios e on e.idusuario=a.idaprobador where a.idnota = $idnota";
     $querydatosnota = mysqli_query($link, $consultadatosnota) or die($consultadatosnota);
     $filadatosnota = mysqli_fetch_array($querydatosnota);
     if (isset($filadatosnota)) {
@@ -63,7 +64,7 @@
         $tipodocumento = '';
         $clasificacion = '';
         $comentario = '';
-        $batch = '';
+        $batch = 0;
         $hora = '';
         $fecha = '';
     }
@@ -76,7 +77,7 @@
         $des = '';
         if ($creado == 1) {
 
-            if (($_SESSION['idusuario'] == $filadatosnota['idusuario']) || ($_SESSION['rol'] == 1 && $filadatosnota['tipo'] == $_SESSION['idproceso'])) {
+            if (($_SESSION['idusuario'] == $filadatosnota['idusuario']) || ($_SESSION['rol'] == 1 && $filadatosnota['tipo'] == $_SESSION['idproceso']) || $batch > 0) {
                 $des = '';
             } else {
                 $des = 'disabled';
@@ -103,7 +104,6 @@
                         <label for="user">Usuario:</label>
                         <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
                     </div>
-
                     <div class="form-group mediano">
                         <label for="type">Tipo de Documento</label>
                         <select <?php echo $estado ?> style="text-align: center;" id="type" class="form-control col-md-8 ">
@@ -168,7 +168,7 @@
                     </div>
                     <div class="form-group mediano">
                         <label for="user">Aprobado por:</label>
-                        <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+                        <input value=" <?php echo $filadatosnota['aprobador'] . ' : ' . $filadatosnota['fechaaprobacion'] . ' ' . $filadatosnota['horaaprobacion']; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
                     </div>
                     <div class="form-group mediano ">
                         <label for="comment">Comentario:</label>
@@ -203,6 +203,7 @@
                 $totaldebe = 0;
                 $totalhaber = 0;
                 $totalimporte = 0;
+                $valido = 0;
                 while ($filasregistros = mysqli_fetch_array($queryregistros)) {
                     $a = 0;
                 ?>
@@ -212,6 +213,7 @@
                         if ($filasregistros['concepto'] == '') {
                             $concepto = $filasregistros['idcuenta'];
                             $color = "#F57272";
+                            $valido = 1;
                             $a++;
                         } else {
                             $concepto = $filasregistros['concepto'];
@@ -230,6 +232,7 @@
 
                             $color = "#F57272";
                             $a++;
+                            $valido = 1;
                         } else {
                             $color = '';
                         }
@@ -242,6 +245,7 @@
                             <?php
                             if ($batch == '') {
                                 if ($des != 'disabled') {
+
                             ?>
 
                                     <button title="Eliminar Registro" style="height:1.5rem;padding-top:0 " onclick="elminarregistro(<?php echo $filasregistros['idregistro'] ?>)" id="eliminarregistro" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
@@ -252,18 +256,15 @@
                                     </button>
 
                                 <?php
-                                } else {
                                 }
                                 ?>
                         </td>
                     <?php
                             }
                     ?>
-
                     </tr>
                 <?php }
-                if ($batch == '') {
-
+                if ($batch == '' & $des != 'disabled') {
                 ?>
                     <form id="registros" action="#" method="POST" class="form-registros">
                         <tr>
@@ -287,17 +288,12 @@
                                 <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="an" name="an" required>
                             </td>
                             <td style="width: 8%">
-                                <?php
-                                if ($des != 'disabled') {
-
-                                ?>
-                                    <button title="Registrar" style="height:25px;padding:0;width:40px" onclick="" type="button" id="registrar" class="btn btn-primary" data-toggle="modal" data-target="">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
-                                            <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
-                                            <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
-                                        </svg>
-                                    </button>
-                                <?php } ?>
+                                <button title="Registrar" style="height:25px;padding:0;width:40px" onclick="" type="button" id="registrar" class="btn btn-primary" data-toggle="modal" data-target="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+                                        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
+                                        <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
+                                    </svg>
+                                </button>
                             </td>
                         </tr>
                     </form>
@@ -310,6 +306,7 @@
                 <label for="comment">Total Importe:</label>
                 <?php
                 ?>
+                <input type="hidden" id="importenum" name="importenum" value="<?php echo $totalimporte ?>">
                 <input style="text-align:center;background-color:<?php echo "white" ?>" class="form-control " id="totalimporte" name="totalimporte" type="text" value="<?php echo number_format($totalimporte) ?>" disabled>
             </div>
         </div>
@@ -318,16 +315,31 @@
             if ($batch == '') {
                 $estado = "";
                 if ($des != 'disabled') {
-
             ?>
                     <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button>
                     <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
                     <button title="Borrar Nota" id="delete" name="delete" class="btn btn-secondary boton">Limpiar</button>
-                <?php
+                    <?php
+                }
+                if ($_SESSION['rol'] == 5) {
+                    $consultaequiponota = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $filadatosnota[idusuario] ";
+                    $queryequiponota = mysqli_query($link, $consultaequiponota) or die($consultaequiponota);
+                    $filaequiponota = mysqli_fetch_array($queryequiponota);
+                    $consultaequipousuario = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $_SESSION[idusuario] ";
+                    $qeryrquipousuario = mysqli_query($link, $consultaequipousuario) or die($consultaequipousuario);
+                    $filaequipousuario = mysqli_fetch_array($qeryrquipousuario);
+                    $consultaminimo = "SELECT * FROM `general`";
+                    $queryminimo = mysqli_query($link, $consultaminimo) or die($consultaminimo);
+                    $filaminimo = mysqli_fetch_array($queryminimo);
+                    $filaminimo['salariominimo'] * 500;
+                    if ($filaequiponota['idequipo'] == $filaequipousuario['idequipo'] && ($filaminimo['salariominimo'] * 500) < $totalimporte && $filadatosnota['aprobador'] == '' && $valido == 0) {
+                    ?> <button <?php echo $estado ?> title="Aprobar Nota" id="aprobar" name="aprobar" class="btn btn-success boton">Aprobar</button>
+                    <?php
+                    }
                 }
             } else {
                 if ($_SESSION['rol'] == 1) {
-                ?>
+                    ?>
                     <button id="edit" name="edit" class="btn btn-primary boton">Editar</button>
             <?php
                 }
@@ -370,6 +382,23 @@
 <script type="text/javascript" src="librerias/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+        $('#aprobar').click(function() {
+            a = 0;
+            iddocumento = $('#iddocumento').val();
+            totalimporte = $('#totalimporte').val();
+            alertify.confirm('Aprobación de nota contable', 'Esta seguro que desea aprobar esta nota contable por valor de $' + totalimporte, function() {
+                aprobarnota(iddocumento);
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000);
+                alertify.success('Operación exitosa. ');
+            }, function() {
+
+            }).set('labels', {
+                ok: 'Continuar',
+                cancel: 'Cancelar'
+            });
+        });
         $('#debe').change(function() {
             debe = $('#debe').val();
             haber = $('#haber').val();
@@ -424,7 +453,7 @@
             an = $('#an').val();
             const ans = an.split(' ');
 
-            if (conceptos.length > 1) {
+            if (ans.length > 1) {
                 ///grupo
                 for (var i = 0; i < conceptos.length; i++) {
                     conceptos[i] = conceptos[i].replace(/-/g, " ");
@@ -597,13 +626,6 @@
                 ok: 'Continuar',
                 cancel: 'Cancelar'
             });
-        });
-        $('#eliminarregistro').click(function() {
-            idu = $('#idu').val();
-            elminarregistro(idu);
-            setTimeout(function() {
-                window.location.reload();
-            }, 1000);
         });
         disponible = (<?php echo $relleno ?>);
         $("#concepto").autocomplete({

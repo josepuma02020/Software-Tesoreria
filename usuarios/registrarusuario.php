@@ -18,8 +18,8 @@ if ($_SESSION['usuario']) {
     $usuario = $_POST['usuario'];
     $clave = $_POST['clave'];
     $proceso = $_POST['proceso'];
-
+    $claveh = password_hash($clave, PASSWORD_DEFAULT);
     $consulta = "INSERT INTO `usuarios`(`idusuario`, `nombre`, `correo`, `usuario`, `clave`, `rol`, `activo`, `ultingreso`, `idproceso`) 
-    VALUES ('','$nombre','$correo',' $usuario','$clave ',' $rol','0',NULL,'$proceso')";
+    VALUES ('','$nombre','$correo','$usuario','$claveh ','$rol','0',NULL,'$proceso')";
     echo $query = mysqli_query($link, $consulta) or die($consulta);
 }
