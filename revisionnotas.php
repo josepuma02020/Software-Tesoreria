@@ -157,13 +157,24 @@ if ($_SESSION['usuario']) {
                         </tr>
                     </THEAD>
                     <TBODY>
-                        <?php   
+                        <?php
                         $query = mysqli_query($link, $consultanotas) or die($consultanotas);
                         while ($filas1 = mysqli_fetch_array($query)) {
                             if ($filas1['batch'] == 0) {
                                 $batch = '';
                             } else {
                                 $batch = $filas1['batch'];
+                            }
+                            $consultaterceros = "select * from registrosdenota where idnota = $filas1[idnota] and haber > 0";
+                            $queryterceros = mysqli_query($link, $consultaterceros) or die($consultaterceros);
+                            $importemenos = 0;
+                            while ($filasterceros = mysqli_fetch_array($queryterceros)) {
+                                $consultaveran = "select idan from listaan where idan = $filasterceros[an]";
+                                $queryveran = mysqli_query($link, $consultaveran) or die($consultaveran);
+                                if (mysqli_num_rows($queryveran) == 0) {
+                                    $color =  '#FC9999';
+                                    $importemenos = $importemenos + $filasterceros['haber'];
+                                }
                             }
                         ?>
                             <TR>
@@ -200,7 +211,7 @@ if ($_SESSION['usuario']) {
                                         $consultaimporte = "select SUM(haber) 'importe' from registrosdenota where idcuenta > 0 and idnota = '$filas1[idnota]'";
                                         $queryimporte = mysqli_query($link, $consultaimporte) or die($consultaimporte);
                                         $filaimporte = mysqli_fetch_array($queryimporte);
-                                        $importe = $filaimporte['importe'];
+                                        $importe = $filaimporte['importe'] - $importemenos;
                                         break;
                                 }
                                 ?>
