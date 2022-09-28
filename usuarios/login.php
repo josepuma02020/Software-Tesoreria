@@ -27,6 +27,9 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
             case 3:
                 $menu = "./layouts/navverificador.php";
                 break;
+            case 5:
+                $menu = "./layouts/navaprobador.php";
+                break;
         }
         //autenticacion
         if (password_verify($clave1, $clave2)) {
@@ -40,7 +43,7 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
             $_SESSION['tiempo'] = time();
             $consultaactconex = "update usuarios set ultingreso = '$fecha' where idusuario = $_SESSION[idusuario] ";
             $query = mysqli_query($link, $consultaactconex) or die($consultaactconex);
-            header('Location: ' . "../revisionnotas.php");
+            header('Location: ' . "../revisionnotas.php?n=" . $_SESSION['idproceso']);
         } else {
             echo 'no';
             header('Location: ' . "../index.php?m=2");

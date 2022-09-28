@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -12,7 +12,6 @@
 
 <body>
     <header>
-
     </header>
     <main>
         <nav class="navbar navbar-expand-lg bg-light">
@@ -32,31 +31,11 @@
                                 <a class="nav-link" href="home.php?n=4">Gestión contable</a>
                             </div>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Revisión de Notas
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="nav-link" href="revisionnotas.php?n=1">Flujo de caja y Financiación</a>
-                                <a class="nav-link" href="revisionnotas.php?n=4">Gestión contable</a>
-                            </div>
+                        <li class="nav-item">
+                            <a class="nav-link" href="revisionnotas.php">Revisión de Notas</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="./informes.php">Informes</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Configuración
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="./generales.php">Generales</a>
-                                <a class="dropdown-item" href="./cuentas.php">Cuentas</a>
-                                <a class="dropdown-item" href="./procesos.php">Procesos</a>
-                                <a class="dropdown-item" href="./listaan.php">Lista de AN8</a>
-                                <a class="dropdown-item" href="./tiposdocumento.php">Tipos de documento</a>
-                                <a class="dropdown-item" href="./clasificacion.php">Clasificacion de documentos</a>
-                                <a class="dropdown-item" href="./usuarios.php">Usuarios</a>
-                            </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="usuarios/cerrarsesion.php">Salir</a>
@@ -69,7 +48,9 @@
             </div>
         </nav>
     </main>
-    <footer></footer>
+    <footer>
+
+    </footer>
 </body>
 
 </html>

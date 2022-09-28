@@ -72,97 +72,111 @@
 
 <body>
     <header>
-        <form action="" method="post">
-            <?php
-            if ($batch != '') {
-                $estado = 'disabled';
+        <?php
+        $des = '';
+        if ($creado == 1) {
+
+            if (($_SESSION['idusuario'] == $filadatosnota['idusuario']) || ($_SESSION['rol'] == 1 && $filadatosnota['tipo'] == $_SESSION['idproceso'])) {
+                $des = '';
             } else {
-                $estado = '';
+                $des = 'disabled';
             }
-            ?>
-            <div class="form-row formulario">
-                <div class="form-group pequeno">
-                    <label for="iddocumento">ID.Documento:</label>
-                    <input value="<?php echo $creado  ?>" style="text-align:center" class="form-control " id="creado" name="creado" type="hidden" disabled>
-                    <input <?php echo $estado ?> value="<?php echo $idnota  ?>" style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled>
-                </div>
-                <div class="form-group mediano-pequeno">
-                    <label for="user">Usuario:</label>
-                    <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
-                </div>
+        }
 
-                <div class="form-group mediano">
-                    <label for="type">Tipo de Documento</label>
-                    <select <?php echo $estado ?> style="text-align: center;" id="type" class="form-control col-md-8 ">
-                        <?php
-                        $selected = '';
-                        $consultausuarios = "select * from tiposdocumento order by documento";
-                        $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
-                        ?> <option value="0">Seleccionar</option>
-                        <?php
-                        while ($filas1 = mysqli_fetch_array($query)) {
-                            if ($filas1['idtipo'] == $filadatosnota['idtipodocumento']) {
-                                $selected = 'selected';
-                            }
-                        ?>
-                            <option <?php echo $selected ?> value="<?php echo $filas1['idtipo'] ?>"><?php echo  $filas1['idtipo'] . '-' . $filas1['documento'] ?></option>
-                        <?php
-                            $selected = '';
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="form-group mediano">
-                    <label for="type">Clasificación de Documento</label>
-                    <select <?php echo $estado ?> style="text-align: center;" id="clasificacion" class="form-control col-md-8 ">
-                        <?php
-                        $consultausuarios = "select * from clasificaciones order by clasificacion";
-                        $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
-                        ?> <option value="0">Seleccionar</option>
-                        <?php
-                        while ($filas1 = mysqli_fetch_array($query)) {
-                            if ($filas1['idclasificacion'] == $filadatosnota['idclasificacion']) {
-                                $selected = 'selected';
-                            }
-                        ?>
-                            <option <?php echo $selected ?> value="<?php echo $filas1['idclasificacion'] ?>"><?php echo  $filas1['clasificacion'] ?></option>
-                        <?php
-                        }
-                        $selected = '';
-                        ?>
-                    </select>
-                </div>
-
-            </div>
-            <div class="form-row formulario">
-                <div class="form-group pequeno">
-                    <label for="batch">Batch:</label>
-                    <?php
+        ?>
+        <fieldset <?php echo $des; ?>>
+            <form action="" method="post">
+                <?php
+                if ($batch != '') {
                     $estado = 'disabled';
-                    if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
-                    } ?>
-                    <input <?php echo $estado ?> min="0" value="<?php echo $batch ?>" style="text-align:center" class="form-control " id="batch" name="batch" type="number">
-                    <?php if ($batch != '') {
+                } else {
+                    $estado = '';
+                }
+                ?>
+                <div class="form-row formulario">
+                    <div class="form-group pequeno">
+                        <label for="iddocumento">ID.Documento:</label>
+                        <input value="<?php echo $creado  ?>" style="text-align:center" class="form-control " id="creado" name="creado" type="hidden" disabled>
+                        <input <?php echo $estado ?> value="<?php echo $idnota  ?>" style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled>
+                    </div>
+                    <div class="form-group mediano-pequeno">
+                        <label for="user">Usuario:</label>
+                        <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
+                    </div>
+
+                    <div class="form-group mediano">
+                        <label for="type">Tipo de Documento</label>
+                        <select <?php echo $estado ?> style="text-align: center;" id="type" class="form-control col-md-8 ">
+                            <?php
+                            $selected = '';
+                            $consultausuarios = "select * from tiposdocumento order by documento";
+                            $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
+                            ?> <option value="0">Seleccionar</option>
+                            <?php
+                            while ($filas1 = mysqli_fetch_array($query)) {
+                                if ($filas1['idtipo'] == $filadatosnota['idtipodocumento']) {
+                                    $selected = 'selected';
+                                }
+                            ?>
+                                <option <?php echo $selected ?> value="<?php echo $filas1['idtipo'] ?>"><?php echo  $filas1['idtipo'] . '-' . $filas1['documento'] ?></option>
+                            <?php
+                                $selected = '';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group mediano">
+                        <label for="type">Clasificación de Documento</label>
+                        <select <?php echo $estado ?> style="text-align: center;" id="clasificacion" class="form-control col-md-8 ">
+                            <?php
+                            $consultausuarios = "select * from clasificaciones order by clasificacion";
+                            $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
+                            ?> <option value="0">Seleccionar</option>
+                            <?php
+                            while ($filas1 = mysqli_fetch_array($query)) {
+                                if ($filas1['idclasificacion'] == $filadatosnota['idclasificacion']) {
+                                    $selected = 'selected';
+                                }
+                            ?>
+                                <option <?php echo $selected ?> value="<?php echo $filas1['idclasificacion'] ?>"><?php echo  $filas1['clasificacion'] ?></option>
+                            <?php
+                            }
+                            $selected = '';
+                            ?>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="form-row formulario">
+                    <div class="form-group pequeno">
+                        <label for="batch">Batch:</label>
+                        <?php
                         $estado = 'disabled';
-                    } else {
-                        $estado = '';
-                    }
-                    ?>
+                        if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
+                        } ?>
+                        <input <?php echo $estado ?> min="0" value="<?php echo $batch ?>" style="text-align:center" class="form-control " id="batch" name="batch" type="number">
+                        <?php if ($batch != '') {
+                            $estado = 'disabled';
+                        } else {
+                            $estado = '';
+                        }
+                        ?>
+                    </div>
+                    <div class="form-group mediano-pequeno">
+                        <label for="user">Fecha creación:</label>
+                        <input style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
+                    </div>
+                    <div class="form-group mediano">
+                        <label for="user">Aprobado por:</label>
+                        <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+                    </div>
+                    <div class="form-group mediano ">
+                        <label for="comment">Comentario:</label>
+                        <input <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
+                    </div>
                 </div>
-                <div class="form-group mediano-pequeno">
-                    <label for="user">Fecha creación:</label>
-                    <input style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
-                </div>
-                <div class="form-group mediano">
-                    <label for="user">Aprobado por:</label>
-                    <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
-                </div>
-                <div class="form-group mediano ">
-                    <label for="comment">Comentario:</label>
-                    <input <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
-                </div>
-            </div>
-        </form>
+            </form>
+        </fieldset>
     </header>
     <main id="tegistrosdenota" class="tabla-registros ">
         <table id="registrosnotas" class="table table-striped  table-responsive-lg">
@@ -224,20 +238,27 @@
                         }
                         ?>
                         <td style="background-color: <?php echo $color; ?> ;"><?php echo $filasregistros['an']; ?> </td>
-                        <?php
-                        if ($batch == '') {
-                        ?>
-                            <td>
-                                <button title="Eliminar Registro" style="height:1.5rem;padding-top:0 " onclick="elminarregistro(<?php echo $filasregistros['idregistro'] ?>)" id="eliminarregistro" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-                                    </svg>
-                                </button>
-                            </td>
-                        <?php
-                        }
-                        ?>
+                        <td>
+                            <?php
+                            if ($batch == '') {
+                                if ($des != 'disabled') {
+                            ?>
+
+                                    <button title="Eliminar Registro" style="height:1.5rem;padding-top:0 " onclick="elminarregistro(<?php echo $filasregistros['idregistro'] ?>)" id="eliminarregistro" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                        </svg>
+                                    </button>
+
+                                <?php
+                                } else {
+                                }
+                                ?>
+                        </td>
+                    <?php
+                            }
+                    ?>
 
                     </tr>
                 <?php }
@@ -266,18 +287,17 @@
                                 <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="an" name="an" required>
                             </td>
                             <td style="width: 8%">
-                                <button title="Registrar" style="height:25px;padding:0;width:40px" onclick="" type="button" id="registrar" class="btn btn-primary" data-toggle="modal" data-target="">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
-                                        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
-                                        <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
-                                    </svg>
-                                </button>
-                                <!-- <button onclick="" type="button" id="eeeee" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
-                                    <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z" />
-                                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
-                                </svg>
-                            </button> -->
+                                <?php
+                                if ($des != 'disabled') {
+
+                                ?>
+                                    <button title="Registrar" style="height:25px;padding:0;width:40px" onclick="" type="button" id="registrar" class="btn btn-primary" data-toggle="modal" data-target="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+                                            <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
+                                            <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
+                                        </svg>
+                                    </button>
+                                <?php } ?>
                             </td>
                         </tr>
                     </form>
@@ -297,11 +317,14 @@
             <?php
             if ($batch == '') {
                 $estado = "";
+                if ($des != 'disabled') {
+
             ?>
-                <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button>
-                <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
-                <button title="Borrar Nota" id="delete" name="delete" class="btn btn-secondary boton">Limpiar</button>
+                    <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button>
+                    <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
+                    <button title="Borrar Nota" id="delete" name="delete" class="btn btn-secondary boton">Limpiar</button>
                 <?php
+                }
             } else {
                 if ($_SESSION['rol'] == 1) {
                 ?>
@@ -315,6 +338,7 @@
     <footer>
 
     </footer>
+
 </body>
 
 </html>
