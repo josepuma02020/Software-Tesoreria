@@ -62,16 +62,16 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                             <div class="modal-body">
                                 <form action="">
                                     <div class="form-row formulario">
-                                        <div class="form-group mediano-grande">
+                                        <div class="form-group grande">
                                             <label for="desde"><b>Nombre:</b></label>
                                             <input style="text-align:center" class=" form-control " id="nombren" name="nombren" type="text">
                                         </div>
+                                    </div>
+                                    <div class="form-row formulario">
                                         <div class="form-group mediano-grande">
                                             <label for="hasta">Correo:</label>
                                             <input style="text-align:center" class="form-control " id="correon" name="correon" type="email">
                                         </div>
-                                    </div>
-                                    <div class="form-row formulario">
                                         <div class="form-group mediano-grande">
                                             <label for="desde">Rol:</label>
                                             <select style="text-align: center;" class="form-control col-md-8 " name="roln" id="roln">
@@ -82,6 +82,8 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                                 <option value="4">Aprobador</option>
                                             </select>
                                         </div>
+                                    </div>
+                                    <div class="form-row formulario">
                                         <div class="form-group mediano-grande">
                                             <label for="desde">Proceso:</label>
                                             <select style="text-align: center;" id="proceso" name="proceso" class="form-control col-md-8 ">
@@ -98,17 +100,18 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                                 ?>
                                             </select>
                                         </div>
-                                    </div>
-                                    <div class="form-row formulario">
                                         <div class="form-group mediano-grande">
                                             <label for="hasta">Usuario:</label>
                                             <input value="" autocomplete="off" style="text-align:center" class="form-control " id="usuarion" name="usuarion" type="text">
                                         </div>
-                                        <div class="form-group mediano">
+
+                                    </div>
+                                    <div class="form-row formulario">
+                                        <div class="form-group mediano-grande">
                                             <label for="desde">Clave:</label>
                                             <input style="text-align:center" class=" form-control " id="claven" name="claven" type="password">
                                         </div>
-                                        <div class="form-group mediano">
+                                        <div class="form-group mediano-grande">
                                             <label for="hasta">Confirmar Clave:</label>
                                             <input style="text-align:center" class="form-control " id="confirmarclaven" name="confirmarclaven" type="password">
                                         </div>
