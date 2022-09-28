@@ -75,6 +75,8 @@ if ($_SESSION['usuario']) {
             $consultaingresoregistro = "INSERT INTO `registrosdenota`(`idregistro`, `idnota`, `fecha`, `debe`, `haber`, `lm`, `an`, `tipolm`, `idcuenta`, `consecutivo`) VALUES 
             ('$idregistro','$id','$fecha[$i]','0','$importe[$i]','$tm[$i]','$an[$i]','$tipo','$conceptos[$i]','$consecutivo')";
             echo $queryregistro = mysqli_query($link, $consultaingresoregistro) or die($consultaingresoregistro);
+            $consultaingresoregistro = "UPDATE `notascontables` SET `seleccion`='1' WHERE idnota = '$id'";
+            $queryregistro = mysqli_query($link, $consultaingresoregistro) or die($consultaingresoregistro);
         }
     }
 } else {

@@ -188,7 +188,7 @@ if ($_SESSION['usuario']) {
                                     if ($batch > 0 && $_SESSION['rol'] != 1) {
                                     } else {
                                     ?>
-                                        <input <?php echo $estadocheck; ?> onchange="cambiarseleccionnota(<?php echo $filas1['idnota'] ?>)" id="check" type="checkbox" aria-label="Checkbox for following text input">
+                                        <input <?php echo $estadocheck . ' ' . 'disabled'; ?> onchange="cambiarseleccionnota(<?php echo $filas1['idnota'] ?>)" id="check" type="checkbox" aria-label="Checkbox for following text input">
                                     <?php
                                     }
 
