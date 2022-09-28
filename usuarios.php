@@ -79,7 +79,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                                 <option value="1">Administrador</option>
                                                 <option value="2">Verificador</option>
                                                 <option value="3">Registrador</option>
-                                                <option value="4">Aprobador</option>
+                                                <option value="5">Aprobador</option>
                                             </select>
                                         </div>
                                     </div>
@@ -159,6 +159,9 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                                 break;
                                             case 4:
                                                 echo 'Inactivo';
+                                                break;
+                                            case 5:
+                                                echo 'Aprobador';
                                                 break;
                                         }
 

@@ -18,6 +18,12 @@ class usuarios
             case 3:
                 $rol = 'Registrador';
                 break;
+            case 5:
+                $rol = 'Aprobador';
+                break;
+            case 4:
+                $rol = 'Inactivo';
+                break;
         }
         $datos = array(
             'id' => $id,
