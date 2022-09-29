@@ -168,7 +168,7 @@
                     </div>
                     <div class="form-group mediano-grande ">
                         <label for="comment">Aprobado por:</label>
-                        <input <?php echo $estado ?> value="<?php  ?>" style="text-align:center" class="form-control " id="aprobado" name="aprobado" type="text">
+                        <input value=" <?php echo $filadatosnota['aprobador'] . ' : ' . $filadatosnota['fechaaprobacion'] . ' ' . $filadatosnota['horaaprobacion']; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
                     </div>
                     <div class="form-group mediano-grande ">
                         <label for="comment">Comentario:</label>
@@ -269,21 +269,12 @@
                                 <input style="text-align:center;padding:5" class="  form-control-register" type="text" required id="an" name="an" required>
                             </td>
                             <td style="width: 8%">
-
                                 <button title="Registrar" style="height:25px;padding:0;width:40px" onclick="" type="button" id="registrar" class="btn btn-primary" data-toggle="modal" data-target="">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
                                         <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
                                         <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z" />
                                     </svg>
                                 </button>
-
-
-                                <!-- <button onclick="" type="button" id="eeeee" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel" viewBox="0 0 16 16">
-                                    <path d="M5.884 6.68a.5.5 0 1 0-.768.64L7.349 10l-2.233 2.68a.5.5 0 0 0 .768.64L8 10.781l2.116 2.54a.5.5 0 0 0 .768-.641L8.651 10l2.233-2.68a.5.5 0 0 0-.768-.64L8 9.219l-2.116-2.54z" />
-                                    <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
-                                </svg>
-                            </button> -->
                             </td>
                         </tr>
                     </form>
@@ -316,7 +307,7 @@
         </div>
         <section class="botones">
             <?php
-            if ($batch == '' && $des != 'disabled') {
+            if ($batch == '') {
                 $estado = "";
                 if ($totalimporte != 0) {
                     $estado = 'disabled';
@@ -331,16 +322,19 @@
                     $consultaminimo = "SELECT * FROM `general`";
                     $queryminimo = mysqli_query($link, $consultaminimo) or die($consultaminimo);
                     $filaminimo = mysqli_fetch_array($queryminimo);
-                    if ($filaequiponota['idequipo'] == $filaequipousuario['idequipo'] && ($filaminimo['salariominimo'] * 500) < $totalhaber) {
+                    if ($filaequiponota['idequipo'] == $filaequipousuario['idequipo'] && ($filaminimo['salariominimo'] * 500) < $totalhaber && ($filadatosnota['aprobador'] == '')) {
             ?> <button <?php echo $estado ?> title="Aprobar Nota" id="aprobar" name="aprobar" class="btn btn-success boton">Aprobar</button>
-                <?php
+                    <?php
                     }
                 }
-                ?>
-                <!-- <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button> -->
-                <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
-                <button title="Borrar Nota" id="delete" name="delete" class="btn btn-secondary boton">Limpiar</button>
+                if ($des != 'disabled') {
+                    ?>
+
+                    <!-- <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button> -->
+                    <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
+                    <button title="Borrar Nota" id="delete" name="delete" class="btn btn-secondary boton">Limpiar</button>
             <?php
+                }
             }
             ?>
         </section>
@@ -382,8 +376,8 @@
         $('#aprobar').click(function() {
             a = 0;
             iddocumento = $('#iddocumento').val();
-            totalimporte = $('#totalimporte').val();
-            alertify.confirm('Aprobación de nota contable', 'Esta seguro que desea aprobar esta nota contable por valor de $' + totalimporte, function() {
+            totalhaber = $('#totalhaber').val();
+            alertify.confirm('Aprobación de nota contable', 'Esta seguro que desea aprobar esta nota contable con valor de $' + totalhaber, function() {
                 aprobarnota(iddocumento);
                 setTimeout(function() {
                     window.location.reload();
@@ -519,7 +513,7 @@
                     //registrarnota(type, clasificacion, comentario, batch);
                     registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
                     setTimeout(function() {
-                        window.location.reload();
+                        // window.location.reload();
                     }, 1000);
                 }
             }
