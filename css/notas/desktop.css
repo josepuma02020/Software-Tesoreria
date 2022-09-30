@@ -97,6 +97,14 @@ footer>button {
     display: inline-block;
 }
 
+.completo {
+    margin-top: 1.5em;
+    margin-left: 1em;
+    margin-right: 1em;
+    width: 90%;
+    display: inline-block;
+}
+
 
 .botones {
     margin: 1.1rem;

@@ -177,8 +177,14 @@
                         <input value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
                     </div>
                     <div class="form-group mediano-grande ">
-                        <label for="comment">Comentario:</label>
-                        <input <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
+                        <label for="comment">Aprobado por:</label>
+                        <input value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+                    </div>
+                    <div class="form-row formulario">
+                        <div class="form-group completo ">
+                            <label for="comment">Comentario:</label>
+                            <input <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
+                        </div>
                     </div>
                 </div>
             </form>

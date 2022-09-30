@@ -144,14 +144,16 @@ if ($_SESSION['usuario']) {
                     <THEAD>
                         <tr>
                             <th> Sel. </th>
-                            <th> Fecha </th>
+                            <th> Creacion </th>
+                            <th> Aprobación </th>
+                            <th> Autoriazación </th>
                             <th> Usuario </th>
                             <th> Tipo </th>
                             <th> Clasificación </th>
                             <th> Total importe </th>
                             <th> Batch </th>
                             <th> Comentario </th>
-                            <th> Aprobado por </th>
+
                         </tr>
                     </THEAD>
                     <TBODY>
@@ -216,12 +218,6 @@ if ($_SESSION['usuario']) {
                                     <input <?php echo $estadocheck . ' ' . $estado; ?> onchange="cambiarseleccionnota(<?php echo $filas1['idnota'] ?>)" id="check" type="checkbox" aria-label="Checkbox for following text input">
                                 </TD>
                                 <TD><?php echo $filas1['fecha'] . ' ' . $filas1['hora']; ?> </TD>
-                                <TD><?php echo $filas1['nombre']; ?> </TD>
-                                <TD><?php echo $filas1['documento']; ?> </TD>
-                                <TD><?php echo $filas1['clasificacion']; ?> </TD>
-                                <TD> <a href="home.php?id=<?php echo "$filas1[idnota]" ?>&n=<?php echo $filas1['tipo'] ?>"> <?php echo number_format($importe); ?></a> </TD>
-                                <TD><?php echo $batch; ?> </TD>
-                                <TD style="width:20% ;"><?php echo $filas1['comentario']; ?> </TD>
                                 <TD style="background-color: <?php echo $coloraprobador ?> ;">
                                     <?php
                                     if ($filas1['idaprobador'] == 0) {
@@ -230,6 +226,21 @@ if ($_SESSION['usuario']) {
                                         echo $filas1['naprobador'];
                                     }
                                     ?> </TD>
+                                <TD style="background-color: <?php echo $coloraprobador ?> ;">
+                                    <?php
+                                    if ($filas1['idaprobador'] == 0) {
+                                        echo '';
+                                    } else {
+                                        echo $filas1['naprobador'];
+                                    }
+                                    ?> </TD>
+                                <TD><?php echo $filas1['nombre']; ?> </TD>
+                                <TD><?php echo $filas1['documento']; ?> </TD>
+                                <TD><?php echo $filas1['clasificacion']; ?> </TD>
+                                <TD> <a href="home.php?id=<?php echo "$filas1[idnota]" ?>&n=<?php echo $filas1['tipo'] ?>"> <?php echo number_format($importe); ?></a> </TD>
+                                <TD><?php echo $batch; ?> </TD>
+                                <TD style="width:20% ;"><?php echo $filas1['comentario']; ?> </TD>
+
                             </TR>
                         <?php } ?>
                     </tbody>

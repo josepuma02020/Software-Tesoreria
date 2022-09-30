@@ -109,7 +109,7 @@
                         <label for="user">Usuario:</label>
                         <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
                     </div>
-                    <div class="form-group mediano">
+                    <div class="form-group mediano-grande">
                         <label for="type">Tipo de Documento</label>
                         <select <?php echo $estado ?> style="text-align: center;" id="type" class="form-control col-md-8 ">
                             <?php
@@ -130,7 +130,7 @@
                             ?>
                         </select>
                     </div>
-                    <div class="form-group mediano">
+                    <div class="form-group mediano-grande">
                         <label for="type">Clasificación de Documento</label>
                         <select <?php echo $estado ?> style="text-align: center;" id="clasificacion" class="form-control col-md-8 ">
                             <?php
@@ -171,11 +171,18 @@
                         <label for="user">Fecha creación:</label>
                         <input style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
                     </div>
-                    <div class="form-group mediano">
+                    <div class="form-group mediano-grande">
                         <label for="user">Aprobado por:</label>
                         <input value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
                     </div>
-                    <div class="form-group mediano ">
+                    <div class="form-group mediano-grande">
+                        <label for="user">Autorizado por:</label>
+                        <input value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+                    </div>
+
+                </div>
+                <div class="form-row formulario">
+                    <div class="form-group completo ">
                         <label for="comment">Comentario:</label>
                         <input <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
                     </div>
