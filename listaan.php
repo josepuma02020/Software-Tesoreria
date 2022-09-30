@@ -61,7 +61,19 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                             </svg>
                         </button>
                     </div>
+
+
                 </section>
+                <div>
+                    <?php
+                    if ($buscar == '') {
+                    ?>
+                        <h6>Se muestran los 100 primeros terceros.</h6>
+                    <?php
+                    }
+                    ?>
+
+                </div>
                 <div class="modal fade" id="nuevacuenta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">

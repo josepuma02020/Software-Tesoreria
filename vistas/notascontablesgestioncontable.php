@@ -59,14 +59,20 @@
         $batch = $filadatosnota['batch'];
         $fecha = $filadatosnota['fecha'];
         $hora = $filadatosnota['hora'];
+        $nombreaprobador = $filadatosnota['aprobador'];
+        $fechaaprobacion = $filadatosnota['fechaaprobacion'];
+        $horaaprobacion = $filadatosnota['horaaprobacion'];
     } else {
         $usuario = $_SESSION['nombre'];
         $tipodocumento = '';
         $clasificacion = '';
         $comentario = '';
-        $batch = 0;
+        $batch = '';
         $hora = '';
         $fecha = '';
+        $nombreaprobador = '';
+        $fechaaprobacion = '';
+        $horaaprobacion = '';
     }
     ?>
 </head>
@@ -83,7 +89,6 @@
                 $des = 'disabled';
             }
         }
-
         ?>
         <fieldset <?php echo $des; ?>>
             <form action="" method="post">
@@ -168,7 +173,7 @@
                     </div>
                     <div class="form-group mediano">
                         <label for="user">Aprobado por:</label>
-                        <input value=" <?php echo $filadatosnota['aprobador'] . ' : ' . $filadatosnota['fechaaprobacion'] . ' ' . $filadatosnota['horaaprobacion']; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+                        <input value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
                     </div>
                     <div class="form-group mediano ">
                         <label for="comment">Comentario:</label>
@@ -441,98 +446,165 @@
             comentario = $('#comment').val();
             totaldebe = 0;
             totalhaber = 0;
-            //grupo
-            concepto = $('#concepto').val();
-            const conceptos = concepto.split(' ');
-            fecha = $('#date').val();
-            const fechas = fecha.split(' ');
-            importe = $('#importe').val();
-            const importes = importe.split(' ');
-            tm = $('#tm').val();
-            const tms = tm.split(' ');
-            an = $('#an').val();
-            const ans = an.split(' ');
+            creado = $('#creado').val();
+            if (creado == 0) {
+                b = 0;
+                if (type == 0) {
+                    b = 1;
+                    alertify.alert('ATENCION!!', 'Favor seleccionar un tipo de documento', function() {
+                        alertify.success('Ok');
+                    });
+                }
+                if (clasificacion == 0) {
+                    b = 1;
+                    alertify.alert('ATENCION!!', 'Favor seleccionar una clasificación para el documento', function() {
+                        alertify.success('Ok');
+                    });
+                }
+                if (b == 0) {
 
-            if (ans.length > 1) {
-                ///grupo
-                for (var i = 0; i < conceptos.length; i++) {
-                    conceptos[i] = conceptos[i].replace(/-/g, " ");
-                    // console.log('debes' + debes);
-                    // console.log('habers' + habers);
-                }
-                console.log(conceptos);
-                console.log(importes);
-                console.log(ans);
-                //debugger;
-                registrargrupogestioncontable(iddoc, conceptos, fechas, importes, ans, tms);
-                setTimeout(function() {
-                    window.location.reload();
-                }, 1000 + (conceptos.length * 10));
-            } else {
-                //individual
-                a = 0;
-                concepto = $('#concepto').val();
-                fecha = $('#date').val();
-                importe = $('#importe').val();
-                tm = $('#tm').val();
-                an = $('#an').val();
-                lmauxiliar = $('#lmauxiliar').val();
-                if (an == '') {
-                    a = 1;
-                    alertify.alert('ATENCION!!', 'Debe ingresar valor de AN8.', function() {
-                        alertify.success('Ok');
-                    });
-                }
-                if (importe == 0) {
-                    a = 1;
-                    alertify.alert('ATENCION!!', 'El importe debe ser mayor a 0.', function() {
-                        alertify.success('Ok');
-                    });
-                }
-                if (concepto == '') {
-                    a = 1;
-                    alertify.alert('ATENCION!!', 'El campo concepto es obligatorio.', function() {
-                        alertify.success('Ok');
-                    });
-                }
-                if (fecha == '') {
-                    a = 1;
-                    alertify.alert('ATENCION!!', 'El campo fecha se encuentra vacío', function() {
-                        alertify.success('Ok');
-                    });
-                }
-                if (a == 0) {
-                    b = 0
-                    creado = $('#creado').val();
-                    if (creado == 0) {
-                        if (type == 0) {
-                            b = 1;
-                            alertify.alert('ATENCION!!', 'Favor seleccionar un tipo de documento', function() {
+                    registrarnota(type, clasificacion, comentario, '', 4);
+                    concepto = $('#concepto').val();
+                    const conceptos = concepto.split(' ');
+                    fecha = $('#date').val();
+                    const fechas = fecha.split(' ');
+                    importe = $('#importe').val();
+                    const importes = importe.split(' ');
+                    tm = $('#tm').val();
+                    const tms = tm.split(' ');
+                    an = $('#an').val();
+                    const ans = an.split(' ');
+
+                    if (ans.length > 1) {
+                        ///grupo
+                        for (var i = 0; i < conceptos.length; i++) {
+                            conceptos[i] = conceptos[i].replace(/-/g, " ");
+                            // console.log('debes' + debes);
+                            // console.log('habers' + habers);
+                        }
+                        console.log(conceptos);
+                        console.log(importes);
+                        console.log(ans);
+                        //debugger;
+                        registrargrupogestioncontable(iddoc, conceptos, fechas, importes, ans, tms);
+                        setTimeout(function() {
+                            window.location.href = "./home.php?id=" + iddoc + "&n=4"
+                        }, 1000 + (conceptos.length * 10));
+                    } else {
+                        //individual
+                        a = 0;
+                        concepto = $('#concepto').val();
+                        fecha = $('#date').val();
+                        importe = $('#importe').val();
+                        tm = $('#tm').val();
+                        an = $('#an').val();
+                        lmauxiliar = $('#lmauxiliar').val();
+                        if (an == '') {
+                            a = 1;
+                            alertify.alert('ATENCION!!', 'Debe ingresar valor de AN8.', function() {
                                 alertify.success('Ok');
                             });
                         }
-                        if (clasificacion == 0) {
-                            b = 1;
-                            alertify.alert('ATENCION!!', 'Favor seleccionar una clasificación para el documento', function() {
+                        if (importe == 0) {
+                            a = 1;
+                            alertify.alert('ATENCION!!', 'El importe debe ser mayor a 0.', function() {
                                 alertify.success('Ok');
                             });
                         }
-                        if (b == 0) {
-                            registrarnota(type, clasificacion, comentario, '', 4);
+                        if (concepto == '') {
+                            a = 1;
+                            alertify.alert('ATENCION!!', 'El campo concepto es obligatorio.', function() {
+                                alertify.success('Ok');
+                            });
+                        }
+                        if (fecha == '') {
+                            a = 1;
+                            alertify.alert('ATENCION!!', 'El campo fecha se encuentra vacío', function() {
+                                alertify.success('Ok');
+                            });
+                        }
+                        if (a == 0) {
+                            b = 0
                             registrogestioncontable(iddoc, concepto, fecha, importe, tm, an, lmauxiliar);
                             setTimeout(function() {
-                                window.location.reload();
+                                window.location.href = "./home.php?id=" + iddoc + "&n=4"
                             }, 1000);
+
                         }
-                    } else {
+                    }
+                }
+            } else {
+                concepto = $('#concepto').val();
+                const conceptos = concepto.split(' ');
+                fecha = $('#date').val();
+                const fechas = fecha.split(' ');
+                importe = $('#importe').val();
+                const importes = importe.split(' ');
+                tm = $('#tm').val();
+                const tms = tm.split(' ');
+                an = $('#an').val();
+                const ans = an.split(' ');
+
+                if (ans.length > 1) {
+                    ///grupo
+                    for (var i = 0; i < conceptos.length; i++) {
+                        conceptos[i] = conceptos[i].replace(/-/g, " ");
+                        // console.log('debes' + debes);
+                        // console.log('habers' + habers);
+                    }
+                    console.log(conceptos);
+                    console.log(importes);
+                    console.log(ans);
+                    //debugger;
+                    registrargrupogestioncontable(iddoc, conceptos, fechas, importes, ans, tms);
+                    setTimeout(function() {
+                        window.location.href = "./home.php?id=" + iddoc + "&n=4"
+                    }, 1000 + (conceptos.length * 10));
+                } else {
+                    //individual
+                    a = 0;
+                    concepto = $('#concepto').val();
+                    fecha = $('#date').val();
+                    importe = $('#importe').val();
+                    tm = $('#tm').val();
+                    an = $('#an').val();
+                    lmauxiliar = $('#lmauxiliar').val();
+                    if (an == '') {
+                        a = 1;
+                        alertify.alert('ATENCION!!', 'Debe ingresar valor de AN8.', function() {
+                            alertify.success('Ok');
+                        });
+                    }
+                    if (importe == 0) {
+                        a = 1;
+                        alertify.alert('ATENCION!!', 'El importe debe ser mayor a 0.', function() {
+                            alertify.success('Ok');
+                        });
+                    }
+                    if (concepto == '') {
+                        a = 1;
+                        alertify.alert('ATENCION!!', 'El campo concepto es obligatorio.', function() {
+                            alertify.success('Ok');
+                        });
+                    }
+                    if (fecha == '') {
+                        a = 1;
+                        alertify.alert('ATENCION!!', 'El campo fecha se encuentra vacío', function() {
+                            alertify.success('Ok');
+                        });
+                    }
+                    if (a == 0) {
+                        b = 0
                         registrogestioncontable(iddoc, concepto, fecha, importe, tm, an, lmauxiliar);
                         setTimeout(function() {
-                            window.location.reload();
+                            window.location.href = "./home.php?id=" + iddoc + "&n=4"
                         }, 1000);
-                    }
 
+                    }
                 }
             }
+            //grupo
+
         });
         $('#save').click(function() {
             type = $('#type').val();

@@ -46,7 +46,7 @@
     }
 
     //consulta datos notas
-    $consultadatosnota = "SELECT a.*,b.nombre,c.documento,d.clasificacion,e.nombre 'aprobador',a.fechaaprobacion,a.horaaprobacion FROM notascontables a 
+    $consultadatosnota = "SELECT a.*,b.nombre,c.documento,d.clasificacion,e.nombre 'aprobador',a.fechaaprobacion,a.horaaprobacion,f.nombre 'naprobador' FROM notascontables a left join usuarios f on f.idusuario=a.idaprobador
     INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion
      left join usuarios e on e.idusuario=a.idaprobador where a.idnota = $idnota";
     $querydatosnota = mysqli_query($link, $consultadatosnota) or die($consultadatosnota);
@@ -59,6 +59,9 @@
         $batch = $filadatosnota['batch'];
         $fecha = $filadatosnota['fecha'];
         $hora = $filadatosnota['hora'];
+        $nombreaprobador = $filadatosnota['aprobador'];
+        $fechaaprobacion = $filadatosnota['fechaaprobacion'];
+        $horaaprobacion = $filadatosnota['horaaprobacion'];
     } else {
         $usuario = $_SESSION['nombre'];
         $tipodocumento = '';
@@ -67,6 +70,9 @@
         $batch = '';
         $hora = '';
         $fecha = '';
+        $nombreaprobador = '';
+        $fechaaprobacion = '';
+        $horaaprobacion = '';
     }
     ?>
 </head>
@@ -168,7 +174,7 @@
                     </div>
                     <div class="form-group mediano-grande ">
                         <label for="comment">Aprobado por:</label>
-                        <input value=" <?php echo $filadatosnota['aprobador'] . ' : ' . $filadatosnota['fechaaprobacion'] . ' ' . $filadatosnota['horaaprobacion']; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+                        <input value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
                     </div>
                     <div class="form-group mediano-grande ">
                         <label for="comment">Comentario:</label>
@@ -478,7 +484,7 @@
                 $('#totalimporte').val(separator(totalimporte));
                 registrargrupo(iddoc, cuentas, dates, debes, habers, lms, ans);
                 setTimeout(function() {
-                    window.location.reload();
+                    window.location.href = "./home.php?id=" + iddoc + "&n=4"
                 }, 1000 + (cuentas.length * 10));
             } else {
                 //individual
@@ -513,7 +519,7 @@
                     //registrarnota(type, clasificacion, comentario, batch);
                     registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
                     setTimeout(function() {
-                        // window.location.reload();
+                        window.location.href = "./home.php?id=" + iddoc + "&n=4"
                     }, 1000);
                 }
             }

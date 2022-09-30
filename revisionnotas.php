@@ -33,19 +33,19 @@ if ($_SESSION['usuario']) {
     }
     switch ($mostrar) {
         case 't':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber' FROM notascontables a 
+            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' FROM notascontables a left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where a.fecha between '$desde' and '$hasta' and tipo = $_GET[n] GROUP by a.idnota;";
+            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.fecha between '$desde' and '$hasta' and tipo = $_GET[n] GROUP by a.idnota;";
             break;
         case 'a':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber' FROM notascontables a 
+            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' FROM notascontables a left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where (a.batch is null or a.batch = '' or a.batch='NULL') and a.fecha between '$desde' and '$hasta'  and tipo = $_GET[n] GROUP by a.idnota;";
+            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where (a.batch is null or a.batch = '' or a.batch='NULL') and a.fecha between '$desde' and '$hasta'  and tipo = $_GET[n] GROUP by a.idnota;";
             break;
         case 'c':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber' FROM notascontables a 
+            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' FROM notascontables a left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario   INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion INNER JOIN registrosdenota e on e.idnota=a.idnota where a.batch > 0  and a.fecha between '$desde' and '$hasta'  and tipo = $_GET[n] GROUP by a.idnota;";
+            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.batch > 0  and a.fecha between '$desde' and '$hasta'  and tipo = $_GET[n] GROUP by a.idnota;";
             break;
     }
 
@@ -175,53 +175,59 @@ if ($_SESSION['usuario']) {
                                     $importemenos = $importemenos + $filasterceros['haber'];
                                     $estado = 'disabled';
                                 }
+                                $consultaveran = "select idcuenta from cuentas where idcuenta = '$filasterceros[idcuenta]'";
+                                $queryveran = mysqli_query($link, $consultaveran) or die($consultaveran);
+                                if (mysqli_num_rows($queryveran) == 0) {
+                                    $color =  '#FC9999';
+                                    $importemenos = $importemenos + $filasterceros['haber'];
+                                    $estado = 'disabled';
+                                }
+                            }
+                            $totalimporte = $filas1['importe'];
+                            switch ($_GET['n']) {
+                                case 1:
+                                    $importe = $filas1['importe'];
+                                    break;
+                                case 4:
+                                    $consultaimporte = "select SUM(debe) 'importe' from registrosdenota where idcuenta > 0 and idnota = '$filas1[idnota]'";
+                                    $queryimporte = mysqli_query($link, $consultaimporte) or die($consultaimporte);
+                                    $filaimporte = mysqli_fetch_array($queryimporte);
+                                    $importe = $filaimporte['importe'] - $importemenos;
+                                    break;
+                            }
+                            $consultaminimo = "SELECT * FROM `general`";
+                            $queryminimo = mysqli_query($link, $consultaminimo) or die($consultaminimo);
+                            $filaminimo = mysqli_fetch_array($queryminimo);
+                            echo $filas1['idaprobador'];
+                            if (($importe >    $filaminimo['salariominimo'] * 500) && ($filas1['idaprobador'] == 0)) {
+                                $estado = 'disabled';
+                                $coloraprobador =  '#FC9999';
                             }
                         ?>
-                            <TR>
+
+                            <TR style="background-color: <?php echo $color ?> ;">
                                 <TD>
                                     <?php
                                     $estadocheck = 'checked';
                                     if ($filas1['seleccion'] == 1) {
                                         $estadocheck = '';
                                     }
-
-                                    if ($batch > 0 && $_SESSION['rol'] != 1) {
-                                    } else {
-                                    ?>
-                                    <?php
-                                    }
                                     ?>
                                     <input <?php echo $estadocheck . ' ' . $estado; ?> onchange="cambiarseleccionnota(<?php echo $filas1['idnota'] ?>)" id="check" type="checkbox" aria-label="Checkbox for following text input">
-
                                 </TD>
                                 <TD><?php echo $filas1['fecha'] . ' ' . $filas1['hora']; ?> </TD>
                                 <TD><?php echo $filas1['nombre']; ?> </TD>
                                 <TD><?php echo $filas1['documento']; ?> </TD>
                                 <TD><?php echo $filas1['clasificacion']; ?> </TD>
-                                <?php
-                                $totalimporte = $filas1['importe'];
-                                if ($totalimporte != 0) {
-                                    $color = '#FC9999';
-                                }
-                                switch ($_GET['n']) {
-                                    case 1:
-                                        $importe = $filas1['importe'];
-                                        break;
-                                    case 4:
-                                        $consultaimporte = "select SUM(haber) 'importe' from registrosdenota where idcuenta > 0 and idnota = '$filas1[idnota]'";
-                                        $queryimporte = mysqli_query($link, $consultaimporte) or die($consultaimporte);
-                                        $filaimporte = mysqli_fetch_array($queryimporte);
-                                        $importe = $filaimporte['importe'] - $importemenos;
-                                        break;
-                                }
-                                ?>
-                                <TD style="background-color:<?php echo $color ?>"> <a href="home.php?id=<?php echo "$filas1[idnota]" ?>&n=<?php echo $filas1['tipo'] ?>"> <?php echo number_format($importe); ?></a> </TD>
+                                <TD> <a href="home.php?id=<?php echo "$filas1[idnota]" ?>&n=<?php echo $filas1['tipo'] ?>"> <?php echo number_format($importe); ?></a> </TD>
                                 <TD><?php echo $batch; ?> </TD>
                                 <TD style="width:20% ;"><?php echo $filas1['comentario']; ?> </TD>
-                                <TD><?php
+                                <TD style="background-color: <?php echo $coloraprobador ?> ;">
+                                    <?php
                                     if ($filas1['idaprobador'] == 0) {
                                         echo '';
                                     } else {
+                                        echo $filas1['naprobador'];
                                     }
                                     ?> </TD>
                             </TR>

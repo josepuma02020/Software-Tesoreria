@@ -28,8 +28,8 @@ if ($_SESSION['usuario']) {
     $consecutivo = $filaconsecutivo['consecutivo'] + 1;
     $idnota = $ano . $mes . $dia . $consecutivo;
     //ingresarnota
-    $consultaingresonota = "INSERT INTO `notascontables`(`idnota`, `idusuario`, `idtipodocumento`, `idclasificacion`, `batch`, `comentario`, `fecha`, `hora`, `tipo`) VALUES 
-    ('$idnota','$usuario','$type','$clasificacion','','$comentario','$fecha_actual','$hora','$tipo')";
+    $consultaingresonota = "INSERT INTO `notascontables`(`idnota`, `idusuario`, `idtipodocumento`, `idclasificacion`, `batch`, `comentario`, `fecha`, `hora`, `tipo`, `seleccion`) VALUES 
+    ('$idnota','$usuario','$type','$clasificacion','','$comentario','$fecha_actual','$hora','$tipo',1)";
     $querynota = mysqli_query($link, $consultaingresonota) or die($consultaingresonota);
 } else {
     header('Location: ' . "usuarios/cerrarsesion.php");
