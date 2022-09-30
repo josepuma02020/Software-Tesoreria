@@ -33,24 +33,21 @@ if ($_SESSION['usuario']) {
     }
     switch ($mostrar) {
         case 't':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' FROM notascontables a left join usuarios f on f.idusuario=a.idaprobador
+            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador',g.nombre 'nautoriza'  FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
             INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.fecha between '$desde' and '$hasta' and tipo = $_GET[n] GROUP by a.idnota;";
             break;
         case 'a':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' FROM notascontables a left join usuarios f on f.idusuario=a.idaprobador
+            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' ,g.nombre 'nautoriza' FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
             INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where (a.batch is null or a.batch = '' or a.batch='NULL') and a.fecha between '$desde' and '$hasta'  and tipo = $_GET[n] GROUP by a.idnota;";
             break;
         case 'c':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' FROM notascontables a left join usuarios f on f.idusuario=a.idaprobador
+            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' ,g.nombre 'nautoriza' FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario   INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
             INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.batch > 0  and a.fecha between '$desde' and '$hasta'  and tipo = $_GET[n] GROUP by a.idnota;";
             break;
     }
-
-
-
 ?>
     <HTML>
 
@@ -146,7 +143,7 @@ if ($_SESSION['usuario']) {
                             <th> Sel. </th>
                             <th> Creacion </th>
                             <th> Aprobación </th>
-                            <th> Autoriazación </th>
+                            <th> Autorización </th>
                             <th> Usuario </th>
                             <th> Tipo </th>
                             <th> Clasificación </th>
@@ -158,6 +155,7 @@ if ($_SESSION['usuario']) {
                     </THEAD>
                     <TBODY>
                         <?php
+
                         $query = mysqli_query($link, $consultanotas) or die($consultanotas);
                         while ($filas1 = mysqli_fetch_array($query)) {
                             $estado = '';
@@ -200,10 +198,23 @@ if ($_SESSION['usuario']) {
                             $consultaminimo = "SELECT * FROM `general`";
                             $queryminimo = mysqli_query($link, $consultaminimo) or die($consultaminimo);
                             $filaminimo = mysqli_fetch_array($queryminimo);
-                            echo $filas1['idaprobador'];
-                            if (($importe >    $filaminimo['salariominimo'] * 500) && ($filas1['idaprobador'] == 0)) {
-                                $estado = 'disabled';
-                                $coloraprobador =  '#FC9999';
+                            $coloraprobador =  '';
+                            $colorautorizador =  '';
+                            $estado = '';
+                            if (($importe >    $filaminimo['salariominimo'] * 500)) {
+                                $a = 0;
+                                if ($filas1['idaprobador'] == 0) {
+
+                                    $coloraprobador =  '#FC9999';
+                                    $a++;
+                                }
+                                if ($filas1['idautoriza'] == 0) {
+                                    $colorautorizador =  '#FC9999';
+                                    $a++;
+                                }
+                                if ($a > 0) {
+                                    $estado = 'disabled';
+                                }
                             }
                         ?>
 
@@ -226,12 +237,12 @@ if ($_SESSION['usuario']) {
                                         echo $filas1['naprobador'];
                                     }
                                     ?> </TD>
-                                <TD style="background-color: <?php echo $coloraprobador ?> ;">
+                                <TD style="background-color: <?php echo $colorautorizador ?> ;">
                                     <?php
                                     if ($filas1['idaprobador'] == 0) {
                                         echo '';
                                     } else {
-                                        echo $filas1['naprobador'];
+                                        echo $filas1['nautoriza'];
                                     }
                                     ?> </TD>
                                 <TD><?php echo $filas1['nombre']; ?> </TD>
