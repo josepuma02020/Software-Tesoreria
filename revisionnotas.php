@@ -31,21 +31,22 @@ if ($_SESSION['usuario']) {
     } else {
         $mostrar = 'a';
     }
+    $n = $_GET['n'];
     switch ($mostrar) {
         case 't':
             $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador',g.nombre 'nautoriza'  FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.fecha between '$desde' and '$hasta' and tipo = $_GET[n] GROUP by a.idnota;";
+            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.fecha between '$desde' and '$hasta' and tipo = $n GROUP by a.idnota;";
             break;
         case 'a':
             $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' ,g.nombre 'nautoriza' FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where (a.batch is null or a.batch = '' or a.batch='NULL') and a.fecha between '$desde' and '$hasta'  and tipo = $_GET[n] GROUP by a.idnota;";
+            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where (a.batch is null or a.batch = '' or a.batch='NULL') and a.fecha between '$desde' and '$hasta'  and tipo = $n GROUP by a.idnota;";
             break;
         case 'c':
             $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' ,g.nombre 'nautoriza' FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario   INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.batch > 0  and a.fecha between '$desde' and '$hasta'  and tipo = $_GET[n] GROUP by a.idnota;";
+            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.batch > 0  and a.fecha between '$desde' and '$hasta'  and tipo = $n GROUP by a.idnota;";
             break;
     }
 ?>
@@ -82,6 +83,7 @@ if ($_SESSION['usuario']) {
                     <div class="form-row formulario">
                         <div class="form-group mediano">
                             <label for="desde">Desde:</label>
+                            <input value="<?php echo $n ?>" style="text-align:center" class="form-control " id="tipon" name="tipon" type="hidden">
                             <input value="<?php echo $desde ?>" style="text-align:center" class=" form-control " id="desde" name="desde" type="date">
                         </div>
                         <div class="form-group mediano">
@@ -141,7 +143,7 @@ if ($_SESSION['usuario']) {
                     <THEAD>
                         <tr>
                             <th> Sel. </th>
-                            <th> Creacion </th>
+                            <th style="width: 10% ;"> Creacion </th>
                             <th> Aprobación </th>
                             <th> Autorización </th>
                             <th> Usuario </th>
@@ -150,12 +152,10 @@ if ($_SESSION['usuario']) {
                             <th> Total importe </th>
                             <th> Batch </th>
                             <th> Comentario </th>
-
                         </tr>
                     </THEAD>
                     <TBODY>
                         <?php
-
                         $query = mysqli_query($link, $consultanotas) or die($consultanotas);
                         while ($filas1 = mysqli_fetch_array($query)) {
                             $estado = '';
@@ -325,10 +325,12 @@ if ($_SESSION['usuario']) {
         });
         $('#buscar').click(function() {
             a = 0;
+
             desde = $('#desde').val();
+            tipon = $('#tipon').val();
             hasta = $('#hasta').val();
             mostrar = $('#mostrar').val();
-            location.href = `revisionnotas.php?desde=${desde}&hasta=${hasta}&m=${mostrar}`;
+            location.href = `revisionnotas.php?desde=${desde}&hasta=${hasta}&m=${mostrar}&n=${tipon}`;
         });
         $('#detalles').click(function() {
             a = 0;
