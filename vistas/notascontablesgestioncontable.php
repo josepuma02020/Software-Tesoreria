@@ -46,7 +46,7 @@
     }
 
     //consulta datos notas
-    $consultadatosnota = "SELECT a.*,b.nombre,c.documento,d.clasificacion,e.nombre 'aprobador',a.fechaaprobacion,a.horaaprobacion FROM notascontables a 
+    $consultadatosnota = "SELECT a.*,b.nombre,c.documento,d.clasificacion,e.nombre 'aprobador',a.fechaaprobacion,a.horaaprobacion,f.nombre 'autoriza' FROM notascontables a left join usuarios f on f.idusuario = a.idautoriza
     INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion
      left join usuarios e on e.idusuario=a.idaprobador where a.idnota = $idnota";
     $querydatosnota = mysqli_query($link, $consultadatosnota) or die($consultadatosnota);
@@ -62,6 +62,9 @@
         $nombreaprobador = $filadatosnota['aprobador'];
         $fechaaprobacion = $filadatosnota['fechaaprobacion'];
         $horaaprobacion = $filadatosnota['horaaprobacion'];
+        $nombreautorizador = $filadatosnota['autoriza'];
+        $fechaautorizacion = $filadatosnota['fechaautorizacion'];
+        $horaautorizacion = $filadatosnota['horaautorizacion'];
     } else {
         $usuario = $_SESSION['nombre'];
         $tipodocumento = '';
@@ -73,6 +76,9 @@
         $nombreaprobador = '';
         $fechaaprobacion = '';
         $horaaprobacion = '';
+        $nombreautorizador = '';
+        $fechaautorizacion = '';
+        $horaautorizacion = '';
     }
     ?>
 </head>
@@ -177,7 +183,7 @@
                     </div>
                     <div class="form-group mediano-grande">
                         <label for="user">Autorizado por:</label>
-                        <input value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+                        <input value=" <?php echo $nombreautorizador . ' : ' . $fechaautorizacion . ' ' . $horaautorizacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
                     </div>
 
                 </div>
@@ -328,7 +334,7 @@
                 $estado = "";
                 if ($des != 'disabled') {
             ?>
-                    <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button>
+                    <!-- <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button> -->
                     <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
                     <button title="Borrar Nota" id="delete" name="delete" class="btn btn-secondary boton">Limpiar</button>
                     <?php
