@@ -1,3 +1,16 @@
+function autorizar(iddocumento) {
+    cadenau = "iddocumento=" + iddocumento;
+    $.ajax({
+        type: "POST",
+        url: "notascontables/autorizarnota.php",
+        data: cadenau,
+        success: function (r) {
+            //console.log(r);
+            //debugger;
+        }
+    });
+}
+
 function aprobarnota(iddocumento) {
     cadenau = "iddocumento=" + iddocumento;
     $.ajax({

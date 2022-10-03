@@ -343,19 +343,26 @@
                     <button title="Borrar Nota" id="delete" name="delete" class="btn btn-secondary boton">Limpiar</button>
                     <?php
                 }
-                if ($_SESSION['rol'] == 5) {
-                    $consultaequiponota = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $filadatosnota[idusuario] ";
-                    $queryequiponota = mysqli_query($link, $consultaequiponota) or die($consultaequiponota);
-                    $filaequiponota = mysqli_fetch_array($queryequiponota);
-                    $consultaequipousuario = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $_SESSION[idusuario] ";
-                    $qeryrquipousuario = mysqli_query($link, $consultaequipousuario) or die($consultaequipousuario);
-                    $filaequipousuario = mysqli_fetch_array($qeryrquipousuario);
-                    $consultaminimo = "SELECT * FROM `general`";
-                    $queryminimo = mysqli_query($link, $consultaminimo) or die($consultaminimo);
-                    $filaminimo = mysqli_fetch_array($queryminimo);
-                    $filaminimo['salariominimo'] * 500;
+                $consultaequiponota = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $filadatosnota[idusuario] ";
+                $queryequiponota = mysqli_query($link, $consultaequiponota) or die($consultaequiponota);
+                $filaequiponota = mysqli_fetch_array($queryequiponota);
+                $consultaequipousuario = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $_SESSION[idusuario] ";
+                $qeryrquipousuario = mysqli_query($link, $consultaequipousuario) or die($consultaequipousuario);
+                $filaequipousuario = mysqli_fetch_array($qeryrquipousuario);
+                $consultaminimo = "SELECT * FROM `general`";
+                $queryminimo = mysqli_query($link, $consultaminimo) or die($consultaminimo);
+                $filaminimo = mysqli_fetch_array($queryminimo);
+                $filaminimo['salariominimo'] * 500;
+                if ($_SESSION['aprobacion'] == 1) {
                     if ($filaequiponota['idequipo'] == $filaequipousuario['idequipo'] && ($filaminimo['salariominimo'] * 500) < $totalimporte && $filadatosnota['aprobador'] == '' && $valido == 0) {
                     ?> <button <?php echo $estado ?> title="Aprobar Nota" id="aprobar" name="aprobar" class="btn btn-success boton">Aprobar</button>
+                    <?php
+                    }
+                }
+                if ($_SESSION['autorizacion'] == 1) {
+                    if (($filaminimo['salariominimo'] * 500) < $totalimporte && $filadatosnota['autoriza'] == '' && $valido == 0) {
+                    ?>
+                        <button <?php echo $estado ?> title="Autorizar Nota" id="autorizar" name="autorizar" class="btn btn-warning boton">Autorizar</button>
                     <?php
                     }
                 }
@@ -410,6 +417,23 @@
             totalimporte = $('#totalimporte').val();
             alertify.confirm('Aprobación de nota contable', 'Esta seguro que desea aprobar esta nota contable por valor de $' + totalimporte, function() {
                 aprobarnota(iddocumento);
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000);
+                alertify.success('Operación exitosa. ');
+            }, function() {
+
+            }).set('labels', {
+                ok: 'Continuar',
+                cancel: 'Cancelar'
+            });
+        });
+        $('#autorizar').click(function() {
+            a = 0;
+            iddocumento = $('#iddocumento').val();
+            totalimporte = $('#totalimporte').val();
+            alertify.confirm('Autorización de nota contable', 'Esta seguro que desea autorizar esta nota contable por valor de $' + totalimporte, function() {
+                autorizar(iddocumento);
                 setTimeout(function() {
                     window.location.reload();
                 }, 1000);

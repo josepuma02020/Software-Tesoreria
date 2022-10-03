@@ -254,7 +254,6 @@ if ($_SESSION['usuario']) {
                                 <TD> <a href="home.php?id=<?php echo "$filas1[idnota]" ?>&n=<?php echo $filas1['tipo'] ?>"> <?php echo number_format($importe); ?></a> </TD>
                                 <TD><?php echo $batch; ?> </TD>
                                 <TD style="width:20% ;"><?php echo $filas1['comentario']; ?> </TD>
-
                             </TR>
                         <?php } ?>
                     </tbody>
