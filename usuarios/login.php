@@ -40,6 +40,11 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
             $_SESSION['nombre'] = $arreglo['nombre'];
             $_SESSION['activo'] = $arreglo['activo'];
             $_SESSION['idproceso'] = $arreglo['idproceso'];
+            $_SESSION['creacion'] = $arreglo['creacion'];
+            $_SESSION['verificacion'] = $arreglo['verificacion'];
+            $_SESSION['aprobacion'] = $arreglo['aprobacion'];
+            $_SESSION['autorizacion'] = $arreglo['autorizacion'];
+            $_SESSION['configuracion'] = $arreglo['configuracion'];
             $_SESSION['tiempo'] = time();
             $consultaactconex = "update usuarios set ultingreso = '$fecha' where idusuario = $_SESSION[idusuario] ";
             $query = mysqli_query($link, $consultaactconex) or die($consultaactconex);
