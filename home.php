@@ -43,7 +43,8 @@ if ($_SESSION['usuario']) {
 
     <body>
         <header>
-            <?php include($_SESSION['menu']) ?>
+            <?php
+            include_once($_SESSION['menu']) ?>
         </header>
         <main>
             <?php

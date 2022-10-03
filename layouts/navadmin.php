@@ -44,20 +44,26 @@
                         <li class="nav-item">
                             <a class="nav-link" href="./informes.php">Informes</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Configuración
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="./generales.php">Generales</a>
-                                <a class="dropdown-item" href="./cuentas.php">Cuentas</a>
-                                <a class="dropdown-item" href="./procesos.php">Procesos</a>
-                                <a class="dropdown-item" href="./listaan.php">Lista de AN8</a>
-                                <a class="dropdown-item" href="./tiposdocumento.php">Tipos de documento</a>
-                                <a class="dropdown-item" href="./clasificacion.php">Clasificacion de documentos</a>
-                                <a class="dropdown-item" href="./usuarios.php">Usuarios</a>
-                            </div>
-                        </li>
+                        <?php if ($_SESSION['configuracion'] == 1) {
+                        ?>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Configuración
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="./generales.php">Generales</a>
+                                    <a class="dropdown-item" href="./cuentas.php">Cuentas</a>
+                                    <a class="dropdown-item" href="./procesos.php">Procesos</a>
+                                       <a class="dropdown-item" href="./listaan.php">Lista de AN8</a>
+                                    <a class="dropdown-item" href="./tiposdocumento.php">Tipos de documento</a>
+                                    <a class="dropdown-item" href="./clasificacion.php">Clasificacion de documentos</a>
+                                    <a class="dropdown-item" href="./usuarios.php">Usuarios</a>
+                                </div>
+                            </li>
+                        <?php
+                        }
+                        ?>
+
                         <li class="nav-item">
                             <a class="nav-link" href="usuarios/cerrarsesion.php">Salir</a>
                         </li>

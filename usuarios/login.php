@@ -17,26 +17,12 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
         $clave2 = $arreglo['clave'];
         $fecha = date("Y" . "-" . "m" . "-" . "d");
         $rol = $arreglo['rol'];
-        switch ($rol) {
-            case 1:
-                $menu = "./layouts/navadmin.php";
-                break;
-            case 2:
-                $menu = "./layouts/navverificador.php";
-                break;
-            case 3:
-                $menu = "./layouts/navverificador.php";
-                break;
-            case 5:
-                $menu = "./layouts/navaprobador.php";
-                break;
-        }
         //autenticacion
         if (password_verify($clave1, $clave2)) {
             $_SESSION['idusuario'] = $arreglo['idusuario'];
             $_SESSION['usuario'] = $usuario;
             $_SESSION['rol'] = $rol;
-            $_SESSION['menu'] = $menu;
+            $_SESSION['menu'] = "./layouts/navadmin.php";
             $_SESSION['nombre'] = $arreglo['nombre'];
             $_SESSION['activo'] = $arreglo['activo'];
             $_SESSION['idproceso'] = $arreglo['idproceso'];

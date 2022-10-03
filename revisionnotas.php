@@ -49,6 +49,8 @@ if ($_SESSION['usuario']) {
             INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.batch > 0  and a.fecha between '$desde' and '$hasta'  and tipo = $n GROUP by a.idnota;";
             break;
     }
+
+
 ?>
     <HTML>
 
@@ -156,6 +158,7 @@ if ($_SESSION['usuario']) {
                     </THEAD>
                     <TBODY>
                         <?php
+                        $consultanotas;
                         $query = mysqli_query($link, $consultanotas) or die($consultanotas);
                         while ($filas1 = mysqli_fetch_array($query)) {
                             $estado = '';
