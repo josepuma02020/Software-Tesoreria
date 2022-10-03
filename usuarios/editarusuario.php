@@ -19,14 +19,15 @@ if ($_SESSION['usuario']) {
     $usuario = $_POST['usuario'];
     $clave = $_POST['clave'];
     $proceso = $_POST['proceso'];
+    $pcreacion = $_POST['pcreacion'];
+    $pverificacion = $_POST['pverificacion'];
+    $paprobacion = $_POST['paprobacion'];
+    $pautorizacion = $_POST['pautorizacion'];
+    $pconfiguracion = $_POST['pconfiguracion'];
 
     if ($clave != '') {
         $claveh = password_hash($clave, PASSWORD_DEFAULT);
         $consulta = "UPDATE `usuarios` SET `clave`='$claveh' WHERE  idusuario = '$id'";
-        echo $query = mysqli_query($link, $consulta) or die($consulta);
-    }
-    if ($rol != 0) {
-        echo   $consulta = "UPDATE `usuarios` SET `rol`='$rol' WHERE  idusuario = '$id'";
         echo $query = mysqli_query($link, $consulta) or die($consulta);
     }
     if ($proceso != 0) {
@@ -34,6 +35,6 @@ if ($_SESSION['usuario']) {
         echo $query = mysqli_query($link, $consulta) or die($consulta);
     }
 
-    $consulta = "UPDATE `usuarios` SET `nombre`='$nombre',`correo`='$correo',`usuario`='$usuario' WHERE  idusuario = '$id'";
+    $consulta = "UPDATE `usuarios` SET `nombre`='$nombre',`correo`='$correo',`usuario`='$usuario',`creacion`='$pcreacion',`verificacion`='$pverificacion',`aprobacion`='$paprobacion',`autorizacion`='$pautorizacion',`configuracion`='$pconfiguracion' WHERE  idusuario = '$id'";
     echo $query = mysqli_query($link, $consulta) or die($consulta);
 }

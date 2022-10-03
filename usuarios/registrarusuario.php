@@ -14,12 +14,16 @@ if ($_SESSION['usuario']) {
     date_default_timezone_set('America/Bogota');
     $nombre = $_POST['nombre'];
     $correo = $_POST['correo'];
-    $rol = $_POST['rol'];
     $usuario = $_POST['usuario'];
     $clave = $_POST['clave'];
     $proceso = $_POST['proceso'];
+    $nconfiguracion = $_POST['nconfiguracion'];
+    $nautorizacion = $_POST['nautorizacion'];
+    $naprobacion = $_POST['naprobacion'];
+    $nverificacion = $_POST['nverificacion'];
+    $ncreacion = $_POST['ncreacion'];
     $claveh = password_hash($clave, PASSWORD_DEFAULT);
-    $consulta = "INSERT INTO `usuarios`(`idusuario`, `nombre`, `correo`, `usuario`, `clave`, `rol`, `activo`, `ultingreso`, `idproceso`) 
-    VALUES ('','$nombre','$correo','$usuario','$claveh ','$rol','0',NULL,'$proceso')";
+    $consulta = "INSERT INTO `usuarios`(`idusuario`, `nombre`, `correo`, `usuario`, `clave`, `rol`, `activo`, `ultingreso`, `idproceso`, `creacion`, `verificacion`, `aprobacion`, `autorizacion`, `configuracion`) 
+    VALUES ('','$nombre','$correo','$usuario','$claveh ','$rol','0',NULL,'$proceso','$ncreacion','$nverificacion','$naprobacion','$nautorizacion','$nconfiguracion')";
     echo $query = mysqli_query($link, $consulta) or die($consulta);
 }

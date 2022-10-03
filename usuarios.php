@@ -62,25 +62,13 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                             <div class="modal-body">
                                 <form action="">
                                     <div class="form-row formulario">
-                                        <div class="form-group grande">
+                                        <div class="form-group mediano-grande">
                                             <label for="desde"><b>Nombre:</b></label>
                                             <input style="text-align:center" class=" form-control " id="nombren" name="nombren" type="text">
                                         </div>
-                                    </div>
-                                    <div class="form-row formulario">
                                         <div class="form-group mediano-grande">
                                             <label for="hasta">Correo:</label>
                                             <input style="text-align:center" class="form-control " id="correon" name="correon" type="email">
-                                        </div>
-                                        <div class="form-group mediano-grande">
-                                            <label for="desde">Rol:</label>
-                                            <select style="text-align: center;" class="form-control col-md-8 " name="roln" id="roln">
-                                                <option value="0">Seleccionar</option>
-                                                <option value="1">Administrador</option>
-                                                <option value="2">Verificador</option>
-                                                <option value="3">Registrador</option>
-                                                <option value="5">Aprobador</option>
-                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-row formulario">
@@ -116,6 +104,45 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                             <input style="text-align:center" class="form-control " id="confirmarclaven" name="confirmarclaven" type="password">
                                         </div>
                                     </div>
+                                    <div class="form-row formulario">
+                                        <div class="form-group mediano-grande">
+                                            <label for="desde">
+                                                <h5>Permisos:</h5>
+                                            </label>
+                                            <table class="table table-striped  table-responsive-lg usuarios ">
+                                                <tr>
+                                                    <th>Creación</th>
+                                                    <td>
+                                                        <input class="form-check-input" type="checkbox" name="ncreacion" id="ncreacion">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Verificación</th>
+                                                    <td>
+                                                        <input class="form-check-input" type="checkbox" name="nverificacion" id="nverificacion">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Aprobación</th>
+                                                    <td>
+                                                        <input class="form-check-input" type="checkbox" name="naprobacion" id="naprobacion">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Autorización</th>
+                                                    <td>
+                                                        <input class="form-check-input" type="checkbox" name="nautorizacion" id="nautorizacion">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Configuración</th>
+                                                    <td>
+                                                        <input value="on" class="form-check-input" type="checkbox" name="nconfiguracion" id="nconfiguracion">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -131,7 +158,6 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                             <th> Nombre</th>
                             <th> Usuario </th>
                             <th> Proceso </th>
-                            <th> Rol </th>
                             <th> Correo </th>
                             <th> Acciones </th>
                         </tr>
@@ -146,26 +172,6 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                 <td> <?php echo $filas['nombre'] ?> </td>
                                 <td> <?php echo $filas['usuario'] ?> </td>
                                 <td> <?php echo $filas['proceso'] ?> </td>
-                                <td> <?php
-                                        switch ($filas['rol']) {
-                                            case 1:
-                                                echo 'Administrador';
-                                                break;
-                                            case 2:
-                                                echo 'Verificador';
-                                                break;
-                                            case 3:
-                                                echo 'Registrador';
-                                                break;
-                                            case 4:
-                                                echo 'Inactivo';
-                                                break;
-                                            case 5:
-                                                echo 'Aprobador';
-                                                break;
-                                        }
-
-                                        ?> </td>
                                 <td> <?php echo $filas['correo'] ?> </td>
                                 <td>
                                     <button onclick="datosusuario('<?php echo $filas['idusuario'] ?>')" type="button" title="Editar tipo de documento" id="detalles" class="btn btn-primary" data-toggle="modal" data-target="#editar">
@@ -235,22 +241,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-row formulario">
-                                        <div class="form-group mediano-grande">
-                                            <label for="hasta">Rol actual:</label>
-                                            <input disabled style="text-align:center" class="form-control " id="rola" name="rola" type="text">
-                                        </div>
-                                        <div class="form-group mediano-grande">
-                                            <label for="desde">Nuevo rol:</label>
-                                            <select style="text-align:center" class="form-control col-md-8 " name="rolu" id="rolu">
-                                                <option value="0">Seleccionar</option>
-                                                <option value="1">Administrador</option>
-                                                <option value="2">Verificador de Notas</option>
-                                                <option value="3">Registrador de Notas</option>
-                                                <option style="background-color: yellow ;" value="4">Inactivo</option>s
-                                            </select>
-                                        </div>
-                                    </div>
+
                                     <div class="form-row formulario">
                                         <div class="form-group mediano-grande">
                                             <label for="desde">Nueva clave:</label>
@@ -259,6 +250,45 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                         <div class="form-group mediano-grande">
                                             <label for="hasta">Confirmar Clave:</label>
                                             <input style="text-align:center" class="form-control " id="confirmarclaveu" name="confirmarclaveu" type="password">
+                                        </div>
+                                    </div>
+                                    <div class="form-row formulario">
+                                        <div class="form-group mediano-grande">
+                                            <label for="desde">
+                                                <h5>Permisos:</h5>
+                                            </label>
+                                            <table class="table table-striped  table-responsive-lg usuarios ">
+                                                <tr>
+                                                    <th>Creación</th>
+                                                    <td>
+                                                        <input class="form-check-input" type="checkbox" name="pcreacion" id="pcreacion">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Verificación</th>
+                                                    <td>
+                                                        <input class="form-check-input" type="checkbox" name="pverificacion" id="pverificacion">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Aprobación</th>
+                                                    <td>
+                                                        <input class="form-check-input" type="checkbox" name="paprobacion" id="paprobacion">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Autorización</th>
+                                                    <td>
+                                                        <input class="form-check-input" type="checkbox" name="pautorizacion" id="pautorizacion">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Configuración</th>
+                                                    <td>
+                                                        <input value="on" class="form-check-input" type="checkbox" name="pconfiguracion" id="pconfiguracion">
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </div>
                                 </form>
@@ -282,7 +312,6 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
     header('Location: ' . "usuarios/cerrarsesion.php");
 }
 ?>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 <script type="text/javascript">
@@ -311,6 +340,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
 <script type="text/javascript" src="librerias/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+
         $('#registrar').click(function() {
             a = 0;
             confirmarclave = $('#confirmarclaven').val();
@@ -320,6 +350,31 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
             proceso = $('#proceso').val();
             usuario = $('#usuarion').val();
             clave = $('#claven').val();
+            if ($('#nconfiguracion').prop('checked')) {
+                nconfiguracion = 1;
+            } else {
+                nconfiguracion = 0;
+            }
+            if ($('#nautorizacion').prop('checked')) {
+                nautorizacion = 1;
+            } else {
+                nautorizacion = 0;
+            }
+            if ($('#naprobacion').prop('checked')) {
+                naprobacion = 1;
+            } else {
+                naprobacion = 0;
+            }
+            if ($('#nverificacion').prop('checked')) {
+                nverificacion = 1;
+            } else {
+                nverificacion = 0;
+            }
+            if ($('#ncreacion').prop('checked')) {
+                ncreacion = 1;
+            } else {
+                ncreacion = 0;
+            }
             if (clave != confirmarclave) {
                 a = 1;
                 alertify.alert('ATENCION!!', 'Las claves no coinciden. ', function() {
@@ -351,7 +406,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                 });
             }
             if (a == 0) {
-                registrarusuario(nombre, correo, rol, usuario, clave, proceso);
+                registrarusuario(nombre, correo, rol, usuario, clave, proceso, nconfiguracion, nautorizacion, naprobacion, nverificacion, ncreacion);
                 setTimeout(function() {
                     window.location.reload();
                 }, 1000);
@@ -367,6 +422,32 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
             clave = $('#claveu').val();
             id = $('#idu').val();
             proceso = $('#proceson').val();
+            if ($('#pconfiguracion').prop('checked')) {
+                pconfiguracion = 1;
+            } else {
+                pconfiguracion = 0;
+            }
+            if ($('#pautorizacion').prop('checked')) {
+                pautorizacion = 1;
+            } else {
+                pautorizacion = 0;
+            }
+            if ($('#paprobacion').prop('checked')) {
+                paprobacion = 1;
+            } else {
+                paprobacion = 0;
+            }
+            if ($('#pverificacion').prop('checked')) {
+                pverificacion = 1;
+            } else {
+                pverificacion = 0;
+            }
+            if ($('#pcreacion').prop('checked')) {
+                pcreacion = 1;
+            } else {
+                pcreacion = 0;
+            }
+
             a = 0;
             if (clave != confirmarclave) {
                 a = 1;
@@ -393,7 +474,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                 });
             }
             if (a == 0) {
-                editarusuario(id, correo, rol, usuario, clave, proceso);
+                editarusuario(id, correo, rol, usuario, clave, proceso, pcreacion, pverificacion, paprobacion, pautorizacion, pconfiguracion);
                 setTimeout(function() {
                     window.location.reload();
                 }, 1000);
