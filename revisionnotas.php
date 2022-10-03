@@ -34,17 +34,17 @@ if ($_SESSION['usuario']) {
     $n = $_GET['n'];
     switch ($mostrar) {
         case 't':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador',g.nombre 'nautoriza'  FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
+            $consultanotas = "SELECT SUM(e.debe) 'debe',SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador',g.nombre 'nautoriza'  FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
             INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.fecha between '$desde' and '$hasta' and tipo = $n GROUP by a.idnota;";
             break;
         case 'a':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' ,g.nombre 'nautoriza' FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
+            $consultanotas = "SELECT SUM(e.debe) 'debe', SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' ,g.nombre 'nautoriza' FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
             INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where (a.batch is null or a.batch = '' or a.batch='NULL') and a.fecha between '$desde' and '$hasta'  and tipo = $n GROUP by a.idnota;";
             break;
         case 'c':
-            $consultanotas = "SELECT SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' ,g.nombre 'nautoriza' FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
+            $consultanotas = "SELECT SUM(e.debe) 'debe', SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' ,g.nombre 'nautoriza' FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario   INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
             INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.batch > 0  and a.fecha between '$desde' and '$hasta'  and tipo = $n GROUP by a.idnota;";
             break;
@@ -189,7 +189,7 @@ if ($_SESSION['usuario']) {
                             $totalimporte = $filas1['importe'];
                             switch ($_GET['n']) {
                                 case 1:
-                                    $importe = $filas1['importe'];
+                                    $importe = $filas1['debe'];
                                     break;
                                 case 4:
                                     $consultaimporte = "select SUM(debe) 'importe' from registrosdenota where idcuenta > 0 and idnota = '$filas1[idnota]'";

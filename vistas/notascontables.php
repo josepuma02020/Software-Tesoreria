@@ -46,13 +46,14 @@
     }
 
     //consulta datos notas
-    $consultadatosnota = "SELECT a.*,b.nombre,c.documento,d.clasificacion,e.nombre 'aprobador',a.fechaaprobacion,a.horaaprobacion,f.nombre 'naprobador' FROM notascontables a left join usuarios f on f.idusuario=a.idaprobador
+    $consultadatosnota = "SELECT a.*,b.nombre,c.documento,d.clasificacion,e.nombre 'aprobador',a.fechaaprobacion,a.horaaprobacion,f.nombre 'autoriza' FROM notascontables a left join usuarios f on f.idusuario = a.idautoriza
     INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion
      left join usuarios e on e.idusuario=a.idaprobador where a.idnota = $idnota";
     $querydatosnota = mysqli_query($link, $consultadatosnota) or die($consultadatosnota);
     $filadatosnota = mysqli_fetch_array($querydatosnota);
     if (isset($filadatosnota)) {
         $usuario = $filadatosnota['nombre'];
+        $idusuario = $filadatosnota['idusuario'];
         $tipodocumento = $filadatosnota['idtipodocumento'];
         $clasificacion = $filadatosnota['idclasificacion'];
         $comentario = $filadatosnota['comentario'];
@@ -62,7 +63,11 @@
         $nombreaprobador = $filadatosnota['aprobador'];
         $fechaaprobacion = $filadatosnota['fechaaprobacion'];
         $horaaprobacion = $filadatosnota['horaaprobacion'];
+        $nombreautorizador = $filadatosnota['autoriza'];
+        $fechaautorizacion = $filadatosnota['fechaautorizacion'];
+        $horaautorizacion = $filadatosnota['horaautorizacion'];
     } else {
+        $idusuario = $_SESSION['idusuario'];
         $usuario = $_SESSION['nombre'];
         $tipodocumento = '';
         $clasificacion = '';
@@ -73,6 +78,9 @@
         $nombreaprobador = '';
         $fechaaprobacion = '';
         $horaaprobacion = '';
+        $nombreautorizador = '';
+        $fechaautorizacion = '';
+        $horaautorizacion = '';
     }
     ?>
 </head>
@@ -83,7 +91,7 @@
         $des = '';
         if ($creado == 1) {
 
-            if (($_SESSION['idusuario'] == $filadatosnota['idusuario']) || ($_SESSION['rol'] == 1 && $filadatosnota['tipo'] == $_SESSION['idproceso'])) {
+            if ((($_SESSION['idusuario'] == $filadatosnota['idusuario']) || ($_SESSION['rol'] == 1 && $filadatosnota['tipo'] == $_SESSION['idproceso']))) {
                 $des = '';
             } else {
                 $des = 'disabled';
@@ -182,8 +190,8 @@
                         <input value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
                     </div>
                     <div class="form-group mediano-grande ">
-                        <label for="comment">Aprobado por:</label>
-                        <input value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+                        <label for="comment">Autorizado por:</label>
+                        <input value=" <?php echo $nombreautorizador . ' : ' . $fechaautorizacion . ' ' . $horaautorizacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
                     </div>
                     <div class="form-row formulario">
                         <div class="form-group completo ">
@@ -218,24 +226,51 @@
             </thead>
             <tbody>
                 <?php
-                $consultaregistros = "SELECT a.*,b.descripcion FROM `registrosdenota` a INNER JOIN cuentas b on b.idcuenta=a.idcuenta WHERE a.idnota='$idnota'";
+                $consultaregistros = "SELECT a.*,b.descripcion FROM `registrosdenota` a left JOIN cuentas b on b.idcuenta=a.idcuenta WHERE a.idnota='$idnota'";
                 $queryregistros = mysqli_query($link, $consultaregistros) or die($consultaregistros);
                 $totaldebe = 0;
                 $totalhaber = 0;
                 while ($filasregistros = mysqli_fetch_array($queryregistros)) {
+                    $a = 0;
                     $totaldebe = $totaldebe + $filasregistros['debe'];
                     $totalhaber = $totalhaber + $filasregistros['haber'];
                 ?>
                     <tr>
                         <TD><?php echo $filasregistros['fecha']; ?> </TD>
-                        <TD><?php echo $filasregistros['idcuenta']; ?> </TD>
+                        <?php
+                        if ($filasregistros['descripcion'] == '') {
+                            $color = "#F57272";
+                            $valido = 1;
+                            $a++;
+                        } else {
+                            $color = '';
+                        }
+                        ?>
+                        <TD style="background-color: <?php echo $color; ?> ;"><?php echo $filasregistros['idcuenta']; ?> </TD>
                         <TD><?php echo $filasregistros['descripcion']; ?> </TD>
                         <TD><?php echo number_format($filasregistros['debe']); ?> </TD>
                         <TD><?php echo number_format($filasregistros['haber']); ?> </TD>
                         <TD><?php echo number_format($filasregistros['debe'] -  $filasregistros['haber']); ?> </TD>
                         <TD><?php echo $filasregistros['tipolm']; ?> </TD>
                         <TD><?php echo $filasregistros['lm']; ?> </TD>
-                        <td><?php echo $filasregistros['an']; ?> </td>
+                        <?php
+                        $consultaan = "select * from listaan where idan = $filasregistros[an]";
+                        $queryan = mysqli_query($link, $consultaan) or die($consultaan);
+                        $numan = mysqli_num_rows($queryan);
+                        if ($numan == 0) {
+
+                            $color = "#F57272";
+                            $a++;
+                            $valido = 1;
+                        } else {
+                            $color = '';
+                        }
+                        if ($a == 0) {
+                            $totalimporte = $totalimporte + $filasregistros['haber'];
+                        }
+                        ?>
+                        <td style="background-color: <?php echo $color; ?> ;"><?php echo $filasregistros['an']; ?> </td>
+
                         <td>
                             <?php
                             if ($batch == '' && $des != 'disabled') {
@@ -329,18 +364,27 @@
                 if ($totalimporte != 0) {
                     $estado = 'disabled';
                 }
-                if ($_SESSION['rol'] == 5) {
-                    $consultaequiponota = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $filadatosnota[idusuario] ";
-                    $queryequiponota = mysqli_query($link, $consultaequiponota) or die($consultaequiponota);
-                    $filaequiponota = mysqli_fetch_array($queryequiponota);
-                    $consultaequipousuario = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $_SESSION[idusuario] ";
-                    $qeryrquipousuario = mysqli_query($link, $consultaequipousuario) or die($consultaequipousuario);
-                    $filaequipousuario = mysqli_fetch_array($qeryrquipousuario);
-                    $consultaminimo = "SELECT * FROM `general`";
-                    $queryminimo = mysqli_query($link, $consultaminimo) or die($consultaminimo);
-                    $filaminimo = mysqli_fetch_array($queryminimo);
-                    if ($filaequiponota['idequipo'] == $filaequipousuario['idequipo'] && ($filaminimo['salariominimo'] * 500) < $totalhaber && ($filadatosnota['aprobador'] == '')) {
-            ?> <button <?php echo $estado ?> title="Aprobar Nota" id="aprobar" name="aprobar" class="btn btn-success boton">Aprobar</button>
+                $consultaequiponota = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $idusuario";
+                $queryequiponota = mysqli_query($link, $consultaequiponota) or die($consultaequiponota);
+                $filaequiponota = mysqli_fetch_array($queryequiponota);
+                $consultaequipousuario = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $_SESSION[idusuario] ";
+                $qeryrquipousuario = mysqli_query($link, $consultaequipousuario) or die($consultaequipousuario);
+                $filaequipousuario = mysqli_fetch_array($qeryrquipousuario);
+                $consultaminimo = "SELECT * FROM `general`";
+                $queryminimo = mysqli_query($link, $consultaminimo) or die($consultaminimo);
+                $filaminimo = mysqli_fetch_array($queryminimo);
+                $filaminimo['salariominimo'] * 500;
+                if ($_SESSION['aprobacion'] == 1) {
+                    if ($filaequiponota['idequipo'] == $filaequipousuario['idequipo'] && ($filaminimo['salariominimo'] * 500) < $totalhaber && $filadatosnota['aprobador'] == '') {
+            ?>
+                        <button <?php echo $estado ?> title="Aprobar Nota" id="aprobar" name="aprobar" class="btn btn-success boton">Aprobar</button>
+                    <?php
+                    }
+                }
+                if ($_SESSION['autorizacion'] == 1) {
+                    if (($filaminimo['salariominimo'] * 500) < $totalhaber && $filadatosnota['autoriza'] == '') {
+                    ?>
+                        <button <?php echo $estado ?> title="Autorizar Nota" id="autorizar" name="autorizar" class="btn btn-warning boton">Autorizar</button>
                     <?php
                     }
                 }
@@ -495,7 +539,7 @@
                 $('#totalimporte').val(separator(totalimporte));
                 registrargrupo(iddoc, cuentas, dates, debes, habers, lms, ans);
                 setTimeout(function() {
-                    window.location.href = "./home.php?id=" + iddoc + "&n=4"
+                    window.location.href = "./home.php?id=" + iddoc + "&n=1"
                 }, 1000 + (cuentas.length * 10));
             } else {
                 //individual
@@ -530,7 +574,7 @@
                     //registrarnota(type, clasificacion, comentario, batch);
                     registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
                     setTimeout(function() {
-                        window.location.href = "./home.php?id=" + iddoc + "&n=4"
+                        //  window.location.href = "./home.php?id=" + iddoc + "&n=1"
                     }, 1000);
                 }
             }

@@ -52,6 +52,7 @@
     $filadatosnota = mysqli_fetch_array($querydatosnota);
     if (isset($filadatosnota)) {
         $usuario = $filadatosnota['nombre'];
+        $idusuario = $filadatosnota['idusuario'];
         $tipodocumento = $filadatosnota['idtipodocumento'];
         $clasificacion = $filadatosnota['idclasificacion'];
         $comentario = $filadatosnota['comentario'];
@@ -65,6 +66,7 @@
         $fechaautorizacion = $filadatosnota['fechaautorizacion'];
         $horaautorizacion = $filadatosnota['horaautorizacion'];
     } else {
+        $idusuario = $_SESSION['idusuario'];
         $usuario = $_SESSION['nombre'];
         $tipodocumento = '';
         $clasificacion = '';
@@ -343,7 +345,7 @@
                     <button title="Borrar Nota" id="delete" name="delete" class="btn btn-secondary boton">Limpiar</button>
                     <?php
                 }
-                $consultaequiponota = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $filadatosnota[idusuario] ";
+                $consultaequiponota = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $idusuario  ";
                 $queryequiponota = mysqli_query($link, $consultaequiponota) or die($consultaequiponota);
                 $filaequiponota = mysqli_fetch_array($queryequiponota);
                 $consultaequipousuario = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $_SESSION[idusuario] ";
@@ -490,12 +492,12 @@
             creado = $('#creado').val();
             if (creado == 0) {
                 b = 0;
-                if (type == 0) {
-                    b = 1;
-                    alertify.alert('ATENCION!!', 'Favor seleccionar un tipo de documento', function() {
-                        alertify.success('Ok');
-                    });
-                }
+                // if (type == 0) {
+                //     b = 1;
+                //     alertify.alert('ATENCION!!', 'Favor seleccionar un tipo de documento', function() {
+                //         alertify.success('Ok');
+                //     });
+                // }
                 if (clasificacion == 0) {
                     b = 1;
                     alertify.alert('ATENCION!!', 'Favor seleccionar una clasificación para el documento', function() {
@@ -645,7 +647,6 @@
                 }
             }
             //grupo
-
         });
         $('#save').click(function() {
             type = $('#type').val();

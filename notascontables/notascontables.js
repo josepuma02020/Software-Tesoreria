@@ -172,11 +172,11 @@ function registrar(idnota, cuenta, fecha, debe, haber, lm, an, tipolm) {
         data: cadenau,
         success: function (r) {
             if (r == 1) {
-                //console.log(r);
-                //debugger;
+                console.log(r);
+                debugger;
             } else {
-                //console.log(r);
-                //debugger;
+                console.log(r);
+                debugger;
             }
         }
     });
