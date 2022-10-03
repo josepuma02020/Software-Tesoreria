@@ -44,7 +44,6 @@
         $idnota = $ano . $mes . $dia . $consecutivo;
         $creado = 0;
     }
-
     //consulta datos notas
     $consultadatosnota = "SELECT a.*,b.nombre,c.documento,d.clasificacion,e.nombre 'aprobador',a.fechaaprobacion,a.horaaprobacion,f.nombre 'autoriza' FROM notascontables a left join usuarios f on f.idusuario = a.idautoriza
     INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion
@@ -88,8 +87,13 @@
         <?php
         $des = '';
         if ($creado == 1) {
-
-            if (($_SESSION['idusuario'] == $filadatosnota['idusuario']) || ($_SESSION['rol'] == 1 && $filadatosnota['tipo'] == $_SESSION['idproceso']) || $batch > 0) {
+            if (($_SESSION['idusuario'] == $filadatosnota['idusuario']) || ($_SESSION['rol'] == 1 && $filadatosnota['tipo'] == $_SESSION['idproceso']) || $batch > 0 || $_SESSION['creacion'] == 1) {
+                $des = '';
+            } else {
+                $des = 'disabled';
+            }
+        } else {
+            if ($_SESSION['creacion'] == 1) {
                 $des = '';
             } else {
                 $des = 'disabled';

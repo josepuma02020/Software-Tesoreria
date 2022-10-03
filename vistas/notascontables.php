@@ -88,8 +88,13 @@
             } else {
                 $des = 'disabled';
             }
+        } else {
+            if ($_SESSION['creacion'] == 1) {
+                $des = '';
+            } else {
+                $des = 'disabled';
+            }
         }
-
         ?>
         <fieldset <?php echo $des; ?>>
             <form action="" method="post">
