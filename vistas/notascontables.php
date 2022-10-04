@@ -31,7 +31,14 @@
     //consulta idnota
     if (isset($_GET['id'])) {
         $idnota = $_GET['id'];
-        $creado = 1;
+        $consultanotacreada = "select * from notascontables where idnota = '$idnota'";
+        $querynotacreada = mysqli_query($link, $consultanotacreada) or die($consultanotacreada);
+        $filanotacreada = mysqli_fetch_array($querynotacreada);
+        if (isset($filanotacreada)) {
+            $creado = 1;
+        } else {
+            $creado = 0;
+        }
     } else {
         $consultaconsecutivo = "select count(idnota) 'consecutivo' from notascontables where fecha = '$fecha_actual'";
         $queryconsecutivo = mysqli_query($link, $consultaconsecutivo) or die($consultaconsecutivo);
@@ -91,7 +98,7 @@
         $des = '';
         if ($creado == 1) {
 
-            if ((($_SESSION['idusuario'] == $filadatosnota['idusuario']) || ($_SESSION['rol'] == 1 && $filadatosnota['tipo'] == $_SESSION['idproceso']))) {
+            if ((($_SESSION['idusuario'] == $idusuario) || ($_SESSION['rol'] == 1 && $filadatosnota['tipo'] == $_SESSION['idproceso']))) {
                 $des = '';
             } else {
                 $des = 'disabled';
@@ -493,92 +500,186 @@
             comentario = $('#comment').val();
             totaldebe = 0;
             totalhaber = 0;
-            //grupo
-            cuenta = $('#cuenta').val();
-            const cuentas = cuenta.split(' ');
-            date = $('#date').val();
-            const dates = date.split(' ');
-            debe = $('#debe').val();
-            const debes = debe.split(' ');
-            haber = $('#haber').val();
-            const habers = haber.split(' ');
-            lm = $('#lm').val();
-            const lms = lm.split(' ');
-            an = $('#an').val();
-            const ans = an.split(' ');
-            // console.log(dates);
-            // console.log(cuentas);
-            // console.log(debes);
-            if (cuentas.length > 1) {
-                ///grupo
-                for (var i = 0; i < cuentas.length; i++) {
-                    cuenta = cuentas[i];
-                    if (debes[i] == '-' || debes[i] == '- ' || debes[i] == ' -' || debes[i] == undefined) {
-                        debes[i] = '0';
-                    }
-                    if (habers[i] == '-' || habers[i] == '- ' || habers[i] == ' -' || habers[i] == undefined) {
-                        habers[i] = '0';
-                    }
-
-                    totaldebe = totaldebe + parseFloat(debes[i]);
-                    totalhaber = totalhaber + parseFloat(habers[i]);
-
-                    // console.log('debes' + debes);
-                    // console.log('habers' + habers);
-
-                }
-                totalimporte = totaldebe - totalhaber;
-
-                function separator(numb) {
-                    var str = numb.toString().split(".");
-                    str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    return str.join(".");
-                }
-                $('#totaldebe').val((separator(totaldebe)));
-                $('#totalhaber').val(separator(totalhaber));
-                $('#totalimporte').val(separator(totalimporte));
-                registrargrupo(iddoc, cuentas, dates, debes, habers, lms, ans);
-                setTimeout(function() {
-                    window.location.href = "./home.php?id=" + iddoc + "&n=1"
-                }, 1000 + (cuentas.length * 10));
-            } else {
-                //individual
+            creado = $('#creado').val();
+            if (creado == 0) {
                 a = 0;
-                cuenta = $('#cuenta').val();
-                fecha = $('#date').val();
-                debe = $('#debe').val();
-                haber = $('#haber').val();
-                lm = $('#lm').val();
-                an = $('#an').val();
-                tipolm = $('#tipolm').val();
-                if (debe <= 0 && haber <= 0) {
+                if (type == 0) {
                     a = 1;
-                    alertify.alert('ATENCION!!', 'Debe llenar el campo de Debe o Haber(Los dos no pueden registrarse en valor menor o igual a cero). ', function() {
+                    alertify.alert('ATENCION!!', 'Favor seleccionar un tipo de documento', function() {
                         alertify.success('Ok');
                     });
                 }
-                if (cuenta == '') {
+                if (clasificacion == 0) {
                     a = 1;
-                    alertify.alert('ATENCION!!', 'El campo de Cuenta se encuentra vacío', function() {
-                        alertify.success('Ok');
-                    });
-                }
-                if (fecha == '') {
-                    a = 1;
-                    alertify.alert('ATENCION!!', 'El campo fecha se encuentra vacío', function() {
+                    alertify.alert('ATENCION!!', 'Favor seleccionar una clasificación para el documento', function() {
                         alertify.success('Ok');
                     });
                 }
 
-                if (a == 0) {
-                    //registrarnota(type, clasificacion, comentario, batch);
-                    registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
+                cuenta = $('#cuenta').val();
+                const cuentas = cuenta.split(' ');
+                date = $('#date').val();
+                const dates = date.split(' ');
+                debe = $('#debe').val();
+                const debes = debe.split(' ');
+                haber = $('#haber').val();
+                const habers = haber.split(' ');
+                lm = $('#lm').val();
+                const lms = lm.split(' ');
+                an = $('#an').val();
+                const ans = an.split(' ');
+                if (cuentas.length > 1) {
+                    ///grupo
+                    for (var i = 0; i < cuentas.length; i++) {
+                        cuenta = cuentas[i];
+                        if (debes[i] == '-' || debes[i] == '- ' || debes[i] == ' -' || debes[i] == undefined) {
+                            debes[i] = '0';
+                        }
+                        if (habers[i] == '-' || habers[i] == '- ' || habers[i] == ' -' || habers[i] == undefined) {
+                            habers[i] = '0';
+                        }
+                        totaldebe = totaldebe + parseFloat(debes[i]);
+                        totalhaber = totalhaber + parseFloat(habers[i]);
+                    }
+                    totalimporte = totaldebe - totalhaber;
+
+                    function separator(numb) {
+                        var str = numb.toString().split(".");
+                        str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        return str.join(".");
+                    }
+                    $('#totaldebe').val((separator(totaldebe)));
+                    $('#totalhaber').val(separator(totalhaber));
+                    $('#totalimporte').val(separator(totalimporte));
+                    console.log('creado');
+                    registrarnota(type, clasificacion, comentario, batch, '1');
+                    registrargrupo(iddoc, cuentas, dates, debes, habers, lms, ans);
                     setTimeout(function() {
-                        //  window.location.href = "./home.php?id=" + iddoc + "&n=1"
-                    }, 1000);
+                        window.location.href = "./home.php?id=" + iddoc + "&n=1"
+                    }, 1000 + (cuentas.length * 10));
+                } else {
+                    //individual
+                    cuenta = $('#cuenta').val();
+                    fecha = $('#date').val();
+                    debe = $('#debe').val();
+                    haber = $('#haber').val();
+                    lm = $('#lm').val();
+                    an = $('#an').val();
+                    tipolm = $('#tipolm').val();
+                    if (debe <= 0 && haber <= 0) {
+                        a = 1;
+                        alertify.alert('ATENCIÓN!!', 'Debe llenar el campo de Debe o Haber(Los dos no pueden registrarse en valor menor o igual a cero). ', function() {
+                            alertify.success('Ok');
+                        });
+                    }
+                    if (cuenta == '') {
+                        a = 1;
+                        alertify.alert('ATENCIÓN!!', 'El campo de Cuenta se encuentra vacío', function() {
+                            alertify.success('Ok');
+                        });
+                    }
+                    if (fecha == '') {
+                        a = 1;
+                        alertify.alert('ATENCIÓN!!', 'El campo fecha se encuentra vacío', function() {
+                            alertify.success('Ok');
+                        });
+                    }
+                    if (a == 0) {
+                        console.log('creado');
+                        registrarnota(type, clasificacion, comentario, batch, '1');
+                        registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
+                        setTimeout(function() {
+                            window.location.href = "./home.php?id=" + iddoc + "&n=1"
+                        }, 1000);
+                    }
+                }
+
+
+            } else {
+                cuenta = $('#cuenta').val();
+                const cuentas = cuenta.split(' ');
+                date = $('#date').val();
+                const dates = date.split(' ');
+                debe = $('#debe').val();
+                const debes = debe.split(' ');
+                haber = $('#haber').val();
+                const habers = haber.split(' ');
+                lm = $('#lm').val();
+                const lms = lm.split(' ');
+                an = $('#an').val();
+                const ans = an.split(' ');
+                // console.log(dates);
+                // console.log(cuentas);
+                // console.log(debes);
+                if (cuentas.length > 1) {
+                    ///grupo
+                    for (var i = 0; i < cuentas.length; i++) {
+                        cuenta = cuentas[i];
+                        if (debes[i] == '-' || debes[i] == '- ' || debes[i] == ' -' || debes[i] == undefined) {
+                            debes[i] = '0';
+                        }
+                        if (habers[i] == '-' || habers[i] == '- ' || habers[i] == ' -' || habers[i] == undefined) {
+                            habers[i] = '0';
+                        }
+
+                        totaldebe = totaldebe + parseFloat(debes[i]);
+                        totalhaber = totalhaber + parseFloat(habers[i]);
+
+                        // console.log('debes' + debes);
+                        // console.log('habers' + habers);
+
+                    }
+                    totalimporte = totaldebe - totalhaber;
+
+                    function separator(numb) {
+                        var str = numb.toString().split(".");
+                        str[0] = str[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        return str.join(".");
+                    }
+                    $('#totaldebe').val((separator(totaldebe)));
+                    $('#totalhaber').val(separator(totalhaber));
+                    $('#totalimporte').val(separator(totalimporte));
+                    //   registrargrupo(iddoc, cuentas, dates, debes, habers, lms, ans);
+                    setTimeout(function() {
+                        window.location.href = "./home.php?id=" + iddoc + "&n=1"
+                    }, 1000 + (cuentas.length * 10));
+                } else {
+                    //individual
+                    a = 0;
+                    cuenta = $('#cuenta').val();
+                    fecha = $('#date').val();
+                    debe = $('#debe').val();
+                    haber = $('#haber').val();
+                    lm = $('#lm').val();
+                    an = $('#an').val();
+                    tipolm = $('#tipolm').val();
+                    if (debe <= 0 && haber <= 0) {
+                        a = 1;
+                        alertify.alert('ATENCION!!', 'Debe llenar el campo de Debe o Haber(Los dos no pueden registrarse en valor menor o igual a cero). ', function() {
+                            alertify.success('Ok');
+                        });
+                    }
+                    if (cuenta == '') {
+                        a = 1;
+                        alertify.alert('ATENCION!!', 'El campo de Cuenta se encuentra vacío', function() {
+                            alertify.success('Ok');
+                        });
+                    }
+                    if (fecha == '') {
+                        a = 1;
+                        alertify.alert('ATENCION!!', 'El campo fecha se encuentra vacío', function() {
+                            alertify.success('Ok');
+                        });
+                    }
+                    if (a == 0) {
+                        //registrarnota(type, clasificacion, comentario, batch);
+                        //      registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
+                        setTimeout(function() {
+                            //  window.location.href = "./home.php?id=" + iddoc + "&n=1"
+                        }, 1000);
+                    }
                 }
             }
-
         });
         $('#save').click(function() {
             type = $('#type').val();

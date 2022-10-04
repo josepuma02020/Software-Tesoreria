@@ -155,11 +155,11 @@ function registrarnota(type, clasificacion, comentario, batch, tipo) {
         data: cadenau,
         success: function (r) {
             if (r == 111) {
-                console.log(batch);
-                debugger;
+                //   console.log(batch);
+                // debugger;
             } else {
-                console.log(batch);
-                debugger;
+                //console.log(batch);
+                //debugger;
             }
         }
     });
