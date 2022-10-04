@@ -1,3 +1,16 @@
+function revision(iddocumento) {
+    cadenau = "iddocumento=" + iddocumento;
+    $.ajax({
+        type: "POST",
+        url: "notascontables/revision.php",
+        data: cadenau,
+        success: function (r) {
+            //console.log(r);
+            //debugger;
+        }
+    });
+}
+
 function autorizar(iddocumento) {
     cadenau = "iddocumento=" + iddocumento;
     $.ajax({

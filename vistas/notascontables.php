@@ -64,7 +64,14 @@
         $tipodocumento = $filadatosnota['idtipodocumento'];
         $clasificacion = $filadatosnota['idclasificacion'];
         $comentario = $filadatosnota['comentario'];
-        $batch = $filadatosnota['batch'];
+        if ($filadatosnota['batch'] == '' and $filadatosnota['revision'] == 1) {
+            $batch = 'En revisión';
+            $colorbatch = '#FED323';
+        } else {
+            $colorbatch = '';
+            $batch = $filadatosnota['batch'];
+        }
+
         $fecha = $filadatosnota['fecha'];
         $hora = $filadatosnota['hora'];
         $nombreaprobador = $filadatosnota['aprobador'];
@@ -97,8 +104,7 @@
         <?php
         $des = '';
         if ($creado == 1) {
-
-            if ((($_SESSION['idusuario'] == $idusuario) || ($_SESSION['rol'] == 1 && $filadatosnota['tipo'] == $_SESSION['idproceso']))) {
+            if ((($_SESSION['idusuario'] == $idusuario && $filadatosnota['revision'] == 0) || ($filadatosnota['tipo'] == $_SESSION['idproceso'] && $filadatosnota['revision'] == 0))) {
                 $des = '';
             } else {
                 $des = 'disabled';
@@ -176,11 +182,7 @@
                 <div class="form-row formulario">
                     <div class="form-group pequeno">
                         <label for="batch">Batch:</label>
-                        <?php
-                        $estado = 'disabled';
-                        if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
-                        } ?>
-                        <input <?php echo $estado ?> min="0" value="<?php echo $batch ?>" style="text-align:center" class="form-control " id="batch" name="batch" type="number">
+                        <input <?php echo $estado ?> min="0" value="<?php echo $batch ?>" style="text-align:center;background-color:<?php echo $colorbatch ?>" class="form-control " id="batch" name="batch" type="text">
                         <?php if ($batch != '') {
                             $estado = 'disabled';
                         } else {
@@ -237,6 +239,7 @@
                 $queryregistros = mysqli_query($link, $consultaregistros) or die($consultaregistros);
                 $totaldebe = 0;
                 $totalhaber = 0;
+                $totalimporte = 0;
                 while ($filasregistros = mysqli_fetch_array($queryregistros)) {
                     $a = 0;
                     $totaldebe = $totaldebe + $filasregistros['debe'];
@@ -368,8 +371,12 @@
             <?php
             if ($batch == '') {
                 $estado = "";
-                if ($totalimporte != 0) {
+                if (($totalimporte != 0 || $a > 0) || $filadatosnota['revision'] == 1) {
                     $estado = 'disabled';
+                } else {
+            ?>
+                    <button <?php echo $estado ?> title="Aprobar Nota" id="revision" name="revision" class="btn btn-primary boton">Revisión</button>
+                    <?php
                 }
                 $consultaequiponota = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $idusuario";
                 $queryequiponota = mysqli_query($link, $consultaequiponota) or die($consultaequiponota);
@@ -383,7 +390,7 @@
                 $filaminimo['salariominimo'] * 500;
                 if ($_SESSION['aprobacion'] == 1) {
                     if ($filaequiponota['idequipo'] == $filaequipousuario['idequipo'] && ($filaminimo['salariominimo'] * 500) < $totalhaber && $filadatosnota['aprobador'] == '') {
-            ?>
+                    ?>
                         <button <?php echo $estado ?> title="Aprobar Nota" id="aprobar" name="aprobar" class="btn btn-success boton">Aprobar</button>
                     <?php
                     }
@@ -408,7 +415,6 @@
         </section>
     </main>
     <footer>
-
     </footer>
 </body>
 
@@ -447,6 +453,22 @@
             totalhaber = $('#totalhaber').val();
             alertify.confirm('Aprobación de nota contable', 'Esta seguro que desea aprobar esta nota contable con valor de $' + totalhaber, function() {
                 aprobarnota(iddocumento);
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000);
+                alertify.success('Operación exitosa. ');
+            }, function() {
+
+            }).set('labels', {
+                ok: 'Continuar',
+                cancel: 'Cancelar'
+            });
+        });
+        $('#revision').click(function() {
+            a = 0;
+            iddocumento = $('#iddocumento').val();
+            alertify.confirm('Envio a revisión', 'Esta seguro de enviar esta nota contable para revisión?', function() {
+                revision(iddocumento);
                 setTimeout(function() {
                     window.location.reload();
                 }, 1000);
@@ -555,7 +577,7 @@
                     registrarnota(type, clasificacion, comentario, batch, '1');
                     registrargrupo(iddoc, cuentas, dates, debes, habers, lms, ans);
                     setTimeout(function() {
-                        window.location.href = "./home.php?id=" + iddoc + "&n=1"
+                        //     window.location.href = "./home.php?id=" + iddoc + "&n=1"
                     }, 1000 + (cuentas.length * 10));
                 } else {
                     //individual
@@ -589,7 +611,7 @@
                         registrarnota(type, clasificacion, comentario, batch, '1');
                         registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
                         setTimeout(function() {
-                            window.location.href = "./home.php?id=" + iddoc + "&n=1"
+                            //      window.location.href = "./home.php?id=" + iddoc + "&n=1"
                         }, 1000);
                     }
                 }
@@ -639,7 +661,7 @@
                     $('#totaldebe').val((separator(totaldebe)));
                     $('#totalhaber').val(separator(totalhaber));
                     $('#totalimporte').val(separator(totalimporte));
-                    //   registrargrupo(iddoc, cuentas, dates, debes, habers, lms, ans);
+                    registrargrupo(iddoc, cuentas, dates, debes, habers, lms, ans);
                     setTimeout(function() {
                         window.location.href = "./home.php?id=" + iddoc + "&n=1"
                     }, 1000 + (cuentas.length * 10));
@@ -673,7 +695,7 @@
                     }
                     if (a == 0) {
                         //registrarnota(type, clasificacion, comentario, batch);
-                        //      registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
+                        registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
                         setTimeout(function() {
                             //  window.location.href = "./home.php?id=" + iddoc + "&n=1"
                         }, 1000);
