@@ -55,6 +55,9 @@ if ($_SESSION['usuario']) {
                 case 4:
                     include('./vistas/notascontablesgestioncontable.php');
                     break;
+                case 'f':
+                    include('./vistas/registrarfactura.php');
+                    break;
             }
             ?>
         </main>

@@ -53,20 +53,14 @@
                                 <li class="nav-item">
                                     <a class="dropdown-item" href="./informes.php">Informes</a>
                                 </li>
+                                <div class="dropdown-divider"></div>
                                 <?php if ($_SESSION['configuracion'] == 1) {
                                 ?>
                                     <li><a class="dropdown-item" href="#"> Configuración &raquo </a>
                                         <ul class="submenu dropdown-menu">
-
-                                            <li><a class="dropdown-item" href="revisionnotas.php?n=1">Flujo de caja y Financiación</a></li>
-                                            <li> <a class="dropdown-item" href="revisionnotas.php?n=4">Gestión contable</a></li>
-                                            <a class="dropdown-item" href="./generales.php">Generales</a>
-                                            <a class="dropdown-item" href="./cuentas.php">Cuentas</a>
-                                            <a class="dropdown-item" href="./procesos.php">Procesos</a>
-                                            <a class="dropdown-item" href="./listaan.php">Lista de AN8</a>
                                             <a class="dropdown-item" href="./tiposdocumento.php">Tipos de documento</a>
                                             <a class="dropdown-item" href="./clasificacion.php">Clasificacion de documentos</a>
-                                            <a class="dropdown-item" href="./usuarios.php">Usuarios</a>
+
                                             <!-- <li><a class="dropdown-item" href=""> Third level 3 &raquo </a>
                                             <ul class="submenu dropdown-menu">
                                                 <li><a class="dropdown-item" href=""> Fourth level 1</a></li>
@@ -78,6 +72,42 @@
                                 <?php
                                 }
                                 ?>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Recaudos</a>
+                            <ul class="dropdown-menu">
+                                <li class="nav-item">
+                                    <a class="dropdown-item" href="home.php?n=f">Registrar factura</a>
+                                </li>
+                                <div class="dropdown-divider"></div>
+                                <?php if ($_SESSION['configuracion'] == 1) {
+                                ?>
+                                    <li><a class="dropdown-item" href="#"> Configuración &raquo </a>
+                                        <ul class="submenu dropdown-menu">
+                                            <a class="dropdown-item" href=" ./tiposfactura.php">Tipos de factura</a>
+
+                                            <!-- <li><a class="dropdown-item" href=""> Third level 3 &raquo </a>
+                                            <ul class="submenu dropdown-menu">
+                                                <li><a class="dropdown-item" href=""> Fourth level 1</a></li>
+                                                <li><a class="dropdown-item" href=""> Fourth level 2</a></li>
+                                            </ul>
+                                        </li> -->
+                                        </ul>
+                                    </li>
+                                <?php
+                                }
+                                ?>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Configuración general</a>
+                            <ul class="dropdown-menu">
+                                <a class="dropdown-item" href="./generales.php">Generales</a>
+                                <a class="dropdown-item" href="./cuentas.php">Cuentas</a>
+                                <a class="dropdown-item" href="./procesos.php">Procesos</a>
+                                <a class="dropdown-item" href="./listaan.php">Lista de AN8</a>
+                                <a class="dropdown-item" href="./usuarios.php">Usuarios</a>
                             </ul>
                         </li>
                         <!-- <li class="nav-item dropdown">
@@ -110,24 +140,6 @@
 </body>
 
 </html>
-<script>
-    $(document).on('click', '.dropdown-menu', function(e) {
-        e.stopPropagation();
-    });
-
-    // make it as accordion for smaller screens
-    if ($(window).width() < 992) {
-        $('.dropdown-menu a').click(function(e) {
-            e.preventDefault();
-            if ($(this).next('.submenu').length) {
-                $(this).next('.submenu').toggle();
-            }
-            $('.dropdown').on('hide.bs.dropdown', function() {
-                $(this).find('.submenu').hide();
-            })
-        });
-    }
-</script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
