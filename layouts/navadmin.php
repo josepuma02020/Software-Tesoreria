@@ -22,47 +22,78 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav ">
                         <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Notas Contables </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#"> Registrar nota &raquo </a>
+                                    <ul class="submenu dropdown-menu">
+                                        <li><a class="dropdown-item" href="home.php?n=1"> Flujo de caja y Financiación</a></li>
+                                        <li><a class="dropdown-item" href="home.php?n=4"> Gestión contable</a></li>
+                                        <!-- <li><a class="dropdown-item" href=""> Third level 3 &raquo </a>
+                                            <ul class="submenu dropdown-menu">
+                                                <li><a class="dropdown-item" href=""> Fourth level 1</a></li>
+                                                <li><a class="dropdown-item" href=""> Fourth level 2</a></li>
+                                            </ul>
+                                        </li> -->
+                                    </ul>
+                                </li>
+                                <li><a class="dropdown-item" href="#"> Revisión de Notas &raquo </a>
+                                    <ul class="submenu dropdown-menu">
+                                        <li><a class="dropdown-item" href="revisionnotas.php?n=1">Flujo de caja y Financiación</a></li>
+                                        <li> <a class="dropdown-item" href="revisionnotas.php?n=4">Gestión contable</a></li>
+                                        <!-- <li><a class="dropdown-item" href=""> Third level 3 &raquo </a>
+                                            <ul class="submenu dropdown-menu">
+                                                <li><a class="dropdown-item" href=""> Fourth level 1</a></li>
+                                                <li><a class="dropdown-item" href=""> Fourth level 2</a></li>
+                                            </ul>
+                                        </li> -->
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" href="./informes.php">Informes</a>
+                                </li>
+                                <?php if ($_SESSION['configuracion'] == 1) {
+                                ?>
+                                    <li><a class="dropdown-item" href="#"> Configuración &raquo </a>
+                                        <ul class="submenu dropdown-menu">
+
+                                            <li><a class="dropdown-item" href="revisionnotas.php?n=1">Flujo de caja y Financiación</a></li>
+                                            <li> <a class="dropdown-item" href="revisionnotas.php?n=4">Gestión contable</a></li>
+                                            <a class="dropdown-item" href="./generales.php">Generales</a>
+                                            <a class="dropdown-item" href="./cuentas.php">Cuentas</a>
+                                            <a class="dropdown-item" href="./procesos.php">Procesos</a>
+                                            <a class="dropdown-item" href="./listaan.php">Lista de AN8</a>
+                                            <a class="dropdown-item" href="./tiposdocumento.php">Tipos de documento</a>
+                                            <a class="dropdown-item" href="./clasificacion.php">Clasificacion de documentos</a>
+                                            <a class="dropdown-item" href="./usuarios.php">Usuarios</a>
+                                            <!-- <li><a class="dropdown-item" href=""> Third level 3 &raquo </a>
+                                            <ul class="submenu dropdown-menu">
+                                                <li><a class="dropdown-item" href=""> Fourth level 1</a></li>
+                                                <li><a class="dropdown-item" href=""> Fourth level 2</a></li>
+                                            </ul>
+                                        </li> -->
+                                        </ul>
+                                    </li>
+                                <?php
+                                }
+                                ?>
+                            </ul>
+                        </li>
+                        <!-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Creación de notas contables
+                                Notas Contables
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="nav-link" href="home.php?n=1">Flujo de caja y Financiación</a>
-                                <a class="nav-link" href="home.php?n=4">Gestión contable</a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Revisión de Notas
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="nav-link" href="revisionnotas.php?n=1">Flujo de caja y Financiación</a>
-                                <a class="nav-link" href="revisionnotas.php?n=4">Gestión contable</a>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./informes.php">Informes</a>
-                        </li>
-                        <?php if ($_SESSION['configuracion'] == 1) {
-                        ?>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Configuración
+                            <div class="dropdown-menu" aria-labelledby="NavCreacionNota">
+                                <a class="nav-link dropright-toggle " href="#" id="NavCreacionNota" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Creación
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="./generales.php">Generales</a>
-                                    <a class="dropdown-item" href="./cuentas.php">Cuentas</a>
-                                    <a class="dropdown-item" href="./procesos.php">Procesos</a>
-                                       <a class="dropdown-item" href="./listaan.php">Lista de AN8</a>
-                                    <a class="dropdown-item" href="./tiposdocumento.php">Tipos de documento</a>
-                                    <a class="dropdown-item" href="./clasificacion.php">Clasificacion de documentos</a>
-                                    <a class="dropdown-item" href="./usuarios.php">Usuarios</a>
+                                <div class="dropdown-menu" aria-labelledby="NavCreacionNota">
+                                    <a class="nav-link" href="home.php?n=1">Flujo de caja y Financiación</a>
+                                    <a class="nav-link" href="home.php?n=4">Flujo de caja y Financiación</a>
                                 </div>
-                            </li>
-                        <?php
-                        }
-                        ?>
+                            </div>
+                        </li> -->
 
                         <li class="nav-item">
                             <a class="nav-link" href="usuarios/cerrarsesion.php">Salir</a>
@@ -79,6 +110,24 @@
 </body>
 
 </html>
+<script>
+    $(document).on('click', '.dropdown-menu', function(e) {
+        e.stopPropagation();
+    });
+
+    // make it as accordion for smaller screens
+    if ($(window).width() < 992) {
+        $('.dropdown-menu a').click(function(e) {
+            e.preventDefault();
+            if ($(this).next('.submenu').length) {
+                $(this).next('.submenu').toggle();
+            }
+            $('.dropdown').on('hide.bs.dropdown', function() {
+                $(this).find('.submenu').hide();
+            })
+        });
+    }
+</script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

@@ -1,3 +1,16 @@
+function noaprobarnota(iddocumento, comentariodesaprobacion) {
+    cadenau = "iddocumento=" + iddocumento + "&comentario=" + comentariodesaprobacion;
+    $.ajax({
+        type: "POST",
+        url: "notascontables/desaprobarnota.php",
+        data: cadenau,
+        success: function (r) {
+            //console.log(r);
+            //debugger;
+        }
+    });
+}
+
 function revision(iddocumento) {
     cadenau = "iddocumento=" + iddocumento;
     $.ajax({
@@ -185,11 +198,11 @@ function registrar(idnota, cuenta, fecha, debe, haber, lm, an, tipolm) {
         data: cadenau,
         success: function (r) {
             if (r == 1) {
-                console.log(r);
-                debugger;
+                //  console.log(r);
+                //  debugger;
             } else {
-                console.log(r);
-                debugger;
+                //console.log(r);
+                //debugger;
             }
         }
     });

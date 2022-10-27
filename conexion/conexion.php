@@ -1,2 +1,2 @@
 <?php
-$link = mysqli_connect("localhost", "root", "", "notasdepagos");
+$link = mysqli_connect("localhost", "root", "", "tesoreria");

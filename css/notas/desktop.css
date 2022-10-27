@@ -56,6 +56,11 @@ footer>button {
     text-align: center;
 }
 
+.mensajes {
+    display: grid;
+    align-content: space-between;
+}
+
 .mediano {
     width: 20%;
     display: inline-block;
@@ -113,4 +118,97 @@ footer>button {
 
 .botones>button {
     margin: 0.3rem;
+}
+
+.sidenav a,
+.dropdown-btn {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 1.6rem;
+    color: #818181;
+    display: block;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: right;
+    cursor: pointer;
+    outline: none;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 75%;
+    background-color: #eee;
+    overflow: hidden;
+
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 1.3rem;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+    padding-right: 10%;
+}
+
+.sidenav a:hover {
+    color: black;
+}
+
+.sidenav a:hover,
+.dropdown-btn:hover {
+    color: black;
+}
+
+.main {
+    margin-left: 200px;
+    /* Same as the width of the sidenav */
+    font-size: 20px;
+    /* Increased text to enable scrolling */
+    padding: 0px 10px;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.active {
+    background-color: #818181;
+    color: white;
+}
+
+.dropdown-container {
+    display: none;
+    background-color: #eee;
+    padding-left: 8px;
+}
+
+
+/* Optional: Style the caret down icon */
+
+.fa-caret-down {
+    float: right;
+    padding-right: 8px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+
+    .sidenav a {
+        font-size: 18px;
+    }
 }

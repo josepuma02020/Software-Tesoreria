@@ -64,14 +64,7 @@
         $tipodocumento = $filadatosnota['idtipodocumento'];
         $clasificacion = $filadatosnota['idclasificacion'];
         $comentario = $filadatosnota['comentario'];
-        if ($filadatosnota['batch'] == '' and $filadatosnota['revision'] == 1) {
-            $batch = 'En revisión';
-            $colorbatch = '#FED323';
-        } else {
-            $colorbatch = '';
-            $batch = $filadatosnota['batch'];
-        }
-
+        $batch = $filadatosnota['batch'];
         $fecha = $filadatosnota['fecha'];
         $hora = $filadatosnota['hora'];
         $nombreaprobador = $filadatosnota['aprobador'];
@@ -80,6 +73,7 @@
         $nombreautorizador = $filadatosnota['autoriza'];
         $fechaautorizacion = $filadatosnota['fechaautorizacion'];
         $horaautorizacion = $filadatosnota['horaautorizacion'];
+        $revision = $filadatosnota['revision'];
     } else {
         $idusuario = $_SESSION['idusuario'];
         $usuario = $_SESSION['nombre'];
@@ -95,6 +89,14 @@
         $nombreautorizador = '';
         $fechaautorizacion = '';
         $horaautorizacion = '';
+        $revision = 0;
+    }
+
+    if ($batch == '' && $revision == 1) {
+        $batch = 'En revisión';
+        $colorbatch = '#FED323';
+    } else {
+        $colorbatch = '';
     }
     ?>
 </head>
@@ -104,7 +106,7 @@
         <?php
         $des = '';
         if ($creado == 1) {
-            if ((($_SESSION['idusuario'] == $idusuario && $filadatosnota['revision'] == 0) || ($filadatosnota['tipo'] == $_SESSION['idproceso'] && $filadatosnota['revision'] == 0))) {
+            if ((($_SESSION['idusuario'] == $idusuario && $filadatosnota['revision'] == 0) || ($filadatosnota['tipo'] == $_SESSION['idproceso'] && $filadatosnota['revision'] == 0 && $_SESSION['idusuario'] == $idusuario))) {
                 $des = '';
             } else {
                 $des = 'disabled';
@@ -117,100 +119,135 @@
             }
         }
         ?>
-        <fieldset <?php echo $des; ?>>
-            <form action="" method="post">
+
+        <?php
+        if ($batch != '') {
+            $estado = 'disabled';
+        } else {
+            $estado = '';
+        }
+        ?>
+        <div class="form-row formulario">
+            <div class="form-group pequeno">
+                <label for="iddocumento">ID.Documento:</label>
+                <input value="<?php echo $creado  ?>" style="text-align:center" class="form-control " id="creado" name="creado" type="hidden" disabled>
+                <input <?php echo $estado ?> value="<?php echo $idnota  ?>" style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled>
+            </div>
+            <div class="form-group mediano-pequeno">
+                <label for="user">Usuario:</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
+            </div>
+            <div class="form-group mediano-grande">
+                <label for="type">Tipo de Documento</label>
+                <select <?php echo $estado ?> style="text-align: center;" id="type" class="form-control col-md-8 ">
+                    <?php
+                    $selected = '';
+                    $consultausuarios = "select * from tiposdocumento order by documento";
+                    $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
+                    ?> <option value="0">Seleccionar</option>
+                    <?php
+                    while ($filas1 = mysqli_fetch_array($query)) {
+                        if ($filas1['idtipo'] == $filadatosnota['idtipodocumento']) {
+                            $selected = 'selected';
+                        }
+                    ?>
+                        <option <?php echo $selected ?> value="<?php echo $filas1['idtipo'] ?>"><?php echo  $filas1['idtipo'] . '-' . $filas1['documento'] ?></option>
+                    <?php
+                        $selected = '';
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group mediano-grande">
+                <label for="type">Clasificación de Documento</label>
+                <select <?php echo $estado ?> style="text-align: center;" id="clasificacion" class="form-control col-md-8 ">
+                    <?php
+                    $consultausuarios = "select * from clasificaciones order by clasificacion";
+                    $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
+                    ?> <option value="0">Seleccionar</option>
+                    <?php
+                    while ($filas1 = mysqli_fetch_array($query)) {
+                        if ($filas1['idclasificacion'] == $filadatosnota['idclasificacion']) {
+                            $selected = 'selected';
+                        }
+                    ?>
+                        <option <?php echo $selected ?> value="<?php echo $filas1['idclasificacion'] ?>"><?php echo  $filas1['clasificacion'] ?></option>
+                    <?php
+                    }
+                    $selected = '';
+                    ?>
+                </select>
+            </div>
+
+        </div>
+        <div class="form-row formulario">
+            <div class="form-group pequeno">
+                <label for="batch">Batch:</label>
                 <?php
-                if ($batch != '') {
+                $estado = 'disabled';
+                if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
+                } ?>
+                <input <?php echo $estado ?> min="0" value="<?php echo $batch ?>" style="text-align:center;background-color:<?php echo $colorbatch ?>" class="form-control " id="batch" name="batch" type="text">
+                <?php if ($batch != '') {
                     $estado = 'disabled';
                 } else {
                     $estado = '';
                 }
                 ?>
-                <div class="form-row formulario">
-                    <div class="form-group pequeno">
-                        <label for="iddocumento">ID.Documento:</label>
-                        <input value="<?php echo $creado  ?>" style="text-align:center" class="form-control " id="creado" name="creado" type="hidden" disabled>
-                        <input <?php echo $estado ?> value="<?php echo $idnota  ?>" style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled>
-                    </div>
-                    <div class="form-group mediano-pequeno">
-                        <label for="user">Usuario:</label>
-                        <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
-                    </div>
-                    <div class="form-group mediano-grande">
-                        <label for="type">Tipo de Documento</label>
-                        <select <?php echo $estado ?> style="text-align: center;" id="type" class="form-control col-md-8 ">
-                            <?php
-                            $selected = '';
-                            $consultausuarios = "select * from tiposdocumento order by documento";
-                            $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
-                            ?> <option value="0">Seleccionar</option>
-                            <?php
-                            while ($filas1 = mysqli_fetch_array($query)) {
-                                if ($filas1['idtipo'] == $filadatosnota['idtipodocumento']) {
-                                    $selected = 'selected';
-                                }
-                            ?>
-                                <option <?php echo $selected ?> value="<?php echo $filas1['idtipo'] ?>"><?php echo  $filas1['idtipo'] . '-' . $filas1['documento'] ?></option>
-                            <?php
-                                $selected = '';
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="form-group mediano-grande">
-                        <label for="type">Clasificación de Documento</label>
-                        <select <?php echo $estado ?> style="text-align: center;" id="clasificacion" class="form-control col-md-8 ">
-                            <?php
-                            $consultausuarios = "select * from clasificaciones order by clasificacion";
-                            $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
-                            ?> <option value="0">Seleccionar</option>
-                            <?php
-                            while ($filas1 = mysqli_fetch_array($query)) {
-                                if ($filas1['idclasificacion'] == $filadatosnota['idclasificacion']) {
-                                    $selected = 'selected';
-                                }
-                            ?>
-                                <option <?php echo $selected ?> value="<?php echo $filas1['idclasificacion'] ?>"><?php echo  $filas1['clasificacion'] ?></option>
-                            <?php
-                            }
-                            $selected = '';
-                            ?>
-                        </select>
-                    </div>
+            </div>
+            <div class="form-group mediano-pequeno">
+                <label for="user">Fecha creación:</label>
+                <input <?php echo $des; ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
+            </div>
+            <div class="form-group mediano-grande ">
+                <label for="comment">Aprobado por:</label>
+                <input <?php echo $des; ?> value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+            </div>
+            <div class="form-group mediano-grande ">
+                <label for="comment">Autorizado por:</label>
+                <input <?php echo $des; ?> value=" <?php echo $nombreautorizador . ' : ' . $fechaautorizacion . ' ' . $horaautorizacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+            </div>
+            <div class="form-row formulario">
+                <div class="form-group completo ">
+                    <label for="comment">Comentario:</label>
+                    <input <?php echo $des; ?> <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
+                </div>
+                <button class="btn btn-info" onclick="openMsg()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-dots" viewBox="0 0 16 16">
+                        <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                        <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                    </svg>
+                </button>
 
+            </div>
+
+        </div>
+        <div id="mensajes" class="sidenav mensajes" style="width:0;">
+            <div>
+                <a class="cerrar" href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            </div>
+            <div>
+                <?php
+                $consultamensajes = "select a.*,b.nombre from mensajes a inner JOIN usuarios b on b.idusuario=a.idusuario where a.idnota= $idnota";
+                $querymensajes = mysqli_query($link, $consultamensajes) or die($consultamensajes);
+
+                while ($filasmensajes = mysqli_fetch_array($querymensajes)) {
+                ?>
+                    <div class="form-group completo">
+                        <h6 for="desde"><?php echo $filasmensajes['nombre'] . ' - ' . $filasmensajes['fecha'] . ' ' . $filasmensajes['hora']  ?></h6>
+                        <textarea disabled class="form-control" name="comentariodesaprobacion" id="comentariodesaprobacion" rows="4"><?php echo $filasmensajes['mensaje']  ?></textarea>
+                    </div>
+                <?php
+                }
+                ?>
+                <div class="form-group completo">
+                    <h6 for="desde"><?php echo $_SESSION['nombre'] ?></h6>
+                    <textarea class="form-control" name="comentariodesaprobacion" id="comentariodesaprobacion" rows="4"></textarea>
                 </div>
-                <div class="form-row formulario">
-                    <div class="form-group pequeno">
-                        <label for="batch">Batch:</label>
-                        <input <?php echo $estado ?> min="0" value="<?php echo $batch ?>" style="text-align:center;background-color:<?php echo $colorbatch ?>" class="form-control " id="batch" name="batch" type="text">
-                        <?php if ($batch != '') {
-                            $estado = 'disabled';
-                        } else {
-                            $estado = '';
-                        }
-                        ?>
-                    </div>
-                    <div class="form-group mediano-pequeno">
-                        <label for="user">Fecha creación:</label>
-                        <input style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
-                    </div>
-                    <div class="form-group mediano-grande ">
-                        <label for="comment">Aprobado por:</label>
-                        <input value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
-                    </div>
-                    <div class="form-group mediano-grande ">
-                        <label for="comment">Autorizado por:</label>
-                        <input value=" <?php echo $nombreautorizador . ' : ' . $fechaautorizacion . ' ' . $horaautorizacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
-                    </div>
-                    <div class="form-row formulario">
-                        <div class="form-group completo ">
-                            <label for="comment">Comentario:</label>
-                            <input <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </fieldset>
+            </div>
+        </div>
+
+
     </header>
     <main id="tegistrosdenota" class="tabla-registros ">
         <table id="registrosnotas" class="table table-striped  table-responsive-lg">
@@ -225,7 +262,9 @@
                 <th>LM</th>
                 <th>AN8</th>
                 <?php
-                if ($batch == '') {
+
+                if ($batch == '' && $des != 'disabled') {
+                    echo $des;
                 ?>
                     <th>Acciones</th>
                 <?php
@@ -240,6 +279,7 @@
                 $totaldebe = 0;
                 $totalhaber = 0;
                 $totalimporte = 0;
+                $a = 0;
                 while ($filasregistros = mysqli_fetch_array($queryregistros)) {
                     $a = 0;
                     $totaldebe = $totaldebe + $filasregistros['debe'];
@@ -281,23 +321,24 @@
                         ?>
                         <td style="background-color: <?php echo $color; ?> ;"><?php echo $filasregistros['an']; ?> </td>
 
-                        <td>
-                            <?php
-                            if ($batch == '' && $des != 'disabled') {
-                            ?>
+                        <?php
+                        if ($batch == '' && $des != 'disabled') {
+                        ?>
+                            <td>
                                 <button title="Eliminar Registro" style="height:1.5rem;padding-top:0 " onclick="elminarregistro(<?php echo $filasregistros['idregistro'] ?>)" id="eliminarregistro" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
                                         <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
                                     </svg>
                                 </button>
-                            <?php
-                            }
-                            ?>
-                        </td>
+                            </td>
+                        <?php
+                        }
+                        ?>
+
                     </tr>
                 <?php }
-                if ($batch == '' && $des != 'disabled') {
+                if ($batch == '' && $des != 'disabled' && $_SESSION['idusuario'] == $idusuario) {
 
                 ?>
                     <form id="registros" action="#" method="POST" class="form-registros">
@@ -369,15 +410,15 @@
         </div>
         <section class="botones">
             <?php
-            if ($batch == '') {
+            if ($batch == '' || $batch == 'En revisión') {
                 $estado = "";
-                if (($totalimporte != 0 || $a > 0) || $filadatosnota['revision'] == 1) {
-                    $estado = 'disabled';
-                } else {
+                if ($totalimporte == 0 && $a == 0 && $revision == 0 && $_SESSION['idusuario'] == $idusuario) {
             ?>
-                    <button <?php echo $estado ?> title="Aprobar Nota" id="revision" name="revision" class="btn btn-primary boton">Revisión</button>
+                    <button title="Enviar nota contable a revisión." id="revision" name="revision" class="btn btn-primary boton">Revisión</button>
                     <?php
+                } else {
                 }
+                $estado = "";
                 $consultaequiponota = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $idusuario";
                 $queryequiponota = mysqli_query($link, $consultaequiponota) or die($consultaequiponota);
                 $filaequiponota = mysqli_fetch_array($queryequiponota);
@@ -389,10 +430,12 @@
                 $filaminimo = mysqli_fetch_array($queryminimo);
                 $filaminimo['salariominimo'] * 500;
                 if ($_SESSION['aprobacion'] == 1) {
-                    if ($filaequiponota['idequipo'] == $filaequipousuario['idequipo'] && ($filaminimo['salariominimo'] * 500) < $totalhaber && $filadatosnota['aprobador'] == '') {
+                    if ($filaequiponota['idequipo'] == $filaequipousuario['idequipo'] && ($filaminimo['salariominimo'] * 500) < $totalhaber && $nombreaprobador == '' && $revision == 1) {
                     ?>
                         <button <?php echo $estado ?> title="Aprobar Nota" id="aprobar" name="aprobar" class="btn btn-success boton">Aprobar</button>
+                        <button <?php echo $estado ?> title="No aprobar nota contable." id="noaprobar" name="noaprobar" class="btn btn-danger boton" data-toggle="modal" data-target="#desaprobar">No aprobar</button>
                     <?php
+                    } else {
                     }
                 }
                 if ($_SESSION['autorizacion'] == 1) {
@@ -402,7 +445,7 @@
                     <?php
                     }
                 }
-                if ($des != 'disabled') {
+                if ($des != 'disabled' && $_SESSION['idusuario'] == $idusuario) {
                     ?>
 
                     <!-- <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button> -->
@@ -412,13 +455,51 @@
                 }
             }
             ?>
+            <div class="modal fade" id="desaprobar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Desaprobación de nota contable</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="">
+                                <div class="form-row formulario">
+                                    <div class="form-group completo">
+                                        <h6 for="desde">Escriba el motivo de la desaprobación:</h6>
+                                        <textarea class="form-control" name="comentariodesaprobacion" id="comentariodesaprobacion" rows="4"></textarea>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" id="confirmardesaprobar" class="btn btn-danger">No aprobar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
+
     </main>
     <footer>
+
     </footer>
 </body>
 
 </html>
+<script>
+    function openMsg() {
+        document.getElementById("mensajes").style.width = "25%";
+    }
+
+    function closeNav() {
+        document.getElementById("mensajes").style.width = "0";
+    }
+</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 <script type="text/javascript">
@@ -463,6 +544,15 @@
                 ok: 'Continuar',
                 cancel: 'Cancelar'
             });
+        });
+        $('#confirmardesaprobar').click(function() {
+            a = 0;
+            iddocumento = $('#iddocumento').val();
+            comentariodesaprobacion = $('#comentariodesaprobacion').val();
+            noaprobarnota(iddocumento, comentariodesaprobacion);
+            setTimeout(function() {
+                window.location.reload();
+            }, 1000);
         });
         $('#revision').click(function() {
             a = 0;
