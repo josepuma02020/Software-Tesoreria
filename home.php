@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (time() - $_SESSION['tiempo'] > 500) {
+if (time() - $_SESSION['tiempo'] > 500000000000) {
     //session_destroy();
     /* Aquí redireccionas a la url especifica */
     session_destroy();

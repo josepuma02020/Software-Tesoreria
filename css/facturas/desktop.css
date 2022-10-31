@@ -1,0 +1,219 @@
+body {
+    text-align: center;
+    align-items: center !important;
+}
+
+form {
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 1em;
+    width: 90%;
+    text-align: center;
+
+}
+
+footer {
+    text-align: center;
+}
+
+footer>button {
+    margin: 1rem;
+}
+
+.formulario {
+    margin-bottom: 1%;
+}
+
+.form-registros {
+    font-size: small;
+}
+
+.form-control-register {
+    display: block;
+    width: 100%;
+    padding: .2rem .75rem;
+    font-size: 0.8rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .375rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+
+}
+
+.tabla-registros {
+    font-size: 0.8rem;
+    margin-top: 1.5em;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 80%;
+    display: inline-block;
+    background-color: #ECEBEB;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    text-align: center;
+}
+
+.mensajes {
+    display: grid;
+    align-content: space-between;
+}
+
+.mediano {
+    width: 20%;
+    display: inline-block;
+    margin-left: 1em;
+    margin-right: 1em;
+    text-align: center;
+
+}
+
+.mediano-pequeno {
+    width: 15%;
+    display: inline-block;
+    margin-left: 1em;
+    margin-right: 1em;
+    text-align: center;
+}
+
+.mediano-grande {
+    width: 30%;
+    display: inline-block;
+    margin-left: 1em;
+    margin-right: 1em;
+    text-align: center;
+    text-align: center;
+}
+
+.pequeno {
+    width: 10%;
+    display: inline-block;
+    margin-left: 1em;
+    margin-right: 1em;
+    text-align: center;
+}
+
+.grande {
+    margin-top: 1.5em;
+    margin-left: 1em;
+    margin-right: 1em;
+    width: 63%;
+    display: inline-block;
+}
+
+.completo {
+    margin-top: 1.5em;
+    margin-left: 1em;
+    margin-right: 1em;
+    width: 90%;
+    display: inline-block;
+}
+
+
+.botones {
+    margin: 1.1rem;
+
+}
+
+.botones>button {
+    margin: 0.3rem;
+}
+
+.sidenav a,
+.dropdown-btn {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 1.6rem;
+    color: #818181;
+    display: block;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: right;
+    cursor: pointer;
+    outline: none;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 75%;
+    background-color: #eee;
+    overflow: hidden;
+
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 1.3rem;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+    padding-right: 10%;
+}
+
+.sidenav a:hover {
+    color: black;
+}
+
+.sidenav a:hover,
+.dropdown-btn:hover {
+    color: black;
+}
+
+.main {
+    margin-left: 200px;
+    /* Same as the width of the sidenav */
+    font-size: 20px;
+    /* Increased text to enable scrolling */
+    padding: 0px 10px;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.active {
+    background-color: #818181;
+    color: white;
+}
+
+.dropdown-container {
+    display: none;
+    background-color: #eee;
+    padding-left: 8px;
+}
+
+
+/* Optional: Style the caret down icon */
+
+.fa-caret-down {
+    float: right;
+    padding-right: 8px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+
+    .sidenav a {
+        font-size: 18px;
+    }
+}
