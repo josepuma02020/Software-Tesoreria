@@ -21,14 +21,14 @@
     $dia = date('d');
     $hora = date('h:i a');
     //autocompletar cliente
-    $consulta = "SELECT `idcuenta`  FROM `cuentas` ";
+    $consulta = "select descripcion from cuentas where clasificacion = '1' order by descripcion";
     $queryt = mysqli_query($link, $consulta) or die($consulta);
     $productos[] = array();
-    while ($arregloproductos = mysqli_fetch_row($queryt)) {
-        $productos[] = $arregloproductos[0];
+    while ($arreglocuentas = mysqli_fetch_row($queryt)) {
+        $cuentas[] = $arreglocuentas[0];
     }
-    array_shift($productos);
-    $relleno = json_encode($productos);
+    array_shift($cuentas);
+    $relleno = json_encode($cuentas);
     //consulta idnota
     if (isset($_GET['id'])) {
         $idnota = $_GET['id'];
@@ -147,24 +147,7 @@
         <div class="form-row formulario">
             <div class="form-group mediano-pequeno">
                 <label for="type">Banco</label>
-                <select <?php echo $estado ?> style="text-align: center;" id="banco" name="banco" class="form-control col-md-8 ">
-                    <?php
-                    $selected = '';
-                    $consultausuarios = "select * from tiposfactura order by tipofactura";
-                    $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
-                    ?> <option value="0">Seleccionar</option>
-                    <?php
-                    while ($filas1 = mysqli_fetch_array($query)) {
-                        if ($filas1['idtipo'] == $tipodocumento) {
-                            $selected = 'selected';
-                        }
-                    ?>
-                        <option <?php echo $selected ?> value="<?php echo $filas1['idtipo'] ?>"><?php echo   $filas1['tipofactura'] ?></option>
-                    <?php
-                        $selected = '';
-                    }
-                    ?>
-                </select>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="cuenta" name="cuenta" type="text">
             </div>
             <div class="form-group mediano-pequeno">
                 <label for="fechafactura">Fecha factura:</label>
@@ -177,11 +160,11 @@
 
             <div class="form-group pequeno">
                 <label for="user">RI:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="ri" name="ri" type="text">
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="ri" name="ri" type="number">
             </div>
             <div class="form-group pequeno">
                 <label for="user">AN8:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="an" name="an" type="text">
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="an" name="an" type="number">
             </div>
 
             <div class="form-group mediano">
@@ -253,7 +236,7 @@
             valor = $('#valor').val();
             user = $('#user').val();
             tipo = $('#tipofactura').val();
-            cuenta = $('#banco').val();
+            cuenta = $('#cuenta').val();
             fechafactura = $('#fechafactura').val();
             soporte = $('#soporte').val();
             ri = $('#ri').val();
@@ -416,7 +399,7 @@
         $("#cuenta").autocomplete({
             source: disponible,
             lookup: disponible,
-            minLength: 4
+            minLength: 3
         });
         $("#cuenta").autocomplete("option", "appendTo", ".eventInsForm");
     });
