@@ -32,6 +32,7 @@
     //consulta idnota
     if (isset($_GET['id'])) {
         $idnota = $_GET['id'];
+        $soporte = 'si';
         $consultanotacreada = "select * from notascontables where idnota = '$idnota'";
         $querynotacreada = mysqli_query($link, $consultanotacreada) or die($consultanotacreada);
         $filanotacreada = mysqli_fetch_array($querynotacreada);
@@ -41,6 +42,7 @@
             $creado = 0;
         }
     } else {
+
         $consultaconsecutivo = "select count(idnota) 'consecutivo' from notascontables where fecha = '$fecha_actual'";
         $queryconsecutivo = mysqli_query($link, $consultaconsecutivo) or die($consultaconsecutivo);
         $filaconsecutivo = mysqli_fetch_array($queryconsecutivo);
@@ -54,25 +56,46 @@
     }
 
     //consulta datos notas
-    $consultadatosnota = "select * from facturas  where `iddoc` =  $idnota";
+    $consultadatosnota = "SELECT a.*,b.nombre'nombrecreador',b.usuario'usariocreador',c.nombre'nombrerevisador',d.descripcion'descripcioncuenta' FROM `facturas` a inner join usuarios b on a.idcreador = b.idusuario left join usuarios c on a.idrevisador=c.idusuario INNER JOIN cuentas d on d.idcuenta=a.idcuenta  where `iddoc` =  $idnota";
     $querydatosnota = mysqli_query($link, $consultadatosnota) or die($consultadatosnota);
     $filadatosnota = mysqli_fetch_array($querydatosnota);
     if (isset($filadatosnota)) {
-        $usuario = $filadatosnota['nombre'];
-        $idusuario = $filadatosnota['idusuario'];
+        $soporte = 'si';
+        $usuario = $filadatosnota['nombrecreador'];
+        $idusuario = $filadatosnota['usariocreador'];
+        if ($filadatosnota['idrevisador'] == 0) {
+            $nombrerevisa = '';
+            $fecharevision = '';
+            $horarevision = '';
+        } else {
+            $nombrerevisa = $filadatosnota['nombrerevisador'];
+        }
+        $banco = $nombrerevisa = $filadatosnota['descripcioncuenta'];
         $tipofactura = 0;
+        $ri = $filadatosnota['ri'];
+        $an = $filadatosnota['tercero'];
         $batch = '';
-        $fecha = $fecha_actual;
+        $valor = $filadatosnota['valor'];
+        $horaregistro = $filadatosnota['horaregistro'];
+        $fecha = $filadatosnota['fecharegistro'];
+        $comentario = '';
+        $extension = $filadatosnota['extensionarchivo'];
     } else {
+        $soporte = 'no';
+        $extension = '';
         $idusuario = $_SESSION['idusuario'];
         $usuario = $_SESSION['nombre'];
         $tipofactura = 0;
         $batch = '';
+        $ri = '';
+        $an = '';
+        $valor = '';
         $nombrerevisa = '';
         $fecharevision = '';
         $horarevision = '';
         $fecha = $fecha_actual;
         $comentario = '';
+        $banco = '';
     }
     ?>
 </head>
@@ -148,24 +171,24 @@
             <input <?php echo $estado ?> style="text-align:center" class="form-control " id="valido" name="valido" type="hidden">
             <div class="form-group mediano-pequeno">
                 <label for="type">Banco</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="cuenta" name="cuenta" type="text">
+                <input value="<?php echo $banco; ?>" <?php echo $estado ?> style="text-align:center" class="form-control " id="cuenta" name="cuenta" type="text">
             </div>
             <div class="form-group mediano-pequeno">
                 <label for="fechafactura">Fecha factura:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="fechafactura" name="fechafactura" type="date">
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="fechafactura" value="<?php echo $fecha ?>" name="fechafactura" type="date">
             </div>
             <div class="form-group mediano-pequeno">
                 <label for="user">Valor:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control number " id="valor" name="valor" type="text">
+                <input <?php echo $estado ?> style="text-align:center" class="form-control number " id="valor" value="<?php echo $valor ?>" name="valor" type="text">
             </div>
 
             <div class="form-group pequeno">
                 <label for="user">RI:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="ri" name="ri" type="number">
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="ri" value="<?php echo $ri ?>" name="ri" type="number">
             </div>
             <div class="form-group pequeno">
                 <label for="user">AN8:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="an" name="an" type="number">
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="an" value="<?php echo $an ?>" name="an" type="number">
             </div>
 
             <div class="form-group mediano">
@@ -185,24 +208,48 @@
         </div>
     </header>
     <main>
+        <?php
+        if ($soporte == 'si') {
+            switch ($extension) {
+                case 'pdf':
+        ?>
+                    <embed src="facturas/soportes/<?php echo $idnota . '.' . $extension ?>" width="80%" height=" 800px" type="application/pdf">
+                <?php
+                    break;
+                case 'png':
+                ?>
+                    <embed src="facturas/soportes/<?php echo $idnota . '.' . $extension ?>" width="80%" height=" 800px" type="image/png">
+                <?php
+                    break;
+                case 'jpeg':
+                ?>
+                    <embed src="facturas/soportes/<?php echo $idnota . '.' . $extension ?>" width="80%" height=" 800px" type="image/jpeg">
+                <?php
+                    break;
+                case 'jpg':
+                ?>
+                    <embed src="facturas/soportes/<?php echo $idnota . '.' . $extension ?>" width="80%" height=" 800px" type="image/jpg">
+                <?php
+                    break;
+                case 'gif':
+                ?>
+                    <embed src="facturas/soportes/<?php echo $idnota . '.' . $extension ?>" width="80%" height=" 800px" type="image/gif">
+            <?php
+                    break;
+            }
+            ?>
+
+        <?php
+        }
+        ?>
+
+
     </main>
     <footer>
-        <section class="botones">
-
-        </section>
     </footer>
 </body>
 
 </html>
-<script>
-    function openMsg() {
-        document.getElementById("mensajes").style.width = "25%";
-    }
-
-    function closeNav() {
-        document.getElementById("mensajes").style.width = "0";
-    }
-</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 <script type="text/javascript">
@@ -338,7 +385,7 @@
                     }
                 });
                 setTimeout(function() {
-                    //   window.location.reload();
+                    window.location.href = "./home.php?id=" + iddoc + "&n=f"
                 }, 1000);
             }
 
