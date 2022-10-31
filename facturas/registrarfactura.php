@@ -18,6 +18,7 @@ if ($_SESSION['usuario']) {
     $user = $_POST['user'];
     $tipo = $_POST['tipo'];
     $iddoc = $_POST['iddoc'];
+    $comentario = $_POST['comentario'];
     $fechafactura = $_POST['fechafactura'];
     $ri = $_POST['ri'];
     $an = $_POST['an'];
@@ -25,7 +26,7 @@ if ($_SESSION['usuario']) {
     $consultacuenta = "select * from cuentas where descripcion = '$cuenta'";
     $querycuenta = mysqli_query($link, $consultacuenta) or die($consultacuenta);
     $idcuenta = mysqli_fetch_array($querycuenta);
-    echo $consulta = "INSERT INTO `facturas`(`iddoc`, `fechafactura`, `valor`, `idcuenta`, `idcreador`, `idrevisador`, `horaregistro`, `fecharegistro`, `idtipofactura`, `ri`, `tercero`, `fecharevision`, `horarevision`) VALUES 
-    ('$iddoc','$fechafactura','$valor','$idcuenta[idcuenta]',' $_SESSION[idusuario]','','$hora', '$fecha_actual',' $tipo','  $ri','$an','','')";
+    echo $consulta = "INSERT INTO `facturas`(`iddoc`, `fechafactura`, `valor`, `idcuenta`, `idcreador`, `idrevisador`, `horaregistro`, `fecharegistro`, `idtipofactura`, `ri`, `tercero`, `fecharevision`, `horarevision`, `extensionarchivo`, `comentario`)VALUES 
+    ('$iddoc','$fechafactura','$valor','$idcuenta[idcuenta]',' $_SESSION[idusuario]','','$hora', '$fecha_actual',' $tipo','  $ri','$an','','','','$comentario')";
     echo $query = mysqli_query($link, $consulta) or die($consulta);
 }

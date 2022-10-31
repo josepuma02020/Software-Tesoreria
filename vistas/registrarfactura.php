@@ -198,7 +198,7 @@
             <div class="form-row formulario">
                 <div class="form-group grande ">
                     <label for="comment">Comentario:</label>
-                    <input <?php echo $des; ?> <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
+                    <input <?php echo $des; ?> <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comentario" name="comentario" type="text">
                 </div>
                 <div class="form-group pequeno ">
                     <label for="comment"></label>
@@ -302,6 +302,7 @@
             ri = $('#ri').val();
             an = $('#an').val();
             valido = $('#valido').val();
+            comentario = $('#comentario').val();
             inputcuenta = document.getElementById("cuenta");
             inputan = document.getElementById("an");
             if (ri == '') {
@@ -360,9 +361,8 @@
                     });
                 }
             }
-
             if (a == 0) {
-                registrarfactura(iddoc, valor, user, tipo, fechafactura, ri, an, cuenta);
+                registrarfactura(iddoc, valor, user, tipo, fechafactura, ri, an, cuenta, comentario);
                 soporte = $('#soporte').prop('files')[0];
                 datosForm = new FormData;
                 datosForm.append("soporte", soporte);
