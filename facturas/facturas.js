@@ -23,15 +23,17 @@ function verificarbanco(banco) {
         data: cadenau,
         success: function (r) {
             if (r == 1) {
-                console.log('blanco');
+                //console.log('blanco');
                 // debugger;
                 inputcuenta = document.getElementById("cuenta");
                 inputcuenta.style.backgroundColor = "white";
+                $('#valido').val('');
             } else {
                 // console.log('rojo');
                 // debugger;
                 inputcuenta = document.getElementById("cuenta");
                 inputcuenta.style.backgroundColor = "#F77E8E";
+                $('#valido').val('no');
             }
         }
     });
@@ -46,13 +48,15 @@ function verificaran(an) {
             if (r == 1) {
                 // console.log(r);
                 // debugger;
-                inputcuenta = document.getElementById("an");
-                inputcuenta.style.backgroundColor = "white";
+                inputan = document.getElementById("an");
+                inputan.style.backgroundColor = "white";
+                $('#valido').val('');
             } else {
-                console.log('rojo');
+                // console.log('rojo');
                 // debugger;
-                inputcuenta = document.getElementById("an");
-                inputcuenta.style.backgroundColor = "#F77E8E";
+                inputan = document.getElementById("an");
+                inputan.style.backgroundColor = "#F77E8E";
+                $('#valido').val('no');
             }
         }
     });

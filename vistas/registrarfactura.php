@@ -145,6 +145,7 @@
 
         </div>
         <div class="form-row formulario">
+            <input <?php echo $estado ?> style="text-align:center" class="form-control " id="valido" name="valido" type="hidden">
             <div class="form-group mediano-pequeno">
                 <label for="type">Banco</label>
                 <input <?php echo $estado ?> style="text-align:center" class="form-control " id="cuenta" name="cuenta" type="text">
@@ -253,9 +254,18 @@
             soporte = $('#soporte').val();
             ri = $('#ri').val();
             an = $('#an').val();
+            valido = $('#valido').val();
+            inputcuenta = document.getElementById("cuenta");
+            inputan = document.getElementById("an");
             if (ri == '') {
                 a = 1;
                 alertify.alert('ATENCION!!', 'Debe el # de la RI', function() {
+                    alertify.success('Ok');
+                });
+            }
+            if (valido == 'no') {
+                a = 1;
+                alertify.alert('ATENCION!!', 'Revisar campo de Banco y de AN8', function() {
                     alertify.success('Ok');
                 });
             }
@@ -277,7 +287,7 @@
                     alertify.success('Ok');
                 });
             }
-            if (banco == 0) {
+            if (cuenta == 0) {
                 a = 1;
                 alertify.alert('ATENCION!!', 'Seleccionar el banco donde se realizo el pago', function() {
                     alertify.success('Ok');
@@ -303,29 +313,30 @@
                     });
                 }
             }
+
             if (a == 0) {
-                //  registrarfactura(iddoc, valor, user, tipo, fechafactura, ri, an, cuenta);
+                registrarfactura(iddoc, valor, user, tipo, fechafactura, ri, an, cuenta);
                 soporte = $('#soporte').prop('files')[0];
                 datosForm = new FormData;
                 datosForm.append("soporte", soporte);
-                ruta = 'facturas/subirsoporte.php'
-                // $.ajax({
-                //     type: "POST",
-                //     url: ruta,
-                //     cache: false,
-                //     contentType: false,
-                //     processData: false,
-                //     data: datosForm,
-                //     success: function(r) {
-                //         if (r == 1) {
-                //             console.log(r);
-                //             debugger;
-                //         } else {
-                //             console.log(r);
-                //             debugger;
-                //         }
-                //     }
-                // });
+                ruta = 'facturas/subirsoporte.php?iddoc=' + iddoc;
+                $.ajax({
+                    type: "POST",
+                    url: ruta,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: datosForm,
+                    success: function(r) {
+                        if (r == 1) {
+                            console.log(r);
+                            debugger;
+                        } else {
+                            console.log(r);
+                            debugger;
+                        }
+                    }
+                });
                 setTimeout(function() {
                     //   window.location.reload();
                 }, 1000);
