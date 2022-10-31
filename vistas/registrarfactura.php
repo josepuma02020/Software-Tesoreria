@@ -230,6 +230,18 @@
 <script type="text/javascript" src="librerias/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+        const number = document.querySelector('.number');
+
+        function formatNumber(n) {
+            n = String(n).replace(/\D/g, "");
+            return n === '' ? n : Number(n).toLocaleString();
+        }
+        number.addEventListener('keyup', (e) => {
+            const element = e.target;
+            const value = element.value;
+            element.value = formatNumber(value);
+
+        });
         $('#registrarfactura').click(function() {
             a = 0;
             iddoc = $('#iddoc').val();
@@ -292,7 +304,7 @@
                 }
             }
             if (a == 0) {
-                registrarfactura(iddoc, valor, user, tipo, fechafactura, ri, an, cuenta);
+                //  registrarfactura(iddoc, valor, user, tipo, fechafactura, ri, an, cuenta);
                 soporte = $('#soporte').prop('files')[0];
                 datosForm = new FormData;
                 datosForm.append("soporte", soporte);
@@ -320,16 +332,13 @@
             }
 
         });
-        const number = document.querySelector('.number');
-
-        function formatNumber(n) {
-            n = String(n).replace(/\D/g, "");
-            return n === '' ? n : Number(n).toLocaleString();
-        }
-        number.addEventListener('keyup', (e) => {
-            const element = e.target;
-            const value = element.value;
-            element.value = formatNumber(value);
+        $('#cuenta').change(function() {
+            cuenta = $('#cuenta').val();
+            verificarbanco(cuenta);
+        });
+        $('#an').change(function() {
+            an = $('#an').val();
+            verificaran(an);
         });
         $('#aprobar').click(function() {
             a = 0;
@@ -402,5 +411,6 @@
             minLength: 3
         });
         $("#cuenta").autocomplete("option", "appendTo", ".eventInsForm");
+
     });
 </script>
