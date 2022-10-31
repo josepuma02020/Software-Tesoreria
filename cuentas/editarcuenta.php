@@ -14,7 +14,8 @@ if ($_SESSION['usuario']) {
     date_default_timezone_set('America/Bogota');
     $cuenta = $_POST['cuenta'];
     $descripcion = $_POST['descripcion'];
+    $clasificacion = $_POST['clasificacion'];
 
-    echo $consulta = "UPDATE `cuentas` SET `descripcion`='$descripcion' WHERE `idcuenta`='$cuenta'";
+    echo $consulta = "UPDATE `cuentas` SET `descripcion`='$descripcion',`clasificacion`='$clasificacion' WHERE `idcuenta`='$cuenta'";
     echo $query = mysqli_query($link, $consulta) or die($consulta);
 }

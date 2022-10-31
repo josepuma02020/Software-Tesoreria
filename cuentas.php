@@ -13,7 +13,6 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
     include_once('conexion/conexion.php');
     setlocale(LC_ALL, "es_CO");
     date_default_timezone_set('America/Bogota');
-
 ?>
     <HTML>
 
@@ -72,6 +71,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                                     <label for="hasta">Descipción de Cuenta:</label>
                                                     <input style="text-align:center" class="form-control " id="descripcionn" name="descripcionn" type="text">
                                                 </div>
+
                                             </div>
                                         </form>
                                     </div>
@@ -87,18 +87,35 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                 <tr>
                                     <th> Cuenta Contable </th>
                                     <th> Descripcion de cuenta </th>
+                                    <th> Clasificación </th>
+                                    <th> Tipo </th>
                                     <th> Acciones </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                $consultacuentas = "select * from cuentas where idproceso = 1";
+                                $consultacuentas = "select * from cuentas";
                                 $querycuentas = mysqli_query($link, $consultacuentas) or die($consultacuentas);
                                 while ($filascuentas = mysqli_fetch_array($querycuentas)) {
                                 ?>
                                     <tr>
                                         <td> <?php echo $filascuentas['idcuenta'] ?> </td>
                                         <td> <?php echo $filascuentas['descripcion'] ?> </td>
+                                        <td> <?php
+                                                if ($filascuentas['clasificacion'] == 1) {
+                                                    echo 'Banco';
+                                                } else {
+                                                    echo '';
+                                                }
+                                                ?> </td>
+                                        <td> <?php switch ($filascuentas['tipo']) {
+                                                    case 'c':
+                                                        echo 'Crédito';
+                                                        break;
+                                                    case 'd':
+                                                        echo 'Débito';
+                                                        break;
+                                                } ?> </td>
                                         <td>
                                             <SCRIPT lang="javascript" type="text/javascript" src="./cuentas/cuentas.js"></script>
                                             <button onclick="datoscuenta('<?php echo $filascuentas['idcuenta'] ?>','<?php echo $filascuentas['descripcion'] ?>')" type="button" title="Editar cuenta" id="detalles" class="btn btn-primary" data-toggle="modal" data-target="#editar">
@@ -138,6 +155,15 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                                 <div class="form-group mediano-grande">
                                                     <label for="hasta">Descipcion de Cuenta:</label>
                                                     <input style="text-align:center" class="form-control " id="descripcion" name="descripcion" type="text">
+                                                </div>
+                                            </div>
+                                            <div class="form-row formulario">
+                                                <div class="form-group mediano-grande">
+                                                    <label for="hasta">Clasificacion:</label>
+                                                    <select style="text-align: center;" id="clasificacion" name="clasificacion" class="form-control col-md-8 ">
+                                                        <option value="0">----</option>
+                                                        <option value="1">Banco</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </form>
@@ -225,7 +251,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                         <td> <?php echo $filascuentas['descripcion'] ?> </td>
                                         <td>
                                             <SCRIPT lang="javascript" type="text/javascript" src="./cuentas/cuentas.js"></script>
-                                        
+
                                             <button onclick="datoscuenta('<?php echo $filascuentas['idcuenta'] ?>','<?php echo $filascuentas['descripcion'] ?>')" type="button" title="Eliminar cuenta" id="delete" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
@@ -379,6 +405,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
             a = 0;
             descripcion = $('#descripcion').val();
             cuenta = $('#cuenta').val();
+            clasificacion = $('#clasificacion').val();
             if (descripcion == '') {
                 a = 1;
                 alertify.alert('ATENCION!!', 'Favor llenar el campo de descripcion de cuenta. ', function() {
@@ -386,12 +413,11 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                 });
             }
             if (a == 0) {
-                editarcuenta(cuenta, descripcion);
+                editarcuenta(cuenta, descripcion, clasificacion);
                 setTimeout(function() {
                     window.location.reload();
                 }, 1000);
             }
-
         });
     });
 </script>

@@ -39,8 +39,8 @@ function registrarcuenta(cuenta, descripcion) {
     });
 }
 
-function editarcuenta(cuenta, descripcion) {
-    cadenau = "cuenta=" + cuenta + "&descripcion=" + descripcion;
+function editarcuenta(cuenta, descripcion, clasificacion) {
+    cadenau = "cuenta=" + cuenta + "&descripcion=" + descripcion + "&clasificacion=" + clasificacion;
     $.ajax({
         type: "POST",
         url: "cuentas/editarcuenta.php",

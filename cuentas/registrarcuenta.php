@@ -15,6 +15,6 @@ if ($_SESSION['usuario']) {
     $cuenta = $_POST['cuenta'];
     $descripcion = $_POST['descripcion'];
 
-    echo $consulta = "INSERT INTO `cuentas`(`idcuenta`, `descripcion`) VALUES ('$cuenta','$descripcion')";
+    echo $consulta = "INSERT INTO `cuentas`(`idcuenta`, `descripcion`,clasificacion) VALUES ('$cuenta','$descripcion','0')";
     echo $query = mysqli_query($link, $consulta) or die($consulta);
 }
