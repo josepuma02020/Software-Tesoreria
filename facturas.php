@@ -236,7 +236,7 @@ if ($_SESSION['usuario']) {
             tipon = $('#tipon').val();
             hasta = $('#hasta').val();
             mostrar = $('#mostrar').val();
-            location.href = `revisionnotas.php?desde=${desde}&hasta=${hasta}&m=${mostrar}&n=${tipon}`;
+            location.href = `facturas.php?desde=${desde}&hasta=${hasta}&m=${mostrar}&n=${tipon}`;
         });
         $('#detalles').click(function() {
             a = 0;
