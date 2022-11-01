@@ -58,6 +58,9 @@ if ($_SESSION['usuario']) {
                 case 'f':
                     include('./vistas/registrarfactura.php');
                     break;
+                case 5:
+                    include('./vistas/registrarnotaadjunto.php');
+                    break;
             }
             ?>
         </main>
