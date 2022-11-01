@@ -14,7 +14,7 @@
     <SCRIPT src="librerias/alertify/alertify.js"></script>
     <title>Notas Contables</title>
     <?php
-    include('../NotasdePago/conexion/conexion.php');
+    include('../Tesoreria/conexion/conexion.php');
     $fecha_actual = date("Y-m-j");
     $ano = date('Y');
     $mes = date('m');
@@ -230,7 +230,6 @@
                 <?php
                 $consultamensajes = "select a.*,b.nombre from mensajes a inner JOIN usuarios b on b.idusuario=a.idusuario where a.idnota= $idnota";
                 $querymensajes = mysqli_query($link, $consultamensajes) or die($consultamensajes);
-
                 while ($filasmensajes = mysqli_fetch_array($querymensajes)) {
                 ?>
                     <div class="form-group completo">
@@ -241,13 +240,17 @@
                 }
                 ?>
                 <div class="form-group completo">
-                    <h6 for="desde"><?php echo $_SESSION['nombre'] ?></h6>
-                    <textarea class="form-control" name="comentariodesaprobacion" id="comentariodesaprobacion" rows="4"></textarea>
+                    <h6 style="display:contents" for="desde"><?php echo $_SESSION['nombre'] ?></h6>
+                    <button type="button" id="enviarmensaje" class="btn btn-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                            <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
+                        </svg>
+                    </button>
+                    <textarea class="form-control" name="comentariomensaje" id="comentariomensaje" rows="4"></textarea>
                 </div>
+
             </div>
         </div>
-
-
     </header>
     <main id="tegistrosdenota" class="tabla-registros ">
         <table id="registrosnotas" class="table table-striped  table-responsive-lg">
@@ -483,10 +486,8 @@
                 </div>
             </div>
         </section>
-
     </main>
     <footer>
-
     </footer>
 </body>
 
@@ -528,6 +529,15 @@
 <script type="text/javascript" src="librerias/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+        $('#enviarmensaje').click(function() {
+            a = 0;
+            iddocumento = $('#iddocumento').val();
+            comentariomensaje = $('#comentariomensaje').val();
+            enviarmensaje(iddocumento, comentariomensaje);
+            setTimeout(function() {
+                //  window.location.reload();
+            }, 1000);
+        });
         $('#aprobar').click(function() {
             a = 0;
             iddocumento = $('#iddocumento').val();

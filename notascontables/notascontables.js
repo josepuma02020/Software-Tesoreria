@@ -10,7 +10,18 @@ function noaprobarnota(iddocumento, comentariodesaprobacion) {
         }
     });
 }
-
+function enviarmensaje(iddocumento, comentariomensaje) {
+    cadenau = "iddocumento=" + iddocumento + "&comentario=" + comentariomensaje;
+    $.ajax({
+        type: "POST",
+        url: "notascontables/enviarmensaje.php",
+        data: cadenau,
+        success: function (r) {
+            console.log(r);
+            debugger;
+        }
+    });
+}
 function revision(iddocumento) {
     cadenau = "iddocumento=" + iddocumento;
     $.ajax({
