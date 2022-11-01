@@ -60,14 +60,14 @@
                                     <li><a class="dropdown-item" href="#"> Configuración &raquo </a>
                                         <ul class="submenu dropdown-menu">
                                             <a class="dropdown-item" href="./tiposdocumento.php">Tipos de documento</a>
-                                            <a class="dropdown-item" href="./clasificacion.php">Clasificacion de documentos</a>
 
-                                            <!-- <li><a class="dropdown-item" href=""> Third level 3 &raquo </a>
-                                            <ul class="submenu dropdown-menu">
-                                                <li><a class="dropdown-item" href=""> Fourth level 1</a></li>
-                                                <li><a class="dropdown-item" href=""> Fourth level 2</a></li>
-                                            </ul>
-                                        </li> -->
+
+                                            <li> <a class="dropdown-item" href="./clasificacion.php">Clasificacion de documentos &raquo</a>
+                                                <ul class="submenu dropdown-menu">
+                                                    <li><a class="dropdown-item" href=""> Flujo de caja y Financiación</a></li>
+                                                    <li><a class="dropdown-item" href=""> Gestión contable</a></li>
+                                                </ul>
+                                            </li>
                                         </ul>
                                     </li>
                                 <?php

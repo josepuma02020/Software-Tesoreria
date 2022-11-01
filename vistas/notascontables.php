@@ -664,12 +664,15 @@
                         alertify.success('Ok');
                     });
                 }
-                if (clasificacion == 0) {
-                    a = 1;
-                    alertify.alert('ATENCION!!', 'Favor seleccionar una clasificación para el documento', function() {
-                        alertify.success('Ok');
-                    });
+                if (proceso != 4) {
+                    if (clasificacion == 0) {
+                        a = 1;
+                        alertify.alert('ATENCION!!', 'Favor seleccionar una clasificación para el documento', function() {
+                            alertify.success('Ok');
+                        });
+                    }
                 }
+
                 cuenta = $('#cuenta').val();
                 const cuentas = cuenta.split(' ');
                 date = $('#date').val();
@@ -886,11 +889,13 @@
                             alertify.success('Ok');
                         });
                     }
-                    if (clasificacion == 0) {
-                        a = 1;
-                        alertify.alert('ATENCION!!', 'Favor seleccionar una clasificación para el documento', function() {
-                            alertify.success('Ok');
-                        });
+                    if (proceso != 4) {
+                        if (clasificacion == 0) {
+                            a = 1;
+                            alertify.alert('ATENCION!!', 'Favor seleccionar una clasificación para el documento', function() {
+                                alertify.success('Ok');
+                            });
+                        }
                     }
                     if (totalimporte != 0) {
                         a = 1;
