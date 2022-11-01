@@ -41,7 +41,7 @@
                                 <li><a class="dropdown-item" href="#"> Revisión de Notas &raquo </a>
                                     <ul class="submenu dropdown-menu">
                                         <li><a class="dropdown-item" href="revisionnotas.php?n=1">Flujo de caja y Financiación</a></li>
-                                        <li> <a class="dropdown-item" href="revisionnotas.php?n=4">Gestión contable</a></li>
+                                        <li><a class="dropdown-item" href="revisionnotas.php?n=4">Gestión contable</a></li>
                                         <!-- <li><a class="dropdown-item" href=""> Third level 3 &raquo </a>
                                             <ul class="submenu dropdown-menu">
                                                 <li><a class="dropdown-item" href=""> Fourth level 1</a></li>
@@ -77,27 +77,28 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Recaudos</a>
                             <ul class="dropdown-menu">
-                                <li class="nav-item">
-                                    <a class="dropdown-item" href="home.php?n=f">Registrar factura</a>
-                                </li>
-                                <div class="dropdown-divider"></div>
-                                <?php if ($_SESSION['configuracion'] == 1) {
-                                ?>
-                                    <li><a class="dropdown-item" href="#"> Configuración &raquo </a>
-                                        <ul class="submenu dropdown-menu">
-                                            <a class="dropdown-item" href=" ./tiposfactura.php">Tipos de factura</a>
 
-                                            <!-- <li><a class="dropdown-item" href=""> Third level 3 &raquo </a>
+                                <li> <a class="dropdown-item" href="home.php?n=f">Registrar factura</a></li>
+                                <li> <a class="dropdown-item" href="facturas.php?n=a">Lista de facturas</a>
+
+                                    <div class="dropdown-divider"></div>
+                                    <?php if ($_SESSION['configuracion'] == 1) {
+                                    ?>
+                                <li><a class="dropdown-item" href="#"> Configuración &raquo </a>
+                                    <ul class="submenu dropdown-menu">
+                                        <a class="dropdown-item" href=" ./tiposfactura.php">Tipos de factura</a>
+
+                                        <!-- <li><a class="dropdown-item" href=""> Third level 3 &raquo </a>
                                             <ul class="submenu dropdown-menu">
                                                 <li><a class="dropdown-item" href=""> Fourth level 1</a></li>
                                                 <li><a class="dropdown-item" href=""> Fourth level 2</a></li>
                                             </ul>
                                         </li> -->
-                                        </ul>
-                                    </li>
-                                <?php
-                                }
-                                ?>
+                                    </ul>
+                                </li>
+                            <?php
+                                    }
+                            ?>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">

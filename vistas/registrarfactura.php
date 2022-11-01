@@ -42,19 +42,18 @@
             $creado = 0;
         }
     } else {
-
-        $consultaconsecutivo = "select count(idnota) 'consecutivo' from notascontables where fecha = '$fecha_actual'";
+        $consultaconsecutivo = "select iddoc  from facturas where fecharegistro = '$fecha_actual'";
         $queryconsecutivo = mysqli_query($link, $consultaconsecutivo) or die($consultaconsecutivo);
         $filaconsecutivo = mysqli_fetch_array($queryconsecutivo);
         if (isset($filaconsecutivo)) {
-            $consecutivo = $filaconsecutivo['consecutivo'] + 1;
+            $consecutivo = substr($filaconsecutivo['iddoc'], 8, 10);
+            $consecutivo++; 
         } else {
             $consecutivo = 1;
         }
         $idnota = $ano . $mes . $dia . $consecutivo;
         $creado = 0;
     }
-
     //consulta datos notas
     $consultadatosnota = "SELECT a.*,b.nombre'nombrecreador',b.usuario'usariocreador',c.nombre'nombrerevisador',d.descripcion'descripcioncuenta' FROM `facturas` a inner join usuarios b on a.idcreador = b.idusuario left join usuarios c on a.idrevisador=c.idusuario INNER JOIN cuentas d on d.idcuenta=a.idcuenta  where `iddoc` =  $idnota";
     $querydatosnota = mysqli_query($link, $consultadatosnota) or die($consultadatosnota);
