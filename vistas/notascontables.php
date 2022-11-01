@@ -67,6 +67,7 @@
         $batch = $filadatosnota['batch'];
         $fecha = $filadatosnota['fecha'];
         $hora = $filadatosnota['hora'];
+        $proceso = $filadatosnota['tipo'];
         $nombreaprobador = $filadatosnota['aprobador'];
         $fechaaprobacion = $filadatosnota['fechaaprobacion'];
         $horaaprobacion = $filadatosnota['horaaprobacion'];
@@ -81,6 +82,7 @@
         $clasificacion = '';
         $comentario = '';
         $batch = '';
+        $proceso = '';
         $hora = '';
         $fecha = '';
         $nombreaprobador = '';
@@ -137,7 +139,31 @@
                 <label for="user">Usuario:</label>
                 <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
             </div>
-            <div class="form-group mediano-grande">
+            <div class="form-group mediano-pequeno">
+                <label for="desde">Proceso:</label>
+                <select style="text-align: center;" id="proceso" name="proceso" class="form-control col-md-8 ">
+                    <?php
+                    $consultaequipos = "select a.*,b.equipo,c.area from procesos a inner join equipos b on b.idequipo=a.idequipo inner join areas c on c.idarea = b.idarea where idproceso=1 or idproceso=4";
+                    $query = mysqli_query($link, $consultaequipos) or die($consultaequipos);
+                    ?> <option value="0">Seleccionar</option>
+                    <?php
+                    $estado = '';
+                    while ($filas1 = mysqli_fetch_array($query)) {
+
+                        if ($proceso == $filas1['idproceso']) {
+                            $estado = 'selected';
+                        }
+                    ?>
+                        <option <?php echo $estado ?> value="<?php echo $filas1['idproceso'] ?>"><?php echo  $filas1['proceso'] ?></option>
+                    <?php
+                        if ($proceso == $filas1['idproceso']) {
+                            $estado = '';
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group mediano-pequeno">
                 <label for="type">Tipo de Documento</label>
                 <select <?php echo $estado ?> style="text-align: center;" id="type" class="form-control col-md-8 ">
                     <?php
@@ -158,7 +184,7 @@
                     ?>
                 </select>
             </div>
-            <div class="form-group mediano-grande">
+            <div class="form-group mediano-pequeno">
                 <label for="type">Clasificación de Documento</label>
                 <select <?php echo $estado ?> style="text-align: center;" id="clasificacion" class="form-control col-md-8 ">
                     <?php
@@ -451,7 +477,7 @@
                 if ($des != 'disabled' && $_SESSION['idusuario'] == $idusuario) {
                     ?>
 
-                    <!-- <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button> -->
+                    <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-info boton">Guardar</button>
                     <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
                     <button title="Borrar Nota" id="delete" name="delete" class="btn btn-secondary boton">Limpiar</button>
             <?php
@@ -623,11 +649,18 @@
             totaldebe = 0;
             totalhaber = 0;
             creado = $('#creado').val();
+            proceso = $('#proceso').val();
             if (creado == 0) {
                 a = 0;
                 if (type == 0) {
                     a = 1;
                     alertify.alert('ATENCION!!', 'Favor seleccionar un tipo de documento', function() {
+                        alertify.success('Ok');
+                    });
+                }
+                if (proceso == 0) {
+                    a = 1;
+                    alertify.alert('ATENCION!!', 'Debe seleccionar el proceso al que sera enviado la nota contable.', function() {
                         alertify.success('Ok');
                     });
                 }
@@ -637,7 +670,6 @@
                         alertify.success('Ok');
                     });
                 }
-
                 cuenta = $('#cuenta').val();
                 const cuentas = cuenta.split(' ');
                 date = $('#date').val();
@@ -674,7 +706,7 @@
                     $('#totalhaber').val(separator(totalhaber));
                     $('#totalimporte').val(separator(totalimporte));
                     console.log('creado');
-                    registrarnota(type, clasificacion, comentario, batch, '1');
+                    registrarnota(type, clasificacion, comentario, batch, proceso);
                     registrargrupo(iddoc, cuentas, dates, debes, habers, lms, ans);
                     setTimeout(function() {
                         //     window.location.href = "./home.php?id=" + iddoc + "&n=1"
@@ -708,7 +740,7 @@
                     }
                     if (a == 0) {
                         console.log('creado');
-                        registrarnota(type, clasificacion, comentario, batch, '1');
+                        registrarnota(type, clasificacion, comentario, batch, proceso);
                         registrar(iddoc, cuenta, fecha, debe, haber, lm, an, tipolm);
                         setTimeout(function() {
                             //      window.location.href = "./home.php?id=" + iddoc + "&n=1"
@@ -808,8 +840,7 @@
             clasificacion = $('#clasificacion').val();
             comentario = $('#comment').val();
             creado = $('#creado').val();
-
-
+            proceso = $('#proceso').val();
             if (creado == 1) {
                 iddocumento = $('#iddocumento').val();
                 totaldebe = $('#totaldebe').val();
@@ -818,7 +849,7 @@
                 batch = '';
                 a = 0;
                 if (a == 0) {
-                    editarnota(iddocumento, usuario, type, clasificacion, comentario, batch);
+                    editarnota(iddocumento, usuario, type, clasificacion, comentario, batch, proceso);
                     setTimeout(function() {
                         window.location.reload();
                     }, 1000);

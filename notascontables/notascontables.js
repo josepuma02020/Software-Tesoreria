@@ -97,19 +97,19 @@ function registrogestioncontable(iddoc, concepto, fecha, importe, tm, an, lmauxi
     });
 }
 
-function editarnota(id, usuario, type, clasificacion, comentario, batch) {
-    cadenau = "type=" + type + "&clasificacion=" + clasificacion + "&comentario=" + comentario + "&batch=" + batch + "&usuario=" + usuario + "&id=" + id;
+function editarnota(id, usuario, type, clasificacion, comentario, batch, proceso) {
+    cadenau = "type=" + type + "&clasificacion=" + clasificacion + "&comentario=" + comentario + "&batch=" + batch + "&usuario=" + usuario + "&id=" + id + "&proceso=" + proceso;
     $.ajax({
         type: "POST",
         url: "notascontables/editarnota.php",
         data: cadenau,
         success: function (r) {
             if (r == 1) {
-                console.log(r);
-                debugger;
+                // console.log(r);
+                // debugger;
             } else {
-                console.log(r);
-                debugger;
+                // console.log(r);
+                // debugger;
             }
         }
     });

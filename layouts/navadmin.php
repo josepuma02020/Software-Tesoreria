@@ -28,8 +28,9 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#"> Registrar nota &raquo </a>
                                     <ul class="submenu dropdown-menu">
-                                        <li><a class="dropdown-item" href="home.php?n=1"> Flujo de caja y Financiación</a></li>
-                                        <li><a class="dropdown-item" href="home.php?n=4"> Gestión contable</a></li>
+                                        <li><a class="dropdown-item" href="home.php?n=1"> Nota contable</a></li>
+                                        <li><a class="dropdown-item" href="home.php?n=4"> Por concepto</a></li>
+                                        <li><a class="dropdown-item" href="home.php?n=4"> Por adjunto</a></li>
                                         <!-- <li><a class="dropdown-item" href=""> Third level 3 &raquo </a>
                                             <ul class="submenu dropdown-menu">
                                                 <li><a class="dropdown-item" href=""> Fourth level 1</a></li>

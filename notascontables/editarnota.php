@@ -18,8 +18,9 @@ if ($_SESSION['usuario']) {
     $batch = $_POST['batch'];
     $usuario = $_POST['usuario'];
     $id = $_POST['id'];
+    $proceso = $_POST['proceso'];
 
     $consulta = "UPDATE `notascontables` SET `idtipodocumento`='$type',
-    `idclasificacion`= '$clasificacion',`batch`='$batch',`comentario`='$comentario' WHERE idnota = '$id'";
+    `idclasificacion`= '$clasificacion',`batch`='$batch',`comentario`='$comentario',`tipo`='$proceso' WHERE idnota = '$id'";
     echo $query = mysqli_query($link, $consulta) or die($consulta);
 }
