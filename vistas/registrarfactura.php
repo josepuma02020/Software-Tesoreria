@@ -47,7 +47,7 @@
         $filaconsecutivo = mysqli_fetch_array($queryconsecutivo);
         if (isset($filaconsecutivo)) {
             $consecutivo = substr($filaconsecutivo['iddoc'], 8, 10);
-            $consecutivo++; 
+            $consecutivo++;
         } else {
             $consecutivo = 1;
         }
@@ -169,7 +169,7 @@
         <div class="form-row formulario">
             <input <?php echo $estado ?> style="text-align:center" class="form-control " id="valido" name="valido" type="hidden">
             <div class="form-group mediano-pequeno">
-                <label for="type">Banco</label>
+                <label for="type">Entidad bancaria:</label>
                 <input value="<?php echo $banco; ?>" <?php echo $estado ?> style="text-align:center" class="form-control " id="cuenta" name="cuenta" type="text">
             </div>
             <div class="form-group mediano-pequeno">
@@ -180,9 +180,8 @@
                 <label for="user">Valor:</label>
                 <input <?php echo $estado ?> style="text-align:center" class="form-control number " id="valor" value="<?php echo $valor ?>" name="valor" type="text">
             </div>
-
             <div class="form-group pequeno">
-                <label for="user">RI:</label>
+                <label for="user">#Referencia:</label>
                 <input <?php echo $estado ?> style="text-align:center" class="form-control " id="ri" value="<?php echo $ri ?>" name="ri" type="number">
             </div>
             <div class="form-group pequeno">
@@ -386,6 +385,15 @@
                 setTimeout(function() {
                     window.location.href = "./home.php?id=" + iddoc + "&n=f"
                 }, 1000);
+            }
+
+        });
+        $('#tipofactura').change(function() {
+            tipo = $('#tipofactura').val();
+            if (tipo != 6) {
+                document.getElementById('ri').disabled = true;
+            } else {
+                document.getElementById('ri').disabled = false;
             }
 
         });

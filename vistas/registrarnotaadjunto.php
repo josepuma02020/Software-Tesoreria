@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css" />
     <link type="text/css" href="./librerias/jquery-ui-1.12.1.custom/jquery-ui.min.css" rel=" Stylesheet" />
     <link rel="stylesheet" href="./css/facturas/desktop.css">
-    <SCRIPT lang="javascript" type="text/javascript" src="./facturas/facturas.js"></script>
+    <SCRIPT lang="javascript" type="text/javascript" src="notascontables/notascontables.js"></script>
     <SCRIPT src="librerias/alertify/alertify.js"></script>
     <title>Notas Contables</title>
     <?php
@@ -92,7 +92,7 @@
         $nombrerevisa = '';
         $fecharevision = '';
         $horarevision = '';
-        $fecha = $fecha_actual;
+        $fecha = '';
         $comentario = '';
         $banco = '';
     }
@@ -146,20 +146,20 @@
         </div>
         <div class="form-row formulario">
             <div class="form-group mediano-pequeno">
-                <label for="type">Tipo de factura</label>
-                <select <?php echo $estado ?> style="text-align: center;" id="tipofactura" class="form-control col-md-8 ">
+                <label for="type">Tipo de nota</label>
+                <select <?php echo $estado ?> style="text-align: center;" id="tiponota" class="form-control col-md-8 ">
                     <?php
                     $selected = '';
-                    $consultausuarios = "select * from tiposfactura order by tipofactura";
+                    $consultausuarios = "select * from tiposdocumento order by documento";
                     $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
                     ?> <option value="0">Seleccionar</option>
                     <?php
                     while ($filas1 = mysqli_fetch_array($query)) {
-                        if ($filas1['idtipo'] == $tipodocumento) {
+                        if ($filas1['idtipo'] == $filadatosnota['idtipodocumento']) {
                             $selected = 'selected';
                         }
                     ?>
-                        <option <?php echo $selected ?> value="<?php echo $filas1['idtipo'] ?>"><?php echo   $filas1['tipofactura'] ?></option>
+                        <option <?php echo $selected ?> value="<?php echo $filas1['idtipo'] ?>"><?php echo  $filas1['idtipo'] . '-' . $filas1['documento'] ?></option>
                     <?php
                         $selected = '';
                     }
@@ -169,7 +169,7 @@
             <input <?php echo $estado ?> style="text-align:center" class="form-control " id="valido" name="valido" type="hidden">
             <div class="form-group mediano-pequeno">
                 <label for="fechafactura">Fecha nota:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="fechafactura" value="<?php echo $fecha ?>" name="fechanota" type="fechanota">
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="fechanota" value="<?php echo $fecha ?>" name="fechanota" type="date">
             </div>
             <div class="form-group mediano-grande ">
                 <label for="comment">Comentario:</label>
@@ -181,11 +181,8 @@
             </div>
         </div>
         <div class="form-row formulario">
-            <div class="form-group pequeno ">
-                <label for="comment"></label>
-                <button title="Enviar nota contable a revisión." id="save" name="save" class="btn btn-primary boton"> Guardar </button>
-                <button title="Enviar nota contable a revisión." id="revision" name="revision" class="btn btn-primary boton">Enviar a Revisión </button>
-            </div>
+            <button title="Enviar nota contable a revisión." id="save" name="save" class="btn btn-primary boton"> Guardar </button>
+            <button title="Enviar nota contable a revisión." id="revision" name="revision" class="btn btn-warning boton">Enviar a Revisión </button>
         </div>
     </header>
     <main class=" container container-md tabla-registros ">
@@ -256,30 +253,49 @@
         $('#save').click(function() {
             a = 0;
             iddocumento = $('#iddoc').val();
-            soporte = $('#soporte').prop('files');
-            datosForm = new FormData;
-            for (i = 0; i < soporte.length; i++) {
-                //console.log(soporte[i]);
-                datosForm.append(soporte[i].name, soporte[i]);
+            tiponota = $('#tiponota').val();
+            comentario = $('#comentario').val();
+            fechanota = $('#fechanota').val();
+            if (tiponota == 0) {
+                a = 1;
+                alertify.alert('ATENCION!!', 'Favor seleccionar un tipo de documento', function() {
+                    alertify.success('Ok');
+                });
             }
-            ruta = 'notascontables/subirsoportes.php?iddoc=' + iddocumento;
-            $.ajax({
-                type: "POST",
-                url: ruta,
-                cache: false,
-                contentType: false,
-                processData: false,
-                data: datosForm,
-                success: function(r) {
-                    if (r == 1) {
-                        console.log(r);
-                        debugger;
-                    } else {
-                        console.log(r);
-                        debugger;
-                    }
-                }
-            });
+            if (fechanota == '') {
+                a = 1;
+                alertify.alert('ATENCION!!', 'Favor seleccionar fecha de nota contable.', function() {
+                    alertify.success('Ok');
+                });
+            }
+            if (a == 0) {
+                guardarnotacontableadjunto(iddocumento, tiponota, comentario);
+                // soporte = $('#soporte').prop('files');
+                // datosForm = new FormData;
+                // for (i = 0; i < soporte.length; i++) {
+
+                //     datosForm.append(soporte[i].name, soporte[i]);
+                // }
+                // ruta = 'notascontables/subirsoportes.php?iddoc=' + iddocumento;
+                // $.ajax({
+                //     type: "POST",
+                //     url: ruta,
+                //     cache: false,
+                //     contentType: false,
+                //     processData: false,
+                //     data: datosForm,
+                //     success: function(r) {
+                //         if (r == 1) {
+                //             console.log(r);
+                //             debugger;
+                //         } else {
+                //             console.log(r);
+                //             debugger;
+                //         }
+                //     }
+                // });
+            }
+
             // alertify.confirm('Envio a revisión', 'Esta seguro de enviar esta nota contable para revisión?', function() {
             //     revision(iddocumento);
             //     setTimeout(function() {

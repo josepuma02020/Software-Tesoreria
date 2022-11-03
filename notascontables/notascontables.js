@@ -1,3 +1,21 @@
+function guardarnotacontableadjunto(iddocumento, tiponota, comentario) {
+    cadenau = "iddocumento=" + iddocumento + "&tiponota=" + tiponota + "&comentario=" + comentario;
+    $.ajax({
+        type: "POST",
+        url: "notascontables/guardanotaadjunto.php",
+        data: cadenau,
+        success: function (r) {
+            if (r == 1) {
+                console.log(r);
+                debugger;
+            } else {
+                console.log(r);
+                debugger;
+            }
+        }
+    });
+}
+
 function noaprobarnota(iddocumento, comentariodesaprobacion) {
     cadenau = "iddocumento=" + iddocumento + "&comentario=" + comentariodesaprobacion;
     $.ajax({
