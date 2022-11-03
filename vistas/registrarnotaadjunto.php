@@ -168,41 +168,23 @@
             </div>
             <input <?php echo $estado ?> style="text-align:center" class="form-control " id="valido" name="valido" type="hidden">
             <div class="form-group mediano-pequeno">
-                <label for="type">Banco</label>
-                <input value="<?php echo $banco; ?>" <?php echo $estado ?> style="text-align:center" class="form-control " id="cuenta" name="cuenta" type="text">
+                <label for="fechafactura">Fecha nota:</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="fechafactura" value="<?php echo $fecha ?>" name="fechanota" type="fechanota">
             </div>
-            <div class="form-group mediano-pequeno">
-                <label for="fechafactura">Fecha factura:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="fechafactura" value="<?php echo $fecha ?>" name="fechafactura" type="date">
+            <div class="form-group mediano-grande ">
+                <label for="comment">Comentario:</label>
+                <input <?php echo $des; ?> <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comentario" name="comentario" type="text">
             </div>
-            <div class="form-group mediano-pequeno">
-                <label for="valor">Valor:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control number " id="valor" value="<?php echo $valor ?>" name="valor" type="text">
+            <div class="form-group mediano">
+                <label for="soporte">Soporte:</label>
+                <input multiple style="text-align:center" accept="image/gif,image/jpg,img/jpeg,image/png,.pdf" class="form-control " id="soporte" name="soporte" type="file">
             </div>
-
-            <div class="form-group pequeno">
-                <label for="ri">RI:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="ri" value="<?php echo $ri ?>" name="ri" type="number">
-            </div>
-            <div class="form-group pequeno">
-                <label for="an">AN8:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="an" value="<?php echo $an ?>" name="an" type="number">
-            </div>
-
-
-            <div class="form-row formulario">
-                <div class="form-group grande ">
-                    <label for="comment">Comentario:</label>
-                    <input <?php echo $des; ?> <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comentario" name="comentario" type="text">
-                </div>
-                <div class="form-group mediano">
-                    <label for="soporte">Soporte:</label>
-                    <input multiple style="text-align:center" accept="image/gif,image/jpg,img/jpeg,image/png,.pdf" class="form-control " id="soporte" name="soporte" type="file">
-                </div>
-                <div class="form-group pequeno ">
-                    <label for="comment"></label>
-                    <button title="Enviar nota contable a revisión." id="registrarfactura" name="registrarfactura" class="btn btn-primary boton">Registrar factura </button>
-                </div>
+        </div>
+        <div class="form-row formulario">
+            <div class="form-group pequeno ">
+                <label for="comment"></label>
+                <button title="Enviar nota contable a revisión." id="save" name="save" class="btn btn-primary boton"> Guardar </button>
+                <button title="Enviar nota contable a revisión." id="revision" name="revision" class="btn btn-primary boton">Enviar a Revisión </button>
             </div>
         </div>
     </header>
@@ -222,10 +204,8 @@
                 ?>
                     <tr>
                         <td> <?php echo $filascuentas['concepto'] ?> </td>
-
                         <td>
                             <SCRIPT lang="javascript" type="text/javascript" src="./cuentas/cuentas.js"></script>
-
                             <button onclick="datoscuenta('<?php echo $filascuentas['idcuenta'] ?>','<?php echo $filascuentas['descripcion'] ?>')" type="button" title="Eliminar cuenta" id="delete" class="btn btn-danger" data-toggle="modal" data-target="#eliminar">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
@@ -273,117 +253,45 @@
 <script type="text/javascript" src="librerias/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        const number = document.querySelector('.number');
-
-        function formatNumber(n) {
-            n = String(n).replace(/\D/g, "");
-            return n === '' ? n : Number(n).toLocaleString();
-        }
-        number.addEventListener('keyup', (e) => {
-            const element = e.target;
-            const value = element.value;
-            element.value = formatNumber(value);
-
-        });
-        $('#registrarfactura').click(function() {
+        $('#save').click(function() {
             a = 0;
-            iddoc = $('#iddoc').val();
-            valor = $('#valor').val();
-            user = $('#user').val();
-            tipo = $('#tipofactura').val();
-            cuenta = $('#cuenta').val();
-            fechafactura = $('#fechafactura').val();
-            soporte = $('#soporte').val();
-            ri = $('#ri').val();
-            an = $('#an').val();
-            valido = $('#valido').val();
-            comentario = $('#comentario').val();
-            inputcuenta = document.getElementById("cuenta");
-            inputan = document.getElementById("an");
-            if (ri == '') {
-                a = 1;
-                alertify.alert('ATENCION!!', 'Debe el # de la RI', function() {
-                    alertify.success('Ok');
-                });
+            iddocumento = $('#iddoc').val();
+            soporte = $('#soporte').prop('files');
+            datosForm = new FormData;
+            for (i = 0; i < soporte.length; i++) {
+                //console.log(soporte[i]);
+                datosForm.append(soporte[i].name, soporte[i]);
             }
-            if (valido == 'no') {
-                a = 1;
-                alertify.alert('ATENCION!!', 'Revisar campo de Banco y de AN8', function() {
-                    alertify.success('Ok');
-                });
-            }
-            if (an == '') {
-                a = 1;
-                alertify.alert('ATENCION!!', 'Debe ingresar el #AN8.', function() {
-                    alertify.success('Ok');
-                });
-            }
-            if (fechafactura == '') {
-                a = 1;
-                alertify.alert('ATENCION!!', 'Debe ingresar la fecha de la factura.', function() {
-                    alertify.success('Ok');
-                });
-            }
-            if (valor == '') {
-                a = 1;
-                alertify.alert('ATENCION!!', 'Debe ingresar el valor de la factura.', function() {
-                    alertify.success('Ok');
-                });
-            }
-            if (cuenta == 0) {
-                a = 1;
-                alertify.alert('ATENCION!!', 'Seleccionar el banco donde se realizo el pago', function() {
-                    alertify.success('Ok');
-                });
-            }
-            if (tipo == 0) {
-                a = 1;
-                alertify.alert('ATENCION!!', 'Debe seleccionar el tipo de factura.', function() {
-                    alertify.success('Ok');
-                });
-            }
-            if (soporte == '') {
-                a = 1;
-                alertify.alert('ATENCION!!', 'Debe subir soporte de la factura.', function() {
-                    alertify.success('Ok');
-                });
-            } else {
-                filesize = $('#soporte')[0].files[0].size;
-                if (filesize > 55000000000000) {
-                    a = 1;
-                    alertify.alert('ATENCION!!', 'El soporte es demasiado pesado. ', function() {
-                        alertify.success('Ok');
-                    });
-                }
-            }
-            if (a == 0) {
-                registrarfactura(iddoc, valor, user, tipo, fechafactura, ri, an, cuenta, comentario);
-                soporte = $('#soporte').prop('files')[0];
-                datosForm = new FormData;
-                datosForm.append("soporte", soporte);
-                ruta = 'facturas/subirsoporte.php?iddoc=' + iddoc;
-                $.ajax({
-                    type: "POST",
-                    url: ruta,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: datosForm,
-                    success: function(r) {
-                        if (r == 1) {
-                            console.log(r);
-                            debugger;
-                        } else {
-                            console.log(r);
-                            debugger;
-                        }
+            ruta = 'notascontables/subirsoportes.php?iddoc=' + iddocumento;
+            $.ajax({
+                type: "POST",
+                url: ruta,
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: datosForm,
+                success: function(r) {
+                    if (r == 1) {
+                        console.log(r);
+                        debugger;
+                    } else {
+                        console.log(r);
+                        debugger;
                     }
-                });
-                setTimeout(function() {
-                    window.location.href = "./home.php?id=" + iddoc + "&n=f"
-                }, 1000);
-            }
+                }
+            });
+            // alertify.confirm('Envio a revisión', 'Esta seguro de enviar esta nota contable para revisión?', function() {
+            //     revision(iddocumento);
+            //     setTimeout(function() {
+            //         window.location.reload();
+            //     }, 1000);
+            //     alertify.success('Operación exitosa. ');
+            // }, function() {
 
+            // }).set('labels', {
+            //     ok: 'Continuar',
+            //     cancel: 'Cancelar'
+            // });
         });
         $('#cuenta').change(function() {
             cuenta = $('#cuenta').val();
@@ -419,44 +327,7 @@
                 window.location.reload();
             }, 1000);
         });
-        $('#revision').click(function() {
-            a = 0;
-            iddocumento = $('#iddocumento').val();
-            alertify.confirm('Envio a revisión', 'Esta seguro de enviar esta nota contable para revisión?', function() {
-                revision(iddocumento);
-                setTimeout(function() {
-                    window.location.reload();
-                }, 1000);
-                alertify.success('Operación exitosa. ');
-            }, function() {
 
-            }).set('labels', {
-                ok: 'Continuar',
-                cancel: 'Cancelar'
-            });
-        });
-        $('#lm').change(function() {
-            lm = $('#lm').val();
-            if (lm.length > 0) {
-                $('#tipolm').val("A");
-            } else {
-                $('#tipolm').val("");
-            }
-        });
-        $('#cuenta').change(function() {
-            // $.ajax({
-            //     type: "POST",
-            //     url: "notascontables/obtenerdescripcion.php",
-            //     data: "cuenta=" + $('#cuenta').val(),
-            //     success: function(r) {
-            //         dato = jQuery.parseJSON(r);
-            //         console.log(r)
-            //         $('#descripcion').val(dato['descripcion']);
-
-            //     }
-            // });
-
-        });
         disponible = (<?php echo $relleno ?>);
         $("#cuenta").autocomplete({
             source: disponible,
