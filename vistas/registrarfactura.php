@@ -96,7 +96,7 @@
         $horarevision = '';
         $fecha = $fecha_actual;
         $comentario = '';
-        $banco = '';
+        $cuenta = '';
     }
     ?>
 </head>
@@ -170,15 +170,90 @@
             <input <?php echo $estado ?> style="text-align:center" class="form-control " id="valido" name="valido" type="hidden">
             <div class="form-group mediano-pequeno">
                 <label for="type">Entidad bancaria:</label>
-                <select <?php echo $estado ?> style="text-align: center;" id="cuenta" class="form-control col-md-8 ">
+                <select disabled style="text-align: center;" id="cuenta" class="form-control col-md-8 ">s
+                </select>
+
+                <select style="text-align: center;display:none" id="cuentari" class="form-control col-md-8 ">
                     <?php
                     $selected = '';
-                    $consultausuarios = "select * from cuentas where clasificacion = '1' order by descripcion";
+                    $consultausuarios = "SELECT a.*,b.descripcion FROM `cuentastipofactura` a inner join cuentas b on b.idcuenta=a.idcuenta WHERE idtipofactura = 6";
                     $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
                     ?> <option value="0">Seleccionar</option>
                     <?php
                     while ($filas1 = mysqli_fetch_array($query)) {
-                        if ($filas1['idtipo'] == $tipodocumento) {
+                        if ($filas1['idcuenta'] == $cuenta) {
+                            $selected = 'selected';
+                        }
+                    ?>
+                        <option <?php echo $selected ?> value="<?php echo $filas1['idcuenta'] ?>"><?php echo   $filas1['descripcion'] ?></option>
+                    <?php
+                        $selected = '';
+                    }
+                    ?>
+                </select>
+                <select style="text-align: center;display:none" id="cuentaauxiliosalimentacion" class="form-control col-md-8 ">
+                    <?php
+                    $selected = '';
+                    $consultausuarios = "SELECT a.*,b.descripcion FROM `cuentastipofactura` a inner join cuentas b on b.idcuenta=a.idcuenta WHERE idtipofactura = 4";
+                    $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
+                    ?> <option value="0">Seleccionar</option>
+                    <?php
+                    while ($filas1 = mysqli_fetch_array($query)) {
+                        if ($filas1['idcuenta'] == $cuenta) {
+                            $selected = 'selected';
+                        }
+                    ?>
+                        <option <?php echo $selected ?> value="<?php echo $filas1['idcuenta'] ?>"><?php echo   $filas1['descripcion'] ?></option>
+                    <?php
+                        $selected = '';
+                    }
+                    ?>
+                </select>
+                <select style="text-align: center;display:none" id="cuentacontribucion" class="form-control col-md-8 ">
+                    <?php
+                    $selected = '';
+                    $consultausuarios = "SELECT a.*,b.descripcion FROM `cuentastipofactura` a inner join cuentas b on b.idcuenta=a.idcuenta WHERE idtipofactura = 2";
+                    $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
+                    ?> <option value="0">Seleccionar</option>
+                    <?php
+                    while ($filas1 = mysqli_fetch_array($query)) {
+                        if ($filas1['idcuenta'] == $cuenta) {
+                            $selected = 'selected';
+                        }
+                    ?>
+                        <option <?php echo $selected ?> value="<?php echo $filas1['idcuenta'] ?>"><?php echo   $filas1['descripcion'] ?></option>
+                    <?php
+                        $selected = '';
+                    }
+                    ?>
+                </select>
+                <select style="text-align: center;display:none" id="cuentadevolucionviaticos" class="form-control col-md-8 ">
+                    <?php
+                    $selected = '';
+                    $consultausuarios = "SELECT a.*,b.descripcion FROM `cuentastipofactura` a inner join cuentas b on b.idcuenta=a.idcuenta WHERE idtipofactura = 3";
+                    $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
+                    ?> <option value="0">Seleccionar</option>
+                    <?php
+                    while ($filas1 = mysqli_fetch_array($query)) {
+                        if ($filas1['idcuenta'] == $cuenta) {
+                            $selected = 'selected';
+                        }
+                    ?>
+                        <option <?php echo $selected ?> value="<?php echo $filas1['idcuenta'] ?>"><?php echo   $filas1['descripcion'] ?></option>
+                    <?php
+                        $selected = '';
+                    }
+                    ?>
+                </select>
+                <select style="text-align: center;display:none" id="cuentaprestamo" class="form-control col-md-8 ">
+                    <?php
+                    $selected = '';
+                    $consultausuarios = "SELECT a.*,b.descripcion FROM `cuentastipofactura` a inner join cuentas b on b.idcuenta=a.idcuenta WHERE idtipofactura = 5";
+                    $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
+                    ?> <option value="0">Seleccionar</option>
+                    <?php
+                    while ($filas1 = mysqli_fetch_array($query)) {
+                        if ($filas1['idcuenta'] == $cuenta) {
                             $selected = 'selected';
                         }
                     ?>
@@ -412,15 +487,52 @@
             } else {
                 document.getElementById('ri').disabled = false;
             }
-
+            switch (tipo) {
+                case '6':
+                    document.getElementById('cuentari').style.display = 'block';
+                    document.getElementById('cuenta').style.display = 'none';
+                    document.getElementById('cuentaauxiliosalimentacion').style.display = 'none';
+                    document.getElementById('cuentacontribucion').style.display = 'none';
+                    document.getElementById('cuentadevolucionviaticos').style.display = 'none';
+                    document.getElementById('cuentaprestamo').style.display = 'none';
+                    break;
+                case '4':
+                    document.getElementById('cuentaauxiliosalimentacion').style.display = 'block';
+                    document.getElementById('cuenta').style.display = 'none';
+                    document.getElementById('cuentari').style.display = 'none';
+                    document.getElementById('cuentacontribucion').style.display = 'none';
+                    document.getElementById('cuentadevolucionviaticos').style.display = 'none';
+                    document.getElementById('cuentaprestamo').style.display = 'none';
+                    break;
+                case '2':
+                    document.getElementById('cuentacontribucion').style.display = 'block';
+                    document.getElementById('cuenta').style.display = 'none';
+                    document.getElementById('cuentari').style.display = 'none';
+                    document.getElementById('cuentaauxiliosalimentacion').style.display = 'none';
+                    document.getElementById('cuentadevolucionviaticos').style.display = 'none';
+                    document.getElementById('cuentaprestamo').style.display = 'none';
+                    break;
+                case '3':
+                    document.getElementById('cuentadevolucionviaticos').style.display = 'block';
+                    document.getElementById('cuentacontribucion').style.display = 'none';
+                    document.getElementById('cuenta').style.display = 'none';
+                    document.getElementById('cuentari').style.display = 'none';
+                    document.getElementById('cuentaauxiliosalimentacion').style.display = 'none';
+                    document.getElementById('cuentaprestamo').style.display = 'none';
+                    break;
+                case '5':
+                    document.getElementById('cuentaprestamo').style.display = 'block';
+                    document.getElementById('cuentadevolucionviaticos').style.display = 'none';
+                    document.getElementById('cuentacontribucion').style.display = 'none';
+                    document.getElementById('cuenta').style.display = 'none';
+                    document.getElementById('cuentari').style.display = 'none';
+                    document.getElementById('cuentaauxiliosalimentacion').style.display = 'none';
+                    break;
+            }
         });
         $('#cuenta').change(function() {
             cuenta = $('#cuenta').val();
             verificarbanco(cuenta);
-        });
-        $('#an').change(function() {
-            an = $('#an').val();
-            verificaran(an);
         });
         $('#aprobar').click(function() {
             a = 0;
@@ -464,35 +576,5 @@
                 cancel: 'Cancelar'
             });
         });
-        $('#lm').change(function() {
-            lm = $('#lm').val();
-            if (lm.length > 0) {
-                $('#tipolm').val("A");
-            } else {
-                $('#tipolm').val("");
-            }
-        });
-        $('#cuenta').change(function() {
-            // $.ajax({
-            //     type: "POST",
-            //     url: "notascontables/obtenerdescripcion.php",
-            //     data: "cuenta=" + $('#cuenta').val(),
-            //     success: function(r) {
-            //         dato = jQuery.parseJSON(r);
-            //         console.log(r)
-            //         $('#descripcion').val(dato['descripcion']);
-
-            //     }
-            // });
-
-        });
-        disponible = (<?php echo $relleno ?>);
-        $("#cuenta").autocomplete({
-            source: disponible,
-            lookup: disponible,
-            minLength: 3
-        });
-        $("#cuenta").autocomplete("option", "appendTo", ".eventInsForm");
-
     });
 </script>
