@@ -290,7 +290,9 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                         <thead>
                             <tr>
 
-                                <th> Clasificacion de documento </th>
+                                <th> Área </th>
+                                <th> Cod.Área </th>
+                                <th> Cod.Clasificación </th>
                                 <th> Acciones </th>
                             </tr>
                         </thead>
@@ -302,6 +304,8 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                             ?>
                                 <tr>
                                     <td> <?php echo $filas['area'] ?> </td>
+                                    <td> <?php echo $filas['codarea'] ?> </td>
+                                    <td> <?php echo $filas['codclasificacion'] ?> </td>
                                     <td>
                                         <button onclick="datosarea('<?php echo $filas['idarea'] ?>')" type="button" title="Eliminar clasificación de documento" id="delete" class="btn btn-danger" data-toggle="modal" data-target="#eliminararea">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
