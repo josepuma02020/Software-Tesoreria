@@ -34,13 +34,13 @@ if ($_SESSION['usuario']) {
     $n = $_GET['n'];
     switch ($mostrar) {
         case 't':
-            $consultafacturas = "SELECT a.*,b.nombre'creador',c.nombre'revisador',d.tipofactura,e.descripcion FROM `facturas` a INNER join usuarios b on b.idusuario=a.idcreador left join usuarios c on c.idusuario=a.idrevisador inner JOIN tiposfactura d on d.idtipo=a.idtipofactura inner join cuentas e on e.idcuenta=a.idcuenta";
+            $consultafacturas = "SELECT a.*,b.nombre'creador',c.nombre'revisador',d.tipofactura,e.descripcion,h.area FROM `facturas` a INNER join usuarios b on b.idusuario=a.idcreador left join usuarios c on c.idusuario=a.idrevisador inner JOIN tiposfactura d on d.idtipo=a.idtipofactura inner join cuentas e on e.idcuenta=a.idcuenta inner join procesos f on f.idproceso=b.idproceso inner join equipos g on g.idequipo=f.idequipo inner join areas h on h.idarea=g.idarea";
             break;
         case 'a':
-            $consultafacturas = "SELECT a.*,b.nombre'creador',c.nombre'revisador',d.tipofactura,e.descripcion FROM `facturas` a INNER join usuarios b on b.idusuario=a.idcreador left join usuarios c on c.idusuario=a.idrevisador inner JOIN tiposfactura d on d.idtipo=a.idtipofactura inner join cuentas e on e.idcuenta=a.idcuenta where idrevisador = 0";
+            $consultafacturas = "SELECT a.*,b.nombre'creador',c.nombre'revisador',d.tipofactura,e.descripcion,h.area FROM `facturas` a INNER join usuarios b on b.idusuario=a.idcreador left join usuarios c on c.idusuario=a.idrevisador inner JOIN tiposfactura d on d.idtipo=a.idtipofactura inner join cuentas e on e.idcuenta=a.idcuenta inner join procesos f on f.idproceso=b.idproceso inner join equipos g on g.idequipo=f.idequipo inner join areas h on h.idarea=g.idarea where idrevisador = 0";
             break;
         case 'c':
-            $consultafacturas = "SELECT a.*,b.nombre'creador',c.nombre'revisador',d.tipofactura,e.descripcion FROM `facturas` a INNER join usuarios b on b.idusuario=a.idcreador left join usuarios c on c.idusuario=a.idrevisador inner JOIN tiposfactura d on d.idtipo=a.idtipofactura inner join cuentas e on e.idcuenta=a.idcuenta where idrevisador != 0";
+            $consultafacturas = "SELECT a.*,b.nombre'creador',c.nombre'revisador',d.tipofactura,e.descripcion,h.area FROM `facturas` a INNER join usuarios b on b.idusuario=a.idcreador left join usuarios c on c.idusuario=a.idrevisador inner JOIN tiposfactura d on d.idtipo=a.idtipofactura inner join cuentas e on e.idcuenta=a.idcuenta inner join procesos f on f.idproceso=b.idproceso inner join equipos g on g.idequipo=f.idequipo inner join areas h on h.idarea=g.idarea where idrevisador != 0";
             break;
     }
 ?>
@@ -71,7 +71,7 @@ if ($_SESSION['usuario']) {
         <main style="max-width:90% ;" class=" container container-md">
             <div class="tabla-registros">
                 <section class="titulo-pagina">
-                    <h2>Notas Registradas</h2>
+                    <h2>Facturas registradas</h2>
                 </section>
                 <form action="" method="post">
                     <div class="form-row formulario">
@@ -136,6 +136,8 @@ if ($_SESSION['usuario']) {
                 <table id="registrosnotas" class="table table-striped  table-responsive-lg revision-notas ">
                     <THEAD>
                         <tr>
+                            <th> Revisado </th>
+                            <th> Usuario </th>
                             <th> Fecha pago </th>
                             <th> Banco </th>
                             <th style="width: 10% ;"> Tipo factura </th>
@@ -146,10 +148,13 @@ if ($_SESSION['usuario']) {
                     </THEAD>
                     <TBODY>
                         <?php
+                        $consultafacturas;
                         $queryfacturas = mysqli_query($link, $consultafacturas) or die($consultafacturas);
                         while ($facturas = mysqli_fetch_array($queryfacturas)) {
                         ?>
                             <TR style="background-color: <?php echo $color ?> ;">
+                                <td> <input disabled id="check" type="checkbox" aria-label="Checkbox for following text input"></td>
+                                <TD><?php echo $facturas['creador'] . ' - ' . $facturas['area']; ?> </TD>
                                 <TD> <a href="./home.php?n=f&id=<?php echo $facturas['iddoc'] ?>"><?php echo $facturas['fechafactura']; ?></a> </TD>
                                 <TD><?php echo $facturas['descripcion']; ?> </TD>
                                 <TD><?php echo $facturas['tipofactura']; ?> </TD>
