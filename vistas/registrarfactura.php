@@ -31,12 +31,11 @@
     $relleno = json_encode($cuentas);
     //consulta idnota
     if (isset($_GET['id'])) {
-        $idnota = $_GET['id'];
-        $soporte = 'si';
-        $consultanotacreada = "select * from notascontables where idnota = '$idnota'";
-        $querynotacreada = mysqli_query($link, $consultanotacreada) or die($consultanotacreada);
-        $filanotacreada = mysqli_fetch_array($querynotacreada);
-        if (isset($filanotacreada)) {
+        $iddoc = $_GET['id'];
+        $consultafactura = "select * from facturas where iddoc = '$iddoc'";
+        $queryfactura = mysqli_query($link, $consultafactura) or die($consultafactura);
+        $filafactura = mysqli_fetch_array($queryfactura);
+        if (isset($filafactura)) {
             $creado = 1;
         } else {
             $creado = 0;
@@ -51,11 +50,11 @@
         } else {
             $consecutivo = 1;
         }
-        $idnota = $ano . $mes . $dia . $consecutivo;
+        $iddoc = $ano . $mes . $dia . $consecutivo;
         $creado = 0;
     }
     //consulta datos notas
-    $consultadatosnota = "SELECT a.*,b.nombre'nombrecreador',b.usuario'usariocreador',c.nombre'nombrerevisador',d.descripcion'descripcioncuenta',g.area'areacreador' FROM `facturas` a inner join usuarios b on a.idcreador = b.idusuario left join usuarios c on a.idrevisador=c.idusuario INNER JOIN cuentas d on d.idcuenta=a.idcuenta inner join procesos e on e.idproceso=b.idproceso inner join equipos f on f.idequipo=e.idequipo inner JOIN areas g on g.idarea=f.idarea  where `iddoc` =  $idnota";
+    $consultadatosnota = "SELECT a.*,b.nombre'nombrecreador',b.usuario'usariocreador',c.nombre'nombrerevisador',d.descripcion'descripcioncuenta',g.area'areacreador' FROM `facturas` a inner join usuarios b on a.idcreador = b.idusuario left join usuarios c on a.idrevisador=c.idusuario INNER JOIN cuentas d on d.idcuenta=a.idcuenta inner join procesos e on e.idproceso=b.idproceso inner join equipos f on f.idequipo=e.idequipo inner JOIN areas g on g.idarea=f.idarea  where `iddoc` =  '$iddoc'";
     $querydatosnota = mysqli_query($link, $consultadatosnota) or die($consultadatosnota);
     $filadatosnota = mysqli_fetch_array($querydatosnota);
     if (isset($filadatosnota)) {
@@ -68,8 +67,10 @@
             $horarevision = '';
         } else {
             $nombrerevisa = $filadatosnota['nombrerevisador'];
+            $fecharevision = $filadatosnota['fecharevision'];
+            $horarevision = $filadatosnota['horarevision'];
         }
-        $banco = $nombrerevisa = $filadatosnota['descripcioncuenta'];
+        $banco = $filadatosnota['descripcioncuenta'];
         $tipofactura = 0;
         $ri = $filadatosnota['ri'];
         $an = $filadatosnota['tercero'];
@@ -104,33 +105,18 @@
 <body>
     <header>
         <?php
-        $des = '';
         if ($creado == 1) {
-            if ((($_SESSION['idusuario'] == $idusuario && $filadatosnota['revision'] == 0) || ($filadatosnota['tipo'] == $_SESSION['idproceso'] && $filadatosnota['revision'] == 0 && $_SESSION['idusuario'] == $idusuario))) {
-                $des = '';
-            } else {
-                $des = 'disabled';
-            }
-        } else {
-            if ($_SESSION['creacion'] == 1) {
-                $des = '';
-            } else {
-                $des = 'disabled';
-            }
-        }
-        ?>
-        <?php
-        if ($batch != '') {
             $estado = 'disabled';
         } else {
             $estado = '';
         }
+
         ?>
         <div class="form-row formulario">
             <div class="form-group pequeno">
                 <label for="iddocumento">ID.Documento:</label>
                 <input value="<?php echo $creado  ?>" style="text-align:center" class="form-control " id="creado" name="creado" type="hidden" disabled>
-                <input <?php echo $estado ?> value="<?php echo $idnota  ?>" style="text-align:center" class="form-control " id="iddoc" name="iddoc" type="text" disabled>
+                <input value="<?php echo $iddoc  ?>" style="text-align:center" class="form-control " id="iddoc" name="iddoc" type="text" disabled>
             </div>
             <div class="form-group mediano-pequeno">
                 <label for="user">Usuario - Área:</label>
@@ -138,19 +124,19 @@
             </div>
             <div class="form-group mediano-pequeno">
                 <label for="user">Fecha creación:</label>
-                <input <?php echo $des; ?> style="text-align:center" class="form-control " id="fechacreacion" name="fechacreacion" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
+                <input style="text-align:center" class="form-control " id="fechacreacion" name="fechacreacion" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
             </div>
             <div class="form-group mediano ">
                 <label for="comment">Revisado por:</label>
-                <input <?php echo $des; ?> value=" <?php echo $nombrerevisa . ' : ' . $fecharevision . ' ' . $horarevision; ?>" style="text-align:center" class="form-control " id="revision" name="revision" type="text" disabled>
+                <input value=" <?php echo $nombrerevisa . ' : ' . $fecharevision . ' ' . $horarevision; ?>" style="text-align:center" class="form-control " id="revision" name="revision" type="text" disabled>
             </div>
             <div class="form-group mediano-pequeno">
                 <label for="type">Tipo de factura</label>
                 <select <?php echo $estado ?> style="text-align: center;" id="tipofactura" class="form-control col-md-8 ">
                     <?php
                     $selected = '';
-                    $consultausuarios = "select * from tiposfactura order by tipofactura";
-                    $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
+                    $consultatiposfactura = "select * from tiposfactura order by tipofactura";
+                    $query = mysqli_query($link, $consultatiposfactura) or die($consultatiposfactura);
                     ?> <option value="0">Seleccionar</option>
                     <?php
                     while ($filas1 = mysqli_fetch_array($query)) {
@@ -167,7 +153,7 @@
             </div>
         </div>
         <div class="form-row formulario">
-            <input <?php echo $estado ?> style="text-align:center" class="form-control " id="valido" name="valido" type="hidden">
+            <input style="text-align:center" class="form-control " id="valido" name="valido" type="hidden">
             <div class="form-group mediano-pequeno">
                 <label for="type">Entidad bancaria:</label>
                 <select disabled style="text-align: center;" id="cuenta" class="form-control col-md-8 ">s
@@ -283,16 +269,28 @@
 
             <div class="form-group mediano">
                 <label for="user">Soporte:</label>
-                <input style="text-align:center" accept="image/gif,image/jpg,img/jpeg,image/png,.pdf" class="form-control " id="soporte" name="soporte" type="file">
+                <input <?php echo $estado ?> style="text-align:center" accept="image/gif,image/jpg,img/jpeg,image/png,.pdf" class="form-control " id="soporte" name="soporte" type="file">
             </div>
             <div class="form-row formulario">
                 <div class="form-group grande ">
                     <label for="comment">Comentario:</label>
-                    <input <?php echo $des; ?> <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comentario" name="comentario" type="text">
+                    <input <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comentario" name="comentario" type="text">
                 </div>
                 <div class="form-group pequeno ">
                     <label for="comment"></label>
-                    <button title="Enviar nota contable a revisión." id="registrarfactura" name="registrarfactura" class="btn btn-primary boton">Registrar factura </button>
+                    <?php
+                    if ($creado == 1) {
+                        if ($nombrerevisa == '') {
+                    ?>
+                            <button title="Enviar nota contable a revisión." id="revisarfactura" name="registrarfactura" class="btn btn-success boton">Revisar factura</button>
+                        <?php
+                        }
+                    } else {
+                        ?>
+                        <button title="Enviar nota contable a revisión." id="registrarfactura" name="registrarfactura" class="btn btn-primary boton">Registrar factura </button>
+                    <?php
+                    }
+                    ?>
                 </div>
             </div>
         </div>
@@ -303,27 +301,27 @@
             switch ($extension) {
                 case 'pdf':
         ?>
-                    <embed src="facturas/soportes/<?php echo $idnota . '.' . $extension ?>" width="80%" height=" 800px" type="application/pdf">
+                    <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="application/pdf">
                 <?php
                     break;
                 case 'png':
                 ?>
-                    <embed src="facturas/soportes/<?php echo $idnota . '.' . $extension ?>" width="80%" height=" 800px" type="image/png">
+                    <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="image/png">
                 <?php
                     break;
                 case 'jpeg':
                 ?>
-                    <embed src="facturas/soportes/<?php echo $idnota . '.' . $extension ?>" width="80%" height=" 800px" type="image/jpeg">
+                    <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="image/jpeg">
                 <?php
                     break;
                 case 'jpg':
                 ?>
-                    <embed src="facturas/soportes/<?php echo $idnota . '.' . $extension ?>" width="80%" height=" 800px" type="image/jpg">
+                    <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="image/jpg">
                 <?php
                     break;
                 case 'gif':
                 ?>
-                    <embed src="facturas/soportes/<?php echo $idnota . '.' . $extension ?>" width="80%" height=" 800px" type="image/gif">
+                    <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="image/gif">
             <?php
                     break;
             }
@@ -332,8 +330,6 @@
         <?php
         }
         ?>
-
-
     </main>
     <footer>
     </footer>
@@ -379,6 +375,22 @@
             const value = element.value;
             element.value = formatNumber(value);
 
+        });
+        $('#revisarfactura').click(function() {
+            a = 0;
+            iddocumento = $('#iddoc').val();
+            alertify.confirm('Aprobación de factura', 'Esta seguro que desea autorizar esta factura?.', function() {
+                aprobarfactura(iddocumento);
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000);
+                alertify.success('Operación exitosa. ');
+            }, function() {
+
+            }).set('labels', {
+                ok: 'Continuar',
+                cancel: 'Cancelar'
+            });
         });
         $('#registrarfactura').click(function() {
             a = 0;

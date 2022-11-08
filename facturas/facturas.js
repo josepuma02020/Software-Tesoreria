@@ -15,6 +15,18 @@ function registrarfactura(iddoc, valor, user, tipo, fechafactura, ri, an, cuenta
         }
     });
 }
+function aprobarfactura(iddocumento) {
+    cadenau = "iddocumento=" + iddocumento;
+    $.ajax({
+        type: "POST",
+        url: "facturas/aprobarfactura.php",
+        data: cadenau,
+        success: function (r) {
+            // console.log(r);
+            // debugger;
+        }
+    });
+}
 function verificarbanco(banco) {
     cadenau = "banco=" + banco;
     $.ajax({
