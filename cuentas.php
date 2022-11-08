@@ -159,13 +159,14 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                                             </div>
                                             <div class="form-row formulario">
                                                 <div class="form-group mediano-grande">
-                                                    <label for="hasta">Clasificacion:</label>
+                                                    <label for="hasta">Clasificación:</label>
                                                     <select style="text-align: center;" id="clasificacion" name="clasificacion" class="form-control col-md-8 ">
                                                         <option value="0">----</option>
                                                         <option value="1">Banco</option>
                                                     </select>
                                                 </div>
                                             </div>
+
                                         </form>
                                     </div>
                                     <div class="modal-footer">
@@ -376,6 +377,11 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
                 }, 1000);
             }
 
+        });
+        $('#activarcuenta').change(function() {
+            idtipofactura = $('#idtipofactura').val();
+            console.log(idtipofactura);
+            debugger;
         });
         $('#registrar').click(function() {
             a = 0;

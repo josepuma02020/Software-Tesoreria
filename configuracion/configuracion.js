@@ -1,3 +1,22 @@
+function eliminarrelacion(id) {
+    cadenau = "id=" + id;
+    $.ajax({
+        type: "POST",
+        url: "configuracion/tiposfactura/eliminarrelacioncuentatipofactura.php",
+        data: cadenau,
+        success: function (r) {
+            if (r == 1) {
+                // console.log(r);
+                // debugger;
+            } else {
+                // console.log(r);
+                // debugger;
+            }
+        }
+    });
+}
+
+
 function eliminartipofactura(id) {
     cadenau = "id=" + id;
     $.ajax({
@@ -6,11 +25,11 @@ function eliminartipofactura(id) {
         data: cadenau,
         success: function (r) {
             if (r == 1) {
-                console.log(r);
-                debugger;
+                // console.log(r);
+                // debugger;
             } else {
-                console.log(r);
-                debugger;
+                // console.log(r);
+                // debugger;
             }
         }
     });
@@ -51,7 +70,24 @@ function registrartipofactura(tipo) {
         }
     });
 }
+function registrarrelacioncuentatipofactura(tipo, cuenta) {
+    cadenau = "tipo=" + tipo + "&cuenta=" + cuenta;
 
+    $.ajax({
+        type: "POST",
+        url: "configuracion/tiposfactura/registrarrelacioncuentatipofactura.php",
+        data: cadenau,
+        success: function (r) {
+            if (r == 1) {
+                // console.log(r);
+                // debugger;
+            } else {
+                // console.log(r);
+                // debugger;
+            }
+        }
+    });
+}
 
 function datostipofactura(id, tipofactura) {
     $('#idu').val(id);

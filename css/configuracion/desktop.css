@@ -24,6 +24,10 @@ footer>button {
     margin: 1rem;
 }
 
+.formulario {
+    margin-top: 3%;
+}
+
 .form-registros {
     font-size: small;
 }

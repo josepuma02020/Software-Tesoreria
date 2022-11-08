@@ -88,7 +88,7 @@
                                 <li><a class="dropdown-item" href="#"> Configuración &raquo </a>
                                     <ul class="submenu dropdown-menu">
                                         <a class="dropdown-item" href=" ./tiposfactura.php">Tipos de factura</a>
-
+                                        <a class="dropdown-item" href=" ./cuentastipofactura.php">Cuentas -> Tipos de factura</a>
                                         <!-- <li><a class="dropdown-item" href=""> Third level 3 &raquo </a>
                                             <ul class="submenu dropdown-menu">
                                                 <li><a class="dropdown-item" href=""> Fourth level 1</a></li>

@@ -20,7 +20,7 @@
     $mes = date('m');
     $dia = date('d');
     $hora = date('h:i a');
-    //autocompletar cliente
+    //autocompletar cuenta
     $consulta = "select descripcion from cuentas where clasificacion = '1' order by descripcion";
     $queryt = mysqli_query($link, $consulta) or die($consulta);
     $productos[] = array();
@@ -55,7 +55,7 @@
         $creado = 0;
     }
     //consulta datos notas
-    $consultadatosnota = "SELECT a.*,b.nombre'nombrecreador',b.usuario'usariocreador',c.nombre'nombrerevisador',d.descripcion'descripcioncuenta' FROM `facturas` a inner join usuarios b on a.idcreador = b.idusuario left join usuarios c on a.idrevisador=c.idusuario INNER JOIN cuentas d on d.idcuenta=a.idcuenta  where `iddoc` =  $idnota";
+    $consultadatosnota = "SELECT a.*,b.nombre'nombrecreador',b.usuario'usariocreador',c.nombre'nombrerevisador',d.descripcion'descripcioncuenta',g.area'areacreador' FROM `facturas` a inner join usuarios b on a.idcreador = b.idusuario left join usuarios c on a.idrevisador=c.idusuario INNER JOIN cuentas d on d.idcuenta=a.idcuenta inner join procesos e on e.idproceso=b.idproceso inner join equipos f on f.idequipo=e.idequipo inner JOIN areas g on g.idarea=f.idarea  where `iddoc` =  $idnota";
     $querydatosnota = mysqli_query($link, $consultadatosnota) or die($consultadatosnota);
     $filadatosnota = mysqli_fetch_array($querydatosnota);
     if (isset($filadatosnota)) {
@@ -74,6 +74,7 @@
         $ri = $filadatosnota['ri'];
         $an = $filadatosnota['tercero'];
         $batch = '';
+        $areacreador = ' - ' . $filadatosnota['areacreador'];
         $valor = $filadatosnota['valor'];
         $horaregistro = $filadatosnota['horaregistro'];
         $fecha = $filadatosnota['fecharegistro'];
@@ -86,6 +87,7 @@
         $usuario = $_SESSION['nombre'];
         $tipofactura = 0;
         $batch = '';
+        $areacreador = '';
         $ri = '';
         $an = '';
         $valor = '';
@@ -131,8 +133,8 @@
                 <input <?php echo $estado ?> value="<?php echo $idnota  ?>" style="text-align:center" class="form-control " id="iddoc" name="iddoc" type="text" disabled>
             </div>
             <div class="form-group mediano-pequeno">
-                <label for="user">Usuario:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
+                <label for="user">Usuario - Área:</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario . $areacreador; ?>">
             </div>
             <div class="form-group mediano-pequeno">
                 <label for="user">Fecha creación:</label>
@@ -163,14 +165,29 @@
                     ?>
                 </select>
             </div>
-
-
         </div>
         <div class="form-row formulario">
             <input <?php echo $estado ?> style="text-align:center" class="form-control " id="valido" name="valido" type="hidden">
             <div class="form-group mediano-pequeno">
                 <label for="type">Entidad bancaria:</label>
-                <input value="<?php echo $banco; ?>" <?php echo $estado ?> style="text-align:center" class="form-control " id="cuenta" name="cuenta" type="text">
+                <select <?php echo $estado ?> style="text-align: center;" id="cuenta" class="form-control col-md-8 ">
+                    <?php
+                    $selected = '';
+                    $consultausuarios = "select * from cuentas where clasificacion = '1' order by descripcion";
+                    $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
+                    ?> <option value="0">Seleccionar</option>
+                    <?php
+                    while ($filas1 = mysqli_fetch_array($query)) {
+                        if ($filas1['idtipo'] == $tipodocumento) {
+                            $selected = 'selected';
+                        }
+                    ?>
+                        <option <?php echo $selected ?> value="<?php echo $filas1['idcuenta'] ?>"><?php echo   $filas1['descripcion'] ?></option>
+                    <?php
+                        $selected = '';
+                    }
+                    ?>
+                </select>
             </div>
             <div class="form-group mediano-pequeno">
                 <label for="fechafactura">Fecha factura:</label>
