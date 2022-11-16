@@ -407,12 +407,15 @@
             comentario = $('#comentario').val();
             inputcuenta = document.getElementById("cuenta");
             inputan = document.getElementById("an");
-            if (ri == '') {
-                a = 1;
-                alertify.alert('ATENCION!!', 'Debe el # de la RI', function() {
-                    alertify.success('Ok');
-                });
+            if (tipo == 6) {
+                if (ri == '') {
+                    a = 1;
+                    alertify.alert('ATENCION!!', 'Debe el # de la RI', function() {
+                        alertify.success('Ok');
+                    });
+                }
             }
+
             if (valido == 'no') {
                 a = 1;
                 alertify.alert('ATENCION!!', 'Revisar campo de Banco y de AN8', function() {
@@ -491,6 +494,10 @@
                 }, 1000);
             }
 
+        });
+        $('#an').change(function() {
+            an = $('#an').val();
+            verificaran(an);
         });
         $('#tipofactura').change(function() {
             tipo = $('#tipofactura').val();
