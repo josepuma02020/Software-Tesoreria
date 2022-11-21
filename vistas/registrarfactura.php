@@ -158,7 +158,6 @@
                 <label for="type">Entidad bancaria:</label>
                 <select disabled style="text-align: center;" id="cuenta" class="form-control col-md-8 ">s
                 </select>
-
                 <select style="text-align: center;display:none" id="cuentari" class="form-control col-md-8 ">
                     <?php
                     $selected = '';
@@ -398,7 +397,6 @@
             valor = $('#valor').val();
             user = $('#user').val();
             tipo = $('#tipofactura').val();
-            cuenta = $('#cuenta').val();
             fechafactura = $('#fechafactura').val();
             soporte = $('#soporte').val();
             ri = $('#ri').val();
@@ -407,6 +405,26 @@
             comentario = $('#comentario').val();
             inputcuenta = document.getElementById("cuenta");
             inputan = document.getElementById("an");
+            console.log($('#cuentacontribucion').val());
+            switch (tipo) {
+                case '2':
+                    cuenta = $('#cuentacontribucion').val();
+                    break;
+                case '3':
+                    cuenta = $('#cuentadevolucionviaticos').val();
+                    break;
+                case '4':
+                    cuenta = $('#cuentaauxiliosalimentacion').val();
+                    break;
+                case '5':
+                    cuenta = $('#cuentaprestamo').val();
+                    break;
+                case '6':
+                    cuenta = $('#cuentari').val();
+                    break;
+            }
+            console.log('tipo:' + tipo + ' cuenta:' + cuenta);
+            debugger;
             if (tipo == 6) {
                 if (ri == '') {
                     a = 1;
@@ -467,6 +485,7 @@
                 }
             }
             if (a == 0) {
+                debugger;
                 registrarfactura(iddoc, valor, user, tipo, fechafactura, ri, an, cuenta, comentario);
                 soporte = $('#soporte').prop('files')[0];
                 datosForm = new FormData;
@@ -490,7 +509,7 @@
                     }
                 });
                 setTimeout(function() {
-                    window.location.href = "./home.php?id=" + iddoc + "&n=f"
+                    // window.location.href = "./home.php?id=" + iddoc + "&n=f"
                 }, 1000);
             }
 
