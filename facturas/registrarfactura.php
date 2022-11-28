@@ -23,7 +23,7 @@ if ($_SESSION['usuario']) {
     $ri = $_POST['ri'];
     $an = $_POST['an'];
     $cuenta = $_POST['cuenta'];
-    echo $consulta = "INSERT INTO `facturas`(`iddoc`, `fechafactura`, `valor`, `idcuenta`, `idcreador`, `idrevisador`, `horaregistro`, `fecharegistro`, `idtipofactura`, `ri`, `tercero`, `fecharevision`, `horarevision`, `extensionarchivo`, `comentario`)VALUES 
-    ('$iddoc','$fechafactura','$valor','$cuenta',' $_SESSION[idusuario]','','$hora', '$fecha_actual',' $tipo','  $ri','$an','','','','$comentario')";
+    echo $consulta = "INSERT INTO `facturas`(`iddoc`, `fechafactura`, `valor`, `idcuenta`, `idcreador`, `idrevisador`, `horaregistro`, `fecharegistro`, `idtipofactura`, `ri`, `tercero`, `fecharevision`, `horarevision`, `extensionarchivo`, `comentario`, `subido`)VALUES 
+    ('$iddoc','$fechafactura','$valor','$cuenta',' $_SESSION[idusuario]','','$hora', '$fecha_actual',' $tipo','  $ri','$an','','','','$comentario','no')";
     echo $query = mysqli_query($link, $consulta) or die($consulta);
 }

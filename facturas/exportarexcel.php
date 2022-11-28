@@ -1,5 +1,5 @@
 <?php
-include_once('conexion/conexion.php');
+include_once('../conexion/conexion.php');
 
 if (isset($_GET['desde'])) {
     $desde = $_GET['desde'];
@@ -19,92 +19,59 @@ header("Content-Disposition: attachment; filename=$filename");
 header("Pragma: no-cache");
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 ?>
+<meta http-equiv="Content-type" content="text/html;charset=utf-8">
 <table style="text-align: center">
-    <tbody>
-
-        <tr style="font-weight:100 ;">
-            <td>
-                <?php
-                $consultabatch = "select distinct(batch) from notascontables where  fecha between '$desde' and '$hasta' order by batch ";
-                $querybatch = mysqli_query($link, $consultabatch) or die($consultabatch);
-                while ($batchs = mysqli_fetch_array($querybatch)) {
-                    $a = 0;
-                    $consultanotas = "select * from notascontables where batch = '$batchs[batch]'";
-                    $querynotas = mysqli_query($link, $consultanotas) or die($consultanotas);
-                    while ($notas = mysqli_fetch_array($querynotas)) {
-                        if ($a == 0) {
-                ?>
+    <THEAD>
         <tr style="font-weight: bolder ;">
-            <td style="background-color:coral">Batch</td>
-            <td style="background-color:coral">Fecha</td>
-            <td style="background-color:coral">Cuenta</td>
-            <td style="background-color:coral">Importe</td>
-            <td style="background-color:coral">A</td>
-            <td style="background-color:coral">AN8</td>
-            <td style="background-color:coral">#Direccion</td>
-            <td style="background-color:coral">Comentario</td>
+            <td style="background-color:yellow">Compañia</td>
+            <td style="background-color:yellow">Cuenta bancaria</td>
+            <td style="background-color:yellow">AN8</td>
+            <td style="background-color:yellow">Fecha pago</td>
+            <td style="background-color:yellow">Importe cobro</td>
+            <td style="background-color:yellow">Obs</td>
+            <td style="background-color:yellow">Concepto</td>
+            <td style="background-color:yellow">Cuenta</td>
         </tr>
-    <?php
-                        } else {
-    ?>
-        <tr style="font-weight: bolder ;">
-            <td></td>
-            <td>Fecha</td>
-            <td>Cuenta</td>
-            <td>Importe</td>
-            <td>A</td>
-            <td>AN8</td>
-            <td>#Direccion</td>
-            <td>Comentario</td>
-        </tr>
-    <?php
-                        }
-                        $consultaregistros = "select * from registrosdenota where idnota = '$notas[idnota]'";
-                        $queryregistros = mysqli_query($link, $consultaregistros) or die($consultaregistros);
-                        while ($registros = mysqli_fetch_array($queryregistros)) {
-    ?>
-        <tr>
-            <td style="font-weight: bolder ;">
+    </THEAD>
+    <TBODY>
+        <?php
+        $consultafacturas = "SELECT a.*,e.codclasificacion,f.tipofactura FROM `facturas` a inner join usuarios b on a.idcreador=b.idusuario inner join procesos c on c.idproceso=b.idproceso inner join equipos d on d.idequipo=c.idequipo inner join areas e on e.idarea=d.idarea inner join tiposfactura f on f.idtipo=a.idtipofactura WHERE a.idrevisador > 0 and a.subido = 'no'";
+        $queryfacturas = mysqli_query($link, $consultafacturas) or die($consultafacturas);
+        while ($facturas = mysqli_fetch_array($queryfacturas)) {
+        ?>
+            <TR style="background-color: <?php echo $color ?> ;">
                 <?php
-                            if ($a == 0) {
-                                echo $batchs['batch'];
-                                $a = 1;
+                if ($facturas['idrevisador'] > 0) {
+                    $revisado = 'checked';
+                } else {
+                    $revisado = '';
+                }
+                ?>
+                <TD><?php echo $facturas['codclasificacion'] ?> </TD>
+                <TD><?php echo $facturas['idcuenta'] ?> </TD>
+                <TD><?php echo $facturas['tercero']; ?> </TD>
+                <TD><?php echo $facturas['fechafactura']; ?> </TD>
+                <TD><?php echo ($facturas['valor']); ?> </TD>
+                <TD><?php echo $facturas['comentario']; ?> </TD>
+                <TD><?php echo $facturas['tipofactura']; ?> </TD>
+                <?php
+                switch ($facturas['idtipofactura']) {
+                    case '2':
+                        $consultacuenta = "select idcuenta from cuentas where descripcion = 'CONTRIBUCIONES'";
+                        $querycuenta = mysqli_query($link, $consultacuenta) or die($consultacuenta);
+                        $cuentas = mysqli_fetch_array($querycuenta);
                 ?>
 
+                        <TD><?php echo $cuentas['idcuenta']; ?> </TD>
                 <?php
-                            }
+                        break;
+                }
                 ?>
-            </td>
-            <td> <?php echo $registros['fecha']; ?> </td>
-            <td><?php echo $registros['idcuenta']; ?> </td>
-            <td>
-                <?php
-                            echo number_format($registros['debe'] - $registros['haber']);
-                            if ($registros['debe'] > 0) {
-                                // echo number_format($registros['debe']);
-                            } else {
-                                // echo "-" . number_format($registros['haber']);
-                            } ?>
-            </td>
-            <td><?php echo $registros['tipolm']; ?> </td>
-            <td><?php echo $registros['lm']; ?> </td>
-            <td><?php echo $registros['an']; ?> </td>
-            <td><?php echo $notas['comentario']; ?> </td>
-        </tr>
-    <?php   }
-    ?>
-    <tr>
-
-    </tr>
-
-<?php
-                    }
-?>
-<?php }
-?>
-</td>
-</tr>
-    </tbody>
+            </TR>
+        <?php
+        }
+        ?>
+    </TBODY>
 </table>
 <?php
 ?>
