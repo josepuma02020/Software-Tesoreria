@@ -21,14 +21,14 @@
     $dia = date('d');
     $hora = date('h:i a');
     //autocompletar cuenta
-    $consulta = "select descripcion from cuentas where clasificacion = '1' order by descripcion";
+    $consulta = "SELECT  `nombre` FROM `listaan` order by nombre";
     $queryt = mysqli_query($link, $consulta) or die($consulta);
-    $productos[] = array();
-    while ($arreglocuentas = mysqli_fetch_row($queryt)) {
-        $cuentas[] = $arreglocuentas[0];
+    $funcionarios[] = array();
+    while ($arreglofuncionarios = mysqli_fetch_row($queryt)) {
+        $funcionarios[] = $arreglofuncionarios[0];
     }
-    array_shift($cuentas);
-    $relleno = json_encode($cuentas);
+    array_shift($funcionarios);
+    $relleno = json_encode($funcionarios);
     //consulta idnota
     if (isset($_GET['id'])) {
         $iddoc = $_GET['id'];
@@ -53,6 +53,13 @@
         $iddoc = $ano . $mes . $dia . $consecutivo;
         $creado = 0;
     }
+
+    //consulta area
+    $consultaarea = "SELECT c.area,c.codarea,c.codclasificacion FROM procesos a inner join equipos b on b.idequipo=a.idequipo INNER join areas c on c.idarea=b.idarea where idproceso = $_SESSION[idproceso]";
+    $queryarea = mysqli_query($link, $consultaarea) or die($consultaarea);
+    $filaarea = mysqli_fetch_array($queryarea);
+    $codarea = $filaarea['codarea'];
+    $area  = $filaarea['area'];
     //consulta datos notas
     $consultadatosnota = "SELECT a.*,b.nombre'nombrecreador',b.usuario'usariocreador',c.nombre'nombrerevisador',d.descripcion'descripcioncuenta',g.area'areacreador' FROM `facturas` a inner join usuarios b on a.idcreador = b.idusuario left join usuarios c on a.idrevisador=c.idusuario INNER JOIN cuentas d on d.idcuenta=a.idcuenta inner join procesos e on e.idproceso=b.idproceso inner join equipos f on f.idequipo=e.idequipo inner JOIN areas g on g.idarea=f.idarea  where `iddoc` =  '$iddoc'";
     $querydatosnota = mysqli_query($link, $consultadatosnota) or die($consultadatosnota);
@@ -67,7 +74,7 @@
             $horarevision = '';
         } else {
             $nombrerevisa = $filadatosnota['nombrerevisador'];
-            $fecharevision = $filadatosnota['fecharevision'];
+            $fecharevision = $filadatosnota['fecharevision'] . ': ';
             $horarevision = $filadatosnota['horarevision'];
         }
         $banco = $filadatosnota['descripcioncuenta'];
@@ -110,28 +117,48 @@
         } else {
             $estado = '';
         }
-
         ?>
         <div class="form-row formulario">
-            <div class="form-group pequeno">
-                <label for="iddocumento">ID.Documento:</label>
-                <input value="<?php echo $creado  ?>" style="text-align:center" class="form-control " id="creado" name="creado" type="hidden" disabled>
-                <input value="<?php echo $iddoc  ?>" style="text-align:center" class="form-control " id="iddoc" name="iddoc" type="text" disabled>
+            <div class="form-group mediano-pequeno">
+                <label for="user">Nro.Transacción</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="iddoc" name="iddoc" type="text" disabled value="<?php echo $iddoc; ?>">
+            </div>
+            <div class="form-group mediano">
+                <label for="user">Revisado por</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $nombrerevisa; ?>">
             </div>
             <div class="form-group mediano-pequeno">
-                <label for="user">Usuario - Área:</label>
+                <label for="user"> Fecha revisión</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo  $fecharevision . $horarevision; ?>">
+            </div>
+        </div>
+        <div class="form-row formulario tabla-registros">
+            <h5 class="subtitulo-formulario">Información del empleado</h5>
+            <div class="form-group mediano-pequeno">
+                <label for="user">Nombre</label>
                 <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario . $areacreador; ?>">
             </div>
-            <div class="form-group mediano-pequeno">
-                <label for="user">Fecha creación:</label>
-                <input style="text-align:center" class="form-control " id="fechacreacion" name="fechacreacion" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
+            <div class="form-group mediano-grande">
+                <label for="user">Correo</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $_SESSION['correo']; ?>">
             </div>
-            <div class="form-group mediano ">
-                <label for="comment">Revisado por:</label>
-                <input value=" <?php echo $nombrerevisa . ' : ' . $fecharevision . ' ' . $horarevision; ?>" style="text-align:center" class="form-control " id="revision" name="revision" type="text" disabled>
+            <div class="form-group pequeno">
+                <label for="user"> Dependencia</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo  $codarea; ?>">
             </div>
+            <div class="form-group mediano">
+                <label for="user"> Nombre dependencia</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo  $area; ?>">
+            </div>
+
+        </div>
+        <div class="form-row formulario">
+
+        </div>
+        <div class="form-row formulario tabla-registros">
+            <h5 class="subtitulo-formulario">Registro de pago realizado por consignación o transferencia</h5>
             <div class="form-group mediano-pequeno">
-                <label for="type">Tipo de factura</label>
+                <label for="type">Concepto de pago *</label>
                 <select <?php echo $estado ?> style="text-align: center;" id="tipofactura" class="form-control col-md-8 ">
                     <?php
                     $selected = '';
@@ -151,11 +178,22 @@
                     ?>
                 </select>
             </div>
-        </div>
-        <div class="form-row formulario">
+            <div class="form-group pequeno">
+                <label for="user">Cód. OW - AN8 *</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="an" value="<?php echo $an ?>" name="an" type="number">
+            </div>
+
+            <div class="form-group mediano-pequeno">
+                <label for="fechafactura">Fecha de pago *</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="fechafactura" value="<?php echo $fecha ?>" name="fechafactura" type="date">
+            </div>
+            <div class="form-group mediano-pequeno">
+                <label for="user">Valor consignación *</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control number " id="valor" value="<?php echo $valor ?>" name="valor" type="text">
+            </div>
             <input style="text-align:center" class="form-control " id="valido" name="valido" type="hidden">
             <div class="form-group mediano-pequeno">
-                <label for="type">Entidad bancaria:</label>
+                <label for="type">Entidad bancaria</label>
                 <select disabled style="text-align: center;" id="cuenta" class="form-control col-md-8 ">s
                 </select>
                 <select style="text-align: center;display:none" id="cuentari" class="form-control col-md-8 ">
@@ -249,86 +287,90 @@
                     ?>
                 </select>
             </div>
-            <div class="form-group mediano-pequeno">
-                <label for="fechafactura">Fecha factura:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="fechafactura" value="<?php echo $fecha ?>" name="fechafactura" type="date">
-            </div>
-            <div class="form-group mediano-pequeno">
-                <label for="user">Valor:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control number " id="valor" value="<?php echo $valor ?>" name="valor" type="text">
-            </div>
+
             <div class="form-group pequeno">
-                <label for="user">#Referencia:</label>
+                <label for="user">Nro. RI</label>
                 <input <?php echo $estado ?> style="text-align:center" class="form-control " id="ri" value="<?php echo $ri ?>" name="ri" type="number">
             </div>
-            <div class="form-group pequeno">
-                <label for="user">AN8:</label>
-                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="an" value="<?php echo $an ?>" name="an" type="number">
+            <div style="text-align: left;" class="form-row formulario checkfuncionario">
+                <label for="user">Registrar pago a nombre de otro funcionario </label>
+                <input <?php echo $estado ?> class="form-check-input " id="relfuncionario" name="relfuncionario" type="checkbox">
             </div>
-
-            <div class="form-group mediano">
-                <label for="user">Soporte:</label>
-                <input <?php echo $estado ?> style="text-align:center" accept="image/gif,image/jpg,img/jpeg,image/png,.pdf" class="form-control " id="soporte" name="soporte" type="file">
-            </div>
-            <div class="form-row formulario">
-                <div class="form-group grande ">
-                    <label for="comment">Comentario:</label>
-                    <input <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comentario" name="comentario" type="text">
-                </div>
-                <div class="form-group pequeno ">
-                    <label for="comment"></label>
-                    <?php
-                    if ($creado == 1) {
-                        if ($nombrerevisa == '') {
-                    ?>
-                            <button title="Enviar nota contable a revisión." id="revisarfactura" name="registrarfactura" class="btn btn-success boton">Revisar factura</button>
-                        <?php
-                        }
-                    } else {
-                        ?>
-                        <button title="Enviar nota contable a revisión." id="registrarfactura" name="registrarfactura" class="btn btn-primary boton">Registrar factura </button>
-                    <?php
-                    }
-                    ?>
+            <div style="text-align: left;display:none" id="llenarfuncionario" class="form-row formulario checkfuncionario">
+                <div class="form-group mediano-grande">
+                    <label for="user">Nombre</label>
+                    <input <?php echo $estado ?> style="text-align:center" class="form-control " id="funcionario" name="funcionario" type="text">
                 </div>
             </div>
         </div>
-    </header>
-    <main>
-        <?php
-        if ($soporte == 'si') {
-            switch ($extension) {
-                case 'pdf':
-        ?>
-                    <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="application/pdf">
+        <div class="form-row formulario tabla-registros">
+            <h5 class="subtitulo-formulario">Evidencia de consignación</h5>
+            <div class="form-group mediano-grande">
+                <input <?php echo $estado ?> style="text-align:center" accept="image/gif,image/jpg,img/jpeg,image/png,.pdf" class="form-control " id="soporte" name="soporte" type="file">
+            </div>
+
+            <div class="form-group mediano-grande ">
+                <label for="comment">Observaciones adicionales</label>
+                <input <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comentario" name="comentario" type="text">
+            </div>
+
+            <div class="form-group pequeno ">
                 <?php
-                    break;
-                case 'png':
+                if ($creado == 1) {
+                    if ($nombrerevisa == '') {
                 ?>
-                    <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="image/png">
+                        <button style="width: max-content ;" title="Enviar nota contable a revisión." id="revisarfactura" name="revisarfactura" class="btn btn-success ">Validar</button>
+                    <?php
+                    }
+                } else {
+                    ?>
+                    <button style="width: max-content ;" title="Enviar nota contable a revisión." id="registrarfactura" name="registrarfactura" class="btn btn-primary ">Continuar</button>
                 <?php
-                    break;
-                case 'jpeg':
+                }
                 ?>
-                    <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="image/jpeg">
-                <?php
-                    break;
-                case 'jpg':
-                ?>
-                    <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="image/jpg">
-                <?php
-                    break;
-                case 'gif':
-                ?>
-                    <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="image/gif">
+            </div>
             <?php
-                    break;
+            if ($soporte == 'si') {
+                switch ($extension) {
+                    case 'pdf':
+            ?>
+                        <hr>
+                        <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="application/pdf">
+                    <?php
+                        break;
+                    case 'png':
+                    ?>
+                        <hr>
+                        <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="image/png">
+                    <?php
+                        break;
+                    case 'jpeg':
+                    ?>
+                        <hr>
+                        <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="image/jpeg">
+                    <?php
+                        break;
+                    case 'jpg':
+                    ?>
+                        <hr>
+                        <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="image/jpg">
+                    <?php
+                        break;
+                    case 'gif':
+                    ?>
+                        <hr>
+                        <embed src="facturas/soportes/<?php echo $iddoc . '.' . $extension ?>" width="80%" height=" 800px" type="image/gif">
+                <?php
+                        break;
+                }
+                ?>
+
+            <?php
             }
             ?>
-
-        <?php
-        }
-        ?>
+        </div>
+    </header>
+    <main>
     </main>
     <footer>
     </footer>
@@ -363,7 +405,18 @@
 <script type="text/javascript" src="librerias/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
+        $('#funcionario').change(function() {
+            funcionario = $('#funcionario').val();
+            codigofuncionario(funcionario);
+        });
+
         const number = document.querySelector('.number');
+        disponible = (<?php echo $relleno ?>);
+        $("#funcionario").autocomplete({
+            source: disponible,
+            lookup: disponible,
+            minLength: 3
+        });
 
         function formatNumber(n) {
             n = String(n).replace(/\D/g, "");
@@ -375,10 +428,22 @@
             element.value = formatNumber(value);
 
         });
+        $('#relfuncionario').change(function() {
+            check = $('#relfuncionario').is(":checked");
+            if (check == true) {
+                document.getElementById('llenarfuncionario').style.display = 'block';
+                document.getElementById('an').disabled = true;
+            } else {
+                document.getElementById('llenarfuncionario').style.display = 'none';
+                document.getElementById('an').disabled = false;
+            }
+
+            //verificaran(an);
+        });
         $('#revisarfactura').click(function() {
             a = 0;
             iddocumento = $('#iddoc').val();
-            alertify.confirm('Aprobación de factura', 'Esta seguro que desea autorizar esta factura?.', function() {
+            alertify.confirm('Validación de factura', 'Esta seguro que desea validar esta consignación?.', function() {
                 aprobarfactura(iddocumento);
                 setTimeout(function() {
                     window.location.reload();
@@ -392,6 +457,7 @@
             });
         });
         $('#registrarfactura').click(function() {
+
             a = 0;
             iddoc = $('#iddoc').val();
             valor = $('#valor').val();
@@ -485,32 +551,40 @@
                 }
             }
             if (a == 0) {
-                debugger;
-                registrarfactura(iddoc, valor, user, tipo, fechafactura, ri, an, cuenta, comentario);
-                soporte = $('#soporte').prop('files')[0];
-                datosForm = new FormData;
-                datosForm.append("soporte", soporte);
-                ruta = 'facturas/subirsoporte.php?iddoc=' + iddoc;
-                $.ajax({
-                    type: "POST",
-                    url: ruta,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    data: datosForm,
-                    success: function(r) {
-                        if (r == 1) {
-                            console.log(r);
-                            debugger;
-                        } else {
-                            console.log(r);
-                            debugger;
+                alertify.confirm('Envio a revisión', 'Esta seguro de enviar esta nota contable para revisión?', function() {
+                    registrarfactura(iddoc, valor, user, tipo, fechafactura, ri, an, cuenta, comentario);
+                    soporte = $('#soporte').prop('files')[0];
+                    datosForm = new FormData;
+                    datosForm.append("soporte", soporte);
+                    ruta = 'facturas/subirsoporte.php?iddoc=' + iddoc;
+                    $.ajax({
+                        type: "POST",
+                        url: ruta,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: datosForm,
+                        success: function(r) {
+                            if (r == 1) {
+                                console.log(r);
+                                debugger;
+                            } else {
+                                console.log(r);
+                                debugger;
+                            }
                         }
-                    }
+                    });
+                    setTimeout(function() {
+                        window.location.href = "./home.php?id=" + iddoc + "&n=f"
+                    }, 1000);
+                    alertify.success('Operación exitosa. ');
+                }, function() {
+
+                }).set('labels', {
+                    ok: 'Continuar',
+                    cancel: 'Cancelar'
                 });
-                setTimeout(function() {
-                    // window.location.href = "./home.php?id=" + iddoc + "&n=f"
-                }, 1000);
+
             }
 
         });
@@ -526,6 +600,14 @@
                 document.getElementById('ri').disabled = false;
             }
             switch (tipo) {
+                case '0':
+                    document.getElementById('cuentaprestamo').disabled = true;
+                    document.getElementById('cuentadevolucionviaticos').disabled = true;
+                    document.getElementById('cuentacontribucion').disabled = true;
+                    document.getElementById('cuentaauxiliosalimentacion').disabled = true;
+                    document.getElementById('cuenta').disabled = true;
+                    document.getElementById('cuentari').disabled = true;
+                    break;
                 case '6':
                     document.getElementById('cuentari').style.display = 'block';
                     document.getElementById('cuenta').style.display = 'none';

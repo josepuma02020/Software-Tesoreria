@@ -21,6 +21,7 @@ if ($arreglo['activo'] == 1 and $arreglo['Rol'] != 1) {
         if (password_verify($clave1, $clave2)) {
             $_SESSION['idusuario'] = $arreglo['idusuario'];
             $_SESSION['usuario'] = $usuario;
+            $_SESSION['correo'] = $arreglo['correo'];
             $_SESSION['rol'] = $rol;
             $_SESSION['menu'] = "./layouts/navadmin.php";
             $_SESSION['nombre'] = $arreglo['nombre'];

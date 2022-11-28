@@ -12,7 +12,12 @@ form {
 
 }
 
-
+label {
+    font-size: 1rem;
+    font-family: calibri;
+    color: grey;
+    font-weight: 600;
+}
 
 footer {
     text-align: center;
@@ -20,6 +25,17 @@ footer {
 
 footer>button {
     margin: 1rem;
+}
+
+.checkfuncionario {
+    text-align: left;
+    margin-top: 1%;
+}
+
+.subtitulo-formulario {
+    display: flex;
+    margin-bottom: 30px;
+    color: #009FE3;
 }
 
 .formulario {

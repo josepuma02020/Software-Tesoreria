@@ -1,3 +1,23 @@
+function codigofuncionario(funcionario) {
+    cadenau = "funcionario=" + funcionario;
+    $.ajax({
+        type: "POST",
+        url: "facturas/codigofuncionario.php",
+        data: cadenau,
+        success: function (r) {
+            if (r == 1) {
+                // console.log(r);
+                // debugger;
+                $('#an').val(r);
+            } else {
+                // console.log(r);
+                // debugger;
+                $('#an').val(r);
+            }
+        }
+    });
+}
+
 function registrarfactura(iddoc, valor, user, tipo, fechafactura, ri, an, cuenta, comentario) {
     cadenau = "valor=" + valor + "&comentario=" + comentario + "&cuenta=" + cuenta + "&iddoc=" + iddoc + "&user=" + user + "&tipo=" + tipo + "&fechafactura=" + fechafactura + "&ri=" + ri + "&an=" + an;
     $.ajax({

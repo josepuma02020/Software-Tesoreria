@@ -278,7 +278,7 @@
             </div>
         </div>
     </header>
-    <main id="tegistrosdenota" class="tabla-registros ">
+    <main id="tegistrosdenota" class="tabla-registros">
         <table id="registrosnotas" class="table table-striped  table-responsive-lg">
             <thead>
                 <th>Fecha</th>
