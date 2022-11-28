@@ -12,9 +12,9 @@ if (time() - $_SESSION['tiempo'] > 500) {
 if ($_SESSION['usuario']) {
     include('../conexion/conexion.php');
     date_default_timezone_set('America/Bogota');
-    $equipo = $_POST['equipo'];
+    $codarea = $_POST['codarea'];
     $area = $_POST['area'];
-    $consulta = "INSERT INTO `areas`(`idarea`, `area`) 
-    VALUES ('','$area')";
+    $compania = $_POST['compania'];
+    $consulta = "INSERT INTO `areas`(`idarea`, `area`, `codarea`, `codclasificacion`) VALUES ('','$area','$codarea','$compania')";
     echo $query = mysqli_query($link, $consulta) or die($consulta);
 }

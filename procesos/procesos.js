@@ -81,8 +81,8 @@ function eliminarequipo(id) {
 function datosarea(id) {
     $('#iduarea').val(id);
 }
-function registrararea(area) {
-    cadenau = "area=" + area;
+function registrararea(area, codarea, compania) {
+    cadenau = "area=" + area + "&codarea=" + codarea + "&compania=" + compania;
     $.ajax({
         type: "POST",
         url: "procesos/registrararea.php",
