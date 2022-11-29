@@ -24,6 +24,13 @@ footer>button {
     font-size: small;
 }
 
+.subtitulo-formulario {
+    display: flex;
+    margin-bottom: 0.5rem;
+    color: #009FE3;
+    justify-content: center;
+}
+
 .form-control-register {
     display: block;
     width: 100%;
@@ -52,7 +59,7 @@ footer>button {
     display: inline-block;
     background-color: #ECEBEB;
     border-radius: 1.5rem;
-    padding: 2rem;
+    padding: 1rem;
     text-align: center;
 }
 

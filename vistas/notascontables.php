@@ -51,7 +51,12 @@
         $idnota = $ano . $mes . $dia . $consecutivo;
         $creado = 0;
     }
-
+    //consulta area
+    $consultaarea = "SELECT c.area,c.codarea,c.codclasificacion FROM procesos a inner join equipos b on b.idequipo=a.idequipo INNER join areas c on c.idarea=b.idarea where idproceso = $_SESSION[idproceso]";
+    $queryarea = mysqli_query($link, $consultaarea) or die($consultaarea);
+    $filaarea = mysqli_fetch_array($queryarea);
+    $codarea = $filaarea['codarea'];
+    $area  = $filaarea['area'];
     //consulta datos notas
     $consultadatosnota = "SELECT a.*,b.nombre,c.documento,d.clasificacion,e.nombre 'aprobador',a.fechaaprobacion,a.horaaprobacion,f.nombre 'autoriza' FROM notascontables a left join usuarios f on f.idusuario = a.idautoriza
     INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion
@@ -68,10 +73,10 @@
         $fecha = $filadatosnota['fecha'];
         $hora = $filadatosnota['hora'];
         $proceso = $filadatosnota['tipo'];
-        $nombreaprobador = $filadatosnota['aprobador'];
+        $nombreaprobador = $filadatosnota['aprobador'] . ':';
         $fechaaprobacion = $filadatosnota['fechaaprobacion'];
         $horaaprobacion = $filadatosnota['horaaprobacion'];
-        $nombreautorizador = $filadatosnota['autoriza'];
+        $nombreautorizador = $filadatosnota['autoriza'] . ':';
         $fechaautorizacion = $filadatosnota['fechaautorizacion'];
         $horaautorizacion = $filadatosnota['horaautorizacion'];
         $revision = $filadatosnota['revision'];
@@ -131,16 +136,49 @@
         ?>
         <div class="form-row formulario">
             <div class="form-group pequeno">
-                <label for="iddocumento">ID.Documento:</label>
+                <label for="iddocumento">ID.Documento</label>
                 <input value="<?php echo $creado  ?>" style="text-align:center" class="form-control " id="creado" name="creado" type="hidden" disabled>
                 <input <?php echo $estado ?> value="<?php echo $idnota  ?>" style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled>
             </div>
             <div class="form-group mediano-pequeno">
-                <label for="user">Usuario:</label>
+                <label for="user">Fecha creación</label>
+                <input <?php echo $des; ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
+            </div>
+            <div class="form-group pequeno">
+                <label for="batch">Batch</label>
+                <?php
+                $estado = 'disabled';
+                if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
+                } ?>
+                <input <?php echo $estado ?> min="0" value="<?php echo $batch ?>" style="text-align:center;background-color:<?php echo $colorbatch ?>" class="form-control " id="batch" name="batch" type="text">
+                <?php if ($batch != '') {
+                    $estado = 'disabled';
+                } else {
+                    $estado = '';
+                }
+                ?>
+            </div>
+        </div>
+        <div class="form-row formulario tabla-registros">
+            <h5 class="subtitulo-formulario">Información del empleado</h5>
+            <div class="form-group mediano-pequeno">
+                <label for="user">Nombre:</label>
                 <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
             </div>
+            <div class="form-group mediano-grande">
+                <label for="user">Correo</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $_SESSION['correo']; ?>">
+            </div>
+            <div class="form-group mediano">
+                <label for="user"> Nombre dependencia</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo  $area; ?>">
+            </div>
+
+        </div>
+        <div class="form-row formulario tabla-registros">
+            <h5 class="subtitulo-formulario">Información del registro contable</h5>
             <div class="form-group mediano-pequeno">
-                <label for="desde">Proceso:</label>
+                <label for="desde">Proceso</label>
                 <select style="text-align: center;" id="proceso" name="proceso" class="form-control col-md-8 ">
                     <?php
                     $consultaequipos = "select a.*,b.equipo,c.area from procesos a inner join equipos b on b.idequipo=a.idequipo inner join areas c on c.idarea = b.idarea where idproceso=1 or idproceso=4";
@@ -204,79 +242,50 @@
                     ?>
                 </select>
             </div>
-
+            <div class="form-group mediano-grande ">
+                <label for="comment">Comentario</label>
+                <input <?php echo $des; ?> <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
+            </div>
         </div>
         <div class="form-row formulario">
-            <div class="form-group pequeno">
-                <label for="batch">Batch:</label>
-                <?php
-                $estado = 'disabled';
-                if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
-                } ?>
-                <input <?php echo $estado ?> min="0" value="<?php echo $batch ?>" style="text-align:center;background-color:<?php echo $colorbatch ?>" class="form-control " id="batch" name="batch" type="text">
-                <?php if ($batch != '') {
-                    $estado = 'disabled';
-                } else {
-                    $estado = '';
-                }
-                ?>
-            </div>
-            <div class="form-group mediano-pequeno">
-                <label for="user">Fecha creación:</label>
-                <input <?php echo $des; ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
-            </div>
-            <div class="form-group mediano-grande ">
-                <label for="comment">Aprobado por:</label>
-                <input <?php echo $des; ?> value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
-            </div>
-            <div class="form-group mediano-grande ">
-                <label for="comment">Autorizado por:</label>
-                <input <?php echo $des; ?> value=" <?php echo $nombreautorizador . ' : ' . $fechaautorizacion . ' ' . $horaautorizacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
-            </div>
+
             <div class="form-row formulario">
-                <div class="form-group completo ">
-                    <label for="comment">Comentario:</label>
-                    <input <?php echo $des; ?> <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
+                <div class="form-row formulario">
+
+
+
                 </div>
-                <button class="btn btn-info" onclick="openMsg()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-dots" viewBox="0 0 16 16">
-                        <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
-                        <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
-                    </svg>
-                </button>
 
             </div>
-
-        </div>
-        <div id="mensajes" class="sidenav mensajes" style="width:0;">
-            <div>
-                <a class="cerrar" href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            </div>
-            <div>
-                <?php
-                $consultamensajes = "select a.*,b.nombre from mensajes a inner JOIN usuarios b on b.idusuario=a.idusuario where a.idnota= $idnota";
-                $querymensajes = mysqli_query($link, $consultamensajes) or die($consultamensajes);
-                while ($filasmensajes = mysqli_fetch_array($querymensajes)) {
-                ?>
+            <div id="mensajes" class="sidenav mensajes" style="width:0;">
+                <div>
+                    <a class="cerrar" href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                </div>
+                <div>
+                    <?php
+                    $consultamensajes = "select a.*,b.nombre from mensajes a inner JOIN usuarios b on b.idusuario=a.idusuario where a.idnota= $idnota";
+                    $querymensajes = mysqli_query($link, $consultamensajes) or die($consultamensajes);
+                    while ($filasmensajes = mysqli_fetch_array($querymensajes)) {
+                    ?>
+                        <div class="form-group completo">
+                            <h6 for="desde"><?php echo $filasmensajes['nombre'] . ' - ' . $filasmensajes['fecha'] . ' ' . $filasmensajes['hora']  ?></h6>
+                            <textarea disabled class="form-control" name="comentariodesaprobacion" id="comentariodesaprobacion" rows="4"><?php echo $filasmensajes['mensaje']  ?></textarea>
+                        </div>
+                    <?php
+                    }
+                    ?>
                     <div class="form-group completo">
-                        <h6 for="desde"><?php echo $filasmensajes['nombre'] . ' - ' . $filasmensajes['fecha'] . ' ' . $filasmensajes['hora']  ?></h6>
-                        <textarea disabled class="form-control" name="comentariodesaprobacion" id="comentariodesaprobacion" rows="4"><?php echo $filasmensajes['mensaje']  ?></textarea>
+                        <h6 style="display:contents" for="desde"><?php echo $_SESSION['nombre'] ?></h6>
+                        <button type="button" id="enviarmensaje" class="btn btn-info">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
+                            </svg>
+                        </button>
+                        <textarea class="form-control" name="comentariomensaje" id="comentariomensaje" rows="4"></textarea>
                     </div>
-                <?php
-                }
-                ?>
-                <div class="form-group completo">
-                    <h6 style="display:contents" for="desde"><?php echo $_SESSION['nombre'] ?></h6>
-                    <button type="button" id="enviarmensaje" class="btn btn-info">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
-                            <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
-                        </svg>
-                    </button>
-                    <textarea class="form-control" name="comentariomensaje" id="comentariomensaje" rows="4"></textarea>
-                </div>
 
+                </div>
             </div>
-        </div>
     </header>
     <main id="tegistrosdenota" class="tabla-registros">
         <table id="registrosnotas" class="table table-striped  table-responsive-lg">
@@ -513,7 +522,26 @@
             </div>
         </section>
     </main>
+
     <footer>
+        <div class="form-row formulario tabla-registros">
+            <h5 class="subtitulo-formulario">Aprobación y autorización de registro contable</h5>
+            <div class="form-group mediano-grande ">
+                <label for="comment">Aprobado por</label>
+                <input <?php echo $des; ?> value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+            </div>
+            <div class="form-group mediano-grande ">
+                <label for="comment">Autorizado por</label>
+                <input <?php echo $des; ?> value=" <?php echo $nombreautorizador . ' : ' . $fechaautorizacion . ' ' . $horaautorizacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+            </div>
+            <button class="btn btn-info" onclick="openMsg()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-dots" viewBox="0 0 16 16">
+                    <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                    <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                </svg>
+            </button>
+        </div>
+
     </footer>
 </body>
 
