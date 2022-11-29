@@ -27,6 +27,32 @@
     }
 }
 
+.seccion-menu {
+
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 2%;
+}
+
+.opciones {
+    display: flex;
+}
+
+.opcion {
+    width: 12rem;
+    height: 8rem;
+    border-radius: 10px;
+    margin-left: 1.6rem;
+    margin-right: 1.6rem;
+    margin-top: 0.8rem;
+    background-color: #a1caff;
+}
+
+.opcion:hover {
+    box-shadow: 0.2rem 0.2rem #555555;
+}
+
 .menu {
     text-align: left;
 }

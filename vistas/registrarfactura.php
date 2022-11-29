@@ -193,7 +193,7 @@
             </div>
             <input style="text-align:center" class="form-control " id="valido" name="valido" type="hidden">
             <div class="form-group mediano-pequeno">
-                <label for="type">Entidad bancaria</label>
+                <label for="type">Entidad bancaria*</label>
                 <select disabled style="text-align: center;" id="cuenta" class="form-control col-md-8 ">s
                 </select>
                 <select style="text-align: center;display:none" id="cuentari" class="form-control col-md-8 ">

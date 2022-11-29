@@ -17,6 +17,11 @@ if ($_SESSION['usuario']) {
     $ano = date('Y');
     $mes = date('m');
     $dia = date('d');
+    if (isset($_GET['n'])) {
+        $n = $_GET['n'];
+    } else {
+        $n = 0;
+    }
     if (isset($_GET['desde'])) {
         $desde = $_GET['desde'];
     } else {
@@ -47,8 +52,10 @@ if ($_SESSION['usuario']) {
             include_once($_SESSION['menu']) ?>
         </header>
         <main>
+
+
             <?php
-            switch ($_GET['n']) {
+            switch ($n) {
                 case 1:
                     include('./vistas/notascontables.php');
                     break;
@@ -61,7 +68,36 @@ if ($_SESSION['usuario']) {
                 case 5:
                     include('./vistas/registrarnotaadjunto.php');
                     break;
+                default:
+            ?>
+                    <section class="seccion-menu">
+                        <h4>Registro de notas contables</h4>
+                        <hr>
+                        <div class="opciones">
+                            <button class="opcion">
+                                Nota contable por cuentas.
+                            </button>
+                            <button class="opcion">
+                                Nota contable por conceptos.
+                            </button>
+                            <button class="opcion">
+                                Nota contable por adjuntos.
+                            </button>
+                        </div>
+                    </section>
+                    <section class="seccion-menu">
+                        <h4>Registro de consignaciones</h4>
+                        <hr>
+                        <div class="opciones">
+                            <button class="opcion">
+                                Registrar Consignación.
+                            </button>
+                        </div>
+                    </section>
+            <?php
+                    break;
             }
+
             ?>
         </main>
     </body>

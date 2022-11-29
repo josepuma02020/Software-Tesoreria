@@ -17,7 +17,7 @@
     <main>
         <nav class="navbar navbar-expand-lg bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="../NotasdePago/home.php"><img class="logo" src="../NotasdePago/img/logo.png" alt="Logo ESSA"></a>
+                <a class="navbar-brand" href="../Tesoreria/home.php"><img class="logo" src="../NotasdePago/img/logo.png" alt="Logo ESSA"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -89,7 +89,6 @@
                                     <ul class="submenu dropdown-menu">
                                         <a class="dropdown-item" href=" ./tiposfactura.php">Tipos de factura</a>
                                         <a class="dropdown-item" href=" ./cuentastipofactura.php">Cuentas -> Tipos de factura</a>
-                                        <a class="dropdown-item" href=" ./configcuentasarea.php">Cuentas -> Áreas de trabajo</a>
                                         <!-- <li><a class="dropdown-item" href=""> Third level 3 &raquo </a>
                                             <ul class="submenu dropdown-menu">
                                                 <li><a class="dropdown-item" href=""> Fourth level 1</a></li>
