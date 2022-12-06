@@ -247,45 +247,35 @@
                 <input <?php echo $des; ?> <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
             </div>
         </div>
-        <div class="form-row formulario">
-
-            <div class="form-row formulario">
-                <div class="form-row formulario">
-
-
-
-                </div>
-
+        <div id="mensajes" class="sidenav mensajes" style="width:0;">
+            <div>
+                <a class="cerrar" href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             </div>
-            <div id="mensajes" class="sidenav mensajes" style="width:0;">
-                <div>
-                    <a class="cerrar" href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                </div>
-                <div>
-                    <?php
-                    $consultamensajes = "select a.*,b.nombre from mensajes a inner JOIN usuarios b on b.idusuario=a.idusuario where a.idnota= $idnota";
-                    $querymensajes = mysqli_query($link, $consultamensajes) or die($consultamensajes);
-                    while ($filasmensajes = mysqli_fetch_array($querymensajes)) {
-                    ?>
-                        <div class="form-group completo">
-                            <h6 for="desde"><?php echo $filasmensajes['nombre'] . ' - ' . $filasmensajes['fecha'] . ' ' . $filasmensajes['hora']  ?></h6>
-                            <textarea disabled class="form-control" name="comentariodesaprobacion" id="comentariodesaprobacion" rows="4"><?php echo $filasmensajes['mensaje']  ?></textarea>
-                        </div>
-                    <?php
-                    }
-                    ?>
+            <div>
+                <?php
+                $consultamensajes = "select a.*,b.nombre from mensajes a inner JOIN usuarios b on b.idusuario=a.idusuario where a.idnota= $idnota";
+                $querymensajes = mysqli_query($link, $consultamensajes) or die($consultamensajes);
+                while ($filasmensajes = mysqli_fetch_array($querymensajes)) {
+                ?>
                     <div class="form-group completo">
-                        <h6 style="display:contents" for="desde"><?php echo $_SESSION['nombre'] ?></h6>
-                        <button type="button" id="enviarmensaje" class="btn btn-info">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
-                                <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
-                            </svg>
-                        </button>
-                        <textarea class="form-control" name="comentariomensaje" id="comentariomensaje" rows="4"></textarea>
+                        <h6 for="desde"><?php echo $filasmensajes['nombre'] . ' - ' . $filasmensajes['fecha'] . ' ' . $filasmensajes['hora']  ?></h6>
+                        <textarea disabled class="form-control" name="comentariodesaprobacion" id="comentariodesaprobacion" rows="4"><?php echo $filasmensajes['mensaje']  ?></textarea>
                     </div>
-
+                <?php
+                }
+                ?>
+                <div class="form-group completo">
+                    <h6 style="display:contents" for="desde"><?php echo $_SESSION['nombre'] ?></h6>
+                    <button type="button" id="enviarmensaje" class="btn btn-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                            <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z" />
+                        </svg>
+                    </button>
+                    <textarea class="form-control" name="comentariomensaje" id="comentariomensaje" rows="4"></textarea>
                 </div>
+
             </div>
+        </div>
     </header>
     <main id="tegistrosdenota" class="tabla-registros">
         <table id="registrosnotas" class="table table-striped  table-responsive-lg">
@@ -446,81 +436,7 @@
                 <input style="text-align:center;background-color:<?php echo $color ?>" class="form-control " id="totalimporte" name="totalimporte" type="text" value="<?php echo number_format($totaldebe - $totalhaber) ?>" disabled>
             </div>
         </div>
-        <section class="botones">
-            <?php
-            if ($batch == '' || $batch == 'En revisión') {
-                $estado = "";
-                if ($totalimporte == 0 && $a == 0 && $revision == 0 && $_SESSION['idusuario'] == $idusuario) {
-            ?>
-                    <button title="Enviar nota contable a revisión." id="revision" name="revision" class="btn btn-primary boton">Revisión</button>
-                    <?php
-                } else {
-                }
-                $estado = "";
-                $consultaequiponota = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $idusuario";
-                $queryequiponota = mysqli_query($link, $consultaequiponota) or die($consultaequiponota);
-                $filaequiponota = mysqli_fetch_array($queryequiponota);
-                $consultaequipousuario = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $_SESSION[idusuario] ";
-                $qeryrquipousuario = mysqli_query($link, $consultaequipousuario) or die($consultaequipousuario);
-                $filaequipousuario = mysqli_fetch_array($qeryrquipousuario);
-                $consultaminimo = "SELECT * FROM `general`";
-                $queryminimo = mysqli_query($link, $consultaminimo) or die($consultaminimo);
-                $filaminimo = mysqli_fetch_array($queryminimo);
-                $filaminimo['salariominimo'] * 500;
-                if ($_SESSION['aprobacion'] == 1) {
-                    if ($filaequiponota['idequipo'] == $filaequipousuario['idequipo'] && ($filaminimo['salariominimo'] * 500) < $totalhaber && $nombreaprobador == '' && $revision == 1) {
-                    ?>
-                        <button <?php echo $estado ?> title="Aprobar Nota" id="aprobar" name="aprobar" class="btn btn-success boton">Aprobar</button>
-                        <button <?php echo $estado ?> title="No aprobar nota contable." id="noaprobar" name="noaprobar" class="btn btn-danger boton" data-toggle="modal" data-target="#desaprobar">No aprobar</button>
-                    <?php
-                    } else {
-                    }
-                }
-                if ($_SESSION['autorizacion'] == 1) {
-                    if (($filaminimo['salariominimo'] * 500) < $totalhaber && $filadatosnota['autoriza'] == '') {
-                    ?>
-                        <button <?php echo $estado ?> title="Autorizar Nota" id="autorizar" name="autorizar" class="btn btn-warning boton">Autorizar</button>
-                    <?php
-                    }
-                }
-                if ($des != 'disabled' && $_SESSION['idusuario'] == $idusuario) {
-                    ?>
 
-                    <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-info boton">Guardar</button>
-                    <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
-                    <button title="Borrar Nota" id="delete" name="delete" class="btn btn-secondary boton">Limpiar</button>
-            <?php
-                }
-            }
-            ?>
-            <div class="modal fade" id="desaprobar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Desaprobación de nota contable</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="">
-                                <div class="form-row formulario">
-                                    <div class="form-group completo">
-                                        <h6 for="desde">Escriba el motivo de la desaprobación:</h6>
-                                        <textarea class="form-control" name="comentariodesaprobacion" id="comentariodesaprobacion" rows="4"></textarea>
-                                    </div>
-
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="button" id="confirmardesaprobar" class="btn btn-danger">No aprobar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
     <footer>
@@ -528,11 +444,11 @@
             <h5 class="subtitulo-formulario">Aprobación y autorización de registro contable</h5>
             <div class="form-group mediano-grande ">
                 <label for="comment">Aprobado por</label>
-                <input <?php echo $des; ?> value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+                <input <?php echo $des; ?> value=" <?php echo $nombreaprobador  . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
             </div>
             <div class="form-group mediano-grande ">
                 <label for="comment">Autorizado por</label>
-                <input <?php echo $des; ?> value=" <?php echo $nombreautorizador . ' : ' . $fechaautorizacion . ' ' . $horaautorizacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+                <input <?php echo $des; ?> value=" <?php echo $nombreautorizador  . $fechaautorizacion . ' ' . $horaautorizacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
             </div>
             <button class="btn btn-info" onclick="openMsg()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-left-dots" viewBox="0 0 16 16">
@@ -540,6 +456,81 @@
                     <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
                 </svg>
             </button>
+            <section class="botones">
+                <?php
+                if ($batch == '' || $batch == 'En revisión') {
+                    $estado = "";
+                    if ($totalimporte == 0 && $a == 0 && $revision == 0 && $_SESSION['idusuario'] == $idusuario) {
+                ?>
+                        <button title="Enviar nota contable a revisión." id="revision" name="revision" class="btn btn-primary boton">Revisión</button>
+                        <?php
+                    } else {
+                    }
+                    $estado = "";
+                    $consultaequiponota = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $idusuario";
+                    $queryequiponota = mysqli_query($link, $consultaequiponota) or die($consultaequiponota);
+                    $filaequiponota = mysqli_fetch_array($queryequiponota);
+                    $consultaequipousuario = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $_SESSION[idusuario] ";
+                    $qeryrquipousuario = mysqli_query($link, $consultaequipousuario) or die($consultaequipousuario);
+                    $filaequipousuario = mysqli_fetch_array($qeryrquipousuario);
+                    $consultaminimo = "SELECT * FROM `general`";
+                    $queryminimo = mysqli_query($link, $consultaminimo) or die($consultaminimo);
+                    $filaminimo = mysqli_fetch_array($queryminimo);
+                    $filaminimo['salariominimo'] * 500;
+                    if ($_SESSION['aprobacion'] == 1) {
+                        if ($filaequiponota['idequipo'] == $filaequipousuario['idequipo'] && ($filaminimo['salariominimo'] * 500) < $totalhaber && $nombreaprobador == '' && $revision == 1) {
+                        ?>
+                            <button <?php echo $estado ?> title="Aprobar Nota" id="aprobar" name="aprobar" class="btn btn-success boton">Aprobar</button>
+                            <button <?php echo $estado ?> title="No aprobar nota contable." id="noaprobar" name="noaprobar" class="btn btn-danger boton" data-toggle="modal" data-target="#desaprobar">No aprobar</button>
+                        <?php
+                        } else {
+                        }
+                    }
+                    if ($_SESSION['autorizacion'] == 1) {
+                        if (($filaminimo['salariominimo'] * 500) < $totalhaber && $filadatosnota['autoriza'] == '') {
+                        ?>
+                            <button <?php echo $estado ?> title="Autorizar Nota" id="autorizar" name="autorizar" class="btn btn-warning boton">Autorizar</button>
+                        <?php
+                        }
+                    }
+                    if ($des != 'disabled' && $_SESSION['idusuario'] == $idusuario) {
+                        ?>
+
+                        <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-info boton">Guardar</button>
+                        <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
+                        <button title="Borrar Nota" id="delete" name="delete" class="btn btn-secondary boton">Limpiar</button>
+                <?php
+                    }
+                }
+                ?>
+                <div class="modal fade" id="desaprobar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Desaprobación de nota contable</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="">
+                                    <div class="form-row formulario">
+                                        <div class="form-group completo">
+                                            <h6 for="desde">Escriba el motivo de la desaprobación:</h6>
+                                            <textarea class="form-control" name="comentariodesaprobacion" id="comentariodesaprobacion" rows="4"></textarea>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                <button type="button" id="confirmardesaprobar" class="btn btn-danger">No aprobar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
 
     </footer>
@@ -633,6 +624,13 @@
                 ok: 'Continuar',
                 cancel: 'Cancelar'
             });
+        });
+        $('#proceso').change(function() {
+            proceso = $('#proceso').val();
+            switch (proceso) {
+                case 5:
+                    break;
+            }
         });
         $('#debe').change(function() {
             debe = $('#debe').val();
