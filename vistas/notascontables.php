@@ -460,7 +460,7 @@
                 <?php
                 if ($batch == '' || $batch == 'En revisión') {
                     $estado = "";
-                    if ($totalimporte == 0 && $a == 0 && $revision == 0 && $_SESSION['idusuario'] == $idusuario) {
+                    if ($totalimporte == 0 && $totalhaber > 0 && $a == 0 && $revision == 0 && $_SESSION['idusuario'] == $idusuario) {
                 ?>
                         <button title="Enviar nota contable a revisión." id="revision" name="revision" class="btn btn-primary boton">Revisión</button>
                         <?php

@@ -19,6 +19,11 @@
     $ano = date('Y');
     $mes = date('m');
     $dia = date('d');
+    //consulta area
+    $consultaarea = "SELECT c.area FROM procesos a inner join equipos b on b.idequipo=a.idequipo INNER join areas c on c.idarea=b.idarea where idproceso = $_SESSION[idproceso]";
+    $queryarea = mysqli_query($link, $consultaarea) or die($consultaarea);
+    $filaarea = mysqli_fetch_array($queryarea);
+    $area  = $filaarea['area'];
     //autocompletar cliente
     $consulta = "SELECT distinct(concepto)  FROM `cuentas` where concepto != '' ";
     $queryt = mysqli_query($link, $consulta) or die($consulta);
@@ -59,10 +64,10 @@
         $batch = $filadatosnota['batch'];
         $fecha = $filadatosnota['fecha'];
         $hora = $filadatosnota['hora'];
-        $nombreaprobador = $filadatosnota['aprobador'];
+        $nombreaprobador = $filadatosnota['aprobador'] . ' :';
         $fechaaprobacion = $filadatosnota['fechaaprobacion'];
         $horaaprobacion = $filadatosnota['horaaprobacion'];
-        $nombreautorizador = $filadatosnota['autoriza'];
+        $nombreautorizador = $filadatosnota['autoriza'] . ' :';
         $fechaautorizacion = $filadatosnota['fechaautorizacion'];
         $horaautorizacion = $filadatosnota['horaautorizacion'];
     } else {
@@ -102,105 +107,127 @@
             }
         }
         ?>
-        <fieldset <?php echo $des; ?>>
-            <form action="" method="post">
+        <?php
+        if ($batch != '') {
+            $estado = 'disabled';
+        } else {
+            $estado = '';
+        }
+        ?>
+        <div class="form-row formulario">
+            <div class="form-group pequeno">
+                <label for="iddocumento">ID.Documento:</label>
+                <input value="<?php echo $creado  ?>" style="text-align:center" class="form-control " id="creado" name="creado" type="hidden" disabled>
+                <input <?php echo $estado ?> value="<?php echo $idnota  ?>" style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled>
+            </div>
+            <div class="form-group mediano-pequeno">
+                <label for="fechacreacion">Fecha creación:</label>
+                <input style="text-align:center" class="form-control " id="fechacreacion" name="fechacreacion   " type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
+            </div>
+            <div class="form-group pequeno">
+                <label for="batch">Batch:</label>
                 <?php
-                if ($batch != '') {
+                $estado = 'disabled';
+                if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
+                } ?>
+                <input <?php echo $estado ?> min="0" value="<?php echo $batch ?>" style="text-align:center" class="form-control " id="batch" name="batch" type="number">
+                <?php if ($batch != '') {
                     $estado = 'disabled';
                 } else {
                     $estado = '';
                 }
                 ?>
-                <div class="form-row formulario">
-                    <div class="form-group pequeno">
-                        <label for="iddocumento">ID.Documento:</label>
-                        <input value="<?php echo $creado  ?>" style="text-align:center" class="form-control " id="creado" name="creado" type="hidden" disabled>
-                        <input <?php echo $estado ?> value="<?php echo $idnota  ?>" style="text-align:center" class="form-control " id="iddocumento" name="iddocumento" type="text" disabled>
-                    </div>
-                    <div class="form-group mediano-pequeno">
-                        <label for="user">Usuario:</label>
-                        <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
-                    </div>
-                    <div class="form-group mediano-grande">
-                        <label for="type">Tipo de Documento</label>
-                        <select <?php echo $estado ?> style="text-align: center;" id="type" class="form-control col-md-8 ">
-                            <?php
-                            $selected = '';
-                            $consultausuarios = "select * from tiposdocumento order by documento";
-                            $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
-                            ?> <option value="0">Seleccionar</option>
-                            <?php
-                            while ($filas1 = mysqli_fetch_array($query)) {
-                                if ($filas1['idtipo'] == $filadatosnota['idtipodocumento']) {
-                                    $selected = 'selected';
-                                }
-                            ?>
-                                <option <?php echo $selected ?> value="<?php echo $filas1['idtipo'] ?>"><?php echo  $filas1['idtipo'] . '-' . $filas1['documento'] ?></option>
-                            <?php
-                                $selected = '';
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="form-group mediano-grande">
-                        <label for="type">Clasificación de Documento</label>
-                        <select <?php echo $estado ?> style="text-align: center;" id="clasificacion" class="form-control col-md-8 ">
-                            <?php
-                            $consultausuarios = "select * from clasificaciones order by clasificacion";
-                            $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
-                            ?> <option value="0">Seleccionar</option>
-                            <?php
-                            while ($filas1 = mysqli_fetch_array($query)) {
-                                if ($filas1['idclasificacion'] == $filadatosnota['idclasificacion']) {
-                                    $selected = 'selected';
-                                }
-                            ?>
-                                <option <?php echo $selected ?> value="<?php echo $filas1['idclasificacion'] ?>"><?php echo  $filas1['clasificacion'] ?></option>
-                            <?php
-                            }
-                            $selected = '';
-                            ?>
-                        </select>
-                    </div>
+            </div>
+        </div>
+        <div class="form-row formulario tabla-registros">
+            <h5 class="subtitulo-formulario">Información del empleado</h5>
+            <div class="form-group mediano-pequeno">
+                <label for="user">Nombre</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $usuario; ?>">
+            </div>
+            <div class="form-group mediano-grande">
+                <label for="user">Correo</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $_SESSION['correo']; ?>">
+            </div>
+            <div class="form-group mediano">
+                <label for="user"> Nombre dependencia</label>
+                <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo  $area; ?>">
+            </div>
 
-                </div>
-                <div class="form-row formulario">
-                    <div class="form-group pequeno">
-                        <label for="batch">Batch:</label>
-                        <?php
-                        $estado = 'disabled';
-                        if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
-                        } ?>
-                        <input <?php echo $estado ?> min="0" value="<?php echo $batch ?>" style="text-align:center" class="form-control " id="batch" name="batch" type="number">
-                        <?php if ($batch != '') {
-                            $estado = 'disabled';
-                        } else {
+        </div>
+        <div class="form-row formulario tabla-registros">
+            <h5 class="subtitulo-formulario">Información del registro contable</h5>
+            <div class="form-group mediano-pequeno">
+                <label for="desde">Proceso</label>
+                <select style="text-align: center;" id="proceso" name="proceso" class="form-control col-md-8 ">
+                    <?php
+                    $consultaequipos = "select a.*,b.equipo,c.area from procesos a inner join equipos b on b.idequipo=a.idequipo inner join areas c on c.idarea = b.idarea where idproceso=1 or idproceso=4";
+                    $query = mysqli_query($link, $consultaequipos) or die($consultaequipos);
+                    ?> <option value="0">Seleccionar</option>
+                    <?php
+                    $estado = '';
+                    while ($filas1 = mysqli_fetch_array($query)) {
+
+                        if ($proceso == $filas1['idproceso']) {
+                            $estado = 'selected';
+                        }
+                    ?>
+                        <option <?php echo $estado ?> value="<?php echo $filas1['idproceso'] ?>"><?php echo  $filas1['proceso'] ?></option>
+                    <?php
+                        if ($proceso == $filas1['idproceso']) {
                             $estado = '';
                         }
-                        ?>
-                    </div>
-                    <div class="form-group mediano-pequeno">
-                        <label for="user">Fecha creación:</label>
-                        <input style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
-                    </div>
-                    <div class="form-group mediano-grande">
-                        <label for="user">Aprobado por:</label>
-                        <input value=" <?php echo $nombreaprobador . ' : ' . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
-                    </div>
-                    <div class="form-group mediano-grande">
-                        <label for="user">Autorizado por:</label>
-                        <input value=" <?php echo $nombreautorizador . ' : ' . $fechaautorizacion . ' ' . $horaautorizacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
-                    </div>
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group mediano">
+                <label for="type">Tipo de Documento</label>
+                <select <?php echo $estado ?> style="text-align: center;" id="type" class="form-control col-md-8 ">
+                    <?php
+                    $selected = '';
+                    $consultausuarios = "select * from tiposdocumento order by documento";
+                    $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
+                    ?> <option value="0">Seleccionar</option>
+                    <?php
+                    while ($filas1 = mysqli_fetch_array($query)) {
+                        if ($filas1['idtipo'] == $filadatosnota['idtipodocumento']) {
+                            $selected = 'selected';
+                        }
+                    ?>
+                        <option <?php echo $selected ?> value="<?php echo $filas1['idtipo'] ?>"><?php echo  $filas1['idtipo'] . '-' . $filas1['documento'] ?></option>
+                    <?php
+                        $selected = '';
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group mediano">
+                <label for="type">Clasificación de Documento</label>
+                <select <?php echo $estado ?> style="text-align: center;" id="clasificacion" class="form-control col-md-8 ">
+                    <?php
+                    $consultausuarios = "select * from clasificaciones order by clasificacion";
+                    $query = mysqli_query($link, $consultausuarios) or die($consultausuarios);
+                    ?> <option value="0">Seleccionar</option>
+                    <?php
+                    while ($filas1 = mysqli_fetch_array($query)) {
+                        if ($filas1['idclasificacion'] == $filadatosnota['idclasificacion']) {
+                            $selected = 'selected';
+                        }
+                    ?>
+                        <option <?php echo $selected ?> value="<?php echo $filas1['idclasificacion'] ?>"><?php echo  $filas1['clasificacion'] ?></option>
+                    <?php
+                    }
+                    $selected = '';
+                    ?>
+                </select>
+            </div>
+            <div class="form-group mediano-grande ">
+                <label for="comment">Comentario</label>
+                <input <?php echo $des; ?> <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
+            </div>
+        </div>
 
-                </div>
-                <div class="form-row formulario">
-                    <div class="form-group completo ">
-                        <label for="comment">Comentario:</label>
-                        <input <?php echo $estado ?> value="<?php echo $comentario ?>" style="text-align:center" class="form-control " id="comment" name="comment" type="text">
-                    </div>
-                </div>
-            </form>
-        </fieldset>
     </header>
     <main id="tegistrosdenota" class="tabla-registros ">
         <table id="registrosnotas" class="table table-striped  table-responsive-lg">
@@ -327,59 +354,70 @@
         <input type="hidden" id="idu" name="idu">
         <div class="form-row formulario">
             <div class="form-group mediano ">
-                <label for="comment">Total Importe:</label>
+                <label for="comment">Total Importe</label>
                 <?php
                 ?>
                 <input type="hidden" id="importenum" name="importenum" value="<?php echo $totalimporte ?>">
                 <input style="text-align:center;background-color:<?php echo "white" ?>" class="form-control " id="totalimporte" name="totalimporte" type="text" value="<?php echo number_format($totalimporte) ?>" disabled>
             </div>
         </div>
-        <section class="botones">
-            <?php
-            if ($batch == '') {
-                $estado = "";
-                if ($des != 'disabled') {
-            ?>
-                    <!-- <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button> -->
-                    <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
-                    <button title="Borrar Nota" id="delete" name="delete" class="btn btn-secondary boton">Limpiar</button>
-                    <?php
-                }
-                $consultaequiponota = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $idusuario  ";
-                $queryequiponota = mysqli_query($link, $consultaequiponota) or die($consultaequiponota);
-                $filaequiponota = mysqli_fetch_array($queryequiponota);
-                $consultaequipousuario = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $_SESSION[idusuario] ";
-                $qeryrquipousuario = mysqli_query($link, $consultaequipousuario) or die($consultaequipousuario);
-                $filaequipousuario = mysqli_fetch_array($qeryrquipousuario);
-                $consultaminimo = "SELECT * FROM `general`";
-                $queryminimo = mysqli_query($link, $consultaminimo) or die($consultaminimo);
-                $filaminimo = mysqli_fetch_array($queryminimo);
-                $filaminimo['salariominimo'] * 500;
-                if ($_SESSION['aprobacion'] == 1) {
-                    if ($filaequiponota['idequipo'] == $filaequipousuario['idequipo'] && ($filaminimo['salariominimo'] * 500) < $totalimporte && $filadatosnota['aprobador'] == '' && $valido == 0) {
-                    ?> <button <?php echo $estado ?> title="Aprobar Nota" id="aprobar" name="aprobar" class="btn btn-success boton">Aprobar</button>
-                    <?php
-                    }
-                }
-                if ($_SESSION['autorizacion'] == 1) {
-                    if (($filaminimo['salariominimo'] * 500) < $totalimporte && $filadatosnota['autoriza'] == '' && $valido == 0) {
-                    ?>
-                        <button <?php echo $estado ?> title="Autorizar Nota" id="autorizar" name="autorizar" class="btn btn-warning boton">Autorizar</button>
-                    <?php
-                    }
-                }
-            } else {
-                if ($_SESSION['rol'] == 1) {
-                    ?>
-                    <button id="edit" name="edit" class="btn btn-primary boton">Editar</button>
-            <?php
-                }
-            }
-            ?>
-        </section>
+
     </main>
     <footer>
 
+        <div class="form-row formulario tabla-registros">
+            <div class="form-group mediano-grande">
+                <label for="user">Aprobado por:</label>
+                <input value=" <?php echo $nombreaprobador . $fechaaprobacion . ' ' . $horaaprobacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+            </div>
+            <div class="form-group mediano-grande">
+                <label for="user">Autorizado por:</label>
+                <input value=" <?php echo $nombreautorizador .  $fechaautorizacion . ' ' . $horaautorizacion; ?>" style="text-align:center" class="form-control " id="user" name="user" type="text" disabled>
+            </div>
+            <section class="botones">
+                <?php
+                if ($batch == '') {
+                    $estado = "";
+                    if ($des != 'disabled') {
+                ?>
+                        <!-- <button <?php echo $estado ?> title="Guardar Nota" id="save" name="save" class="btn btn-primary boton">Guardar</button> -->
+                        <!-- // <button title="Cancelar Nota" id="cancel" name="cancel" class="btn btn-secondary boton">Cancelar</button> -->
+                        <button title="Borrar Nota" id="delete" name="delete" class="btn btn-secondary boton">Limpiar</button>
+                        <?php
+                    }
+                    $consultaequiponota = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $idusuario  ";
+                    $queryequiponota = mysqli_query($link, $consultaequiponota) or die($consultaequiponota);
+                    $filaequiponota = mysqli_fetch_array($queryequiponota);
+                    $consultaequipousuario = "select b.idequipo from usuarios a inner join  procesos b on b.idproceso=a.idproceso where a.idusuario = $_SESSION[idusuario] ";
+                    $qeryrquipousuario = mysqli_query($link, $consultaequipousuario) or die($consultaequipousuario);
+                    $filaequipousuario = mysqli_fetch_array($qeryrquipousuario);
+                    $consultaminimo = "SELECT * FROM `general`";
+                    $queryminimo = mysqli_query($link, $consultaminimo) or die($consultaminimo);
+                    $filaminimo = mysqli_fetch_array($queryminimo);
+                    $filaminimo['salariominimo'] * 500;
+                    if ($_SESSION['aprobacion'] == 1) {
+                        if ($filaequiponota['idequipo'] == $filaequipousuario['idequipo'] && ($filaminimo['salariominimo'] * 500) < $totalimporte && $filadatosnota['aprobador'] == '' && $valido == 0) {
+                        ?> <button <?php echo $estado ?> title="Aprobar Nota" id="aprobar" name="aprobar" class="btn btn-success boton">Aprobar</button>
+                        <?php
+                        }
+                    }
+                    if ($_SESSION['autorizacion'] == 1) {
+                        if (($filaminimo['salariominimo'] * 500) < $totalimporte && $filadatosnota['autoriza'] == '' && $valido == 0) {
+                        ?>
+                            <button <?php echo $estado ?> title="Autorizar Nota" id="autorizar" name="autorizar" class="btn btn-warning boton">Autorizar</button>
+                        <?php
+                        }
+                    }
+                } else {
+                    if ($_SESSION['rol'] == 1) {
+                        ?>
+                        <button id="edit" name="edit" class="btn btn-primary boton">Editar</button>
+                <?php
+                    }
+                }
+                ?>
+            </section>
+        </div>
     </footer>
 
 </body>

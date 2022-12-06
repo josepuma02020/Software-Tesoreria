@@ -552,7 +552,7 @@
                 }
             }
             if (a == 0) {
-                alertify.confirm('Envio a revisión', 'Esta seguro de enviar esta nota contable para revisión?', function() {
+                alertify.confirm('Envio a revisión', 'Esta seguro de enviar esta consignación para revisión?', function() {
                     registrarfactura(iddoc, valor, user, tipo, fechafactura, ri, an, cuenta, comentario);
                     soporte = $('#soporte').prop('files')[0];
                     datosForm = new FormData;
