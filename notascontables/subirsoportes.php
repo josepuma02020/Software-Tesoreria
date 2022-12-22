@@ -17,7 +17,9 @@ if ($_SESSION['usuario']) {
     $iddoc = $_GET['iddoc'];
 
     if (is_dir('./' . $iddoc . '/')) {
+        echo 'exsite';
     } else {
+        echo 'noexiste';
         mkdir('./' . $iddoc . '/', 0777,);
     }
 

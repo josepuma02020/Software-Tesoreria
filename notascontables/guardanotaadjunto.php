@@ -15,6 +15,9 @@ if ($_SESSION['usuario']) {
     $type = $_POST['tiponota'];
     $comentario = $_POST['comentario'];
     $id = $_POST['iddocumento'];
+    $fechanota = $_POST['fechanota'];
+    $proceso = $_POST['proceso'];
+    $importe = $_POST['importe'];
     $fecha_actual = date("Y-m-d");
     $hora = date('h:i a');
     $consultaexistenota = "select * from notascontables where idnota = '$id'";
@@ -22,12 +25,12 @@ if ($_SESSION['usuario']) {
     $existenota = mysqli_fetch_array($queryexistenota);
     if (isset($existenota)) {
         //existe
-        $consultaeditarnota = "UPDATE `notascontables` SET  `idtipodocumento`='$type',`comentario`='$comentario' WHERE idnota=$id";
+        $consultaeditarnota = "UPDATE `notascontables` SET  `idtipodocumento`='$type',`comentario`='$comentario',`fechanota`='$fechanota',`tipo`='$proceso' WHERE idnota=$id";
         echo $query = mysqli_query($link, $consultaeditarnota) or die($consultaeditarnota);
     } else {
         //no existe
-        $consultaagregarnota = "INSERT INTO `notascontables`(`idnota`, `idusuario`, `idtipodocumento`, `idclasificacion`, `batch`, `comentario`, `fecha`, `hora`, `seleccion`, `idaprobador`, `tipo`, `idverificador`, `fechabatch`, `horabatch`, `fechaaprobacion`, `horaaprobacion`, `idautoriza`, `fechaautorizacion`, `horaautorizacion`, `revision`) VALUES 
-        ('$id','$_SESSION[idusuario]','$type','0','0','$comentario','$fecha_actual','$hora','1','','5','','','','','','','','','')";
+        $consultaagregarnota = "INSERT INTO `notascontables`(`idnota`, `idusuario`, `idtipodocumento`, `idclasificacion`, `batch`, `comentario`, `fecha`, `hora`, `seleccion`, `idaprobador`, `tipo`, `idverificador`, `fechabatch`, `horabatch`, `fechaaprobacion`, `horaaprobacion`, `idautoriza`, `fechaautorizacion`, `horaautorizacion`, `revision`, `fechanota`,`importe) VALUES 
+        ('$id','$_SESSION[idusuario]','$type','0','0','$comentario','$fecha_actual','$hora','1','','$proceso','','','','','','','','','','$fechanota','$importe')";
         echo $query = mysqli_query($link, $consultaagregarnota) or die($consultaagregarnota);
     }
     // $consulta = "UPDATE `notascontables` SET `idtipodocumento`='$type',

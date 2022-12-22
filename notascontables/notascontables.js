@@ -1,5 +1,5 @@
-function guardarnotacontableadjunto(iddocumento, tiponota, comentario) {
-    cadenau = "iddocumento=" + iddocumento + "&tiponota=" + tiponota + "&comentario=" + comentario;
+function guardarnotacontableadjunto(iddocumento, tiponota, proceso, fechanota, importe) {
+    cadenau = "iddocumento=" + iddocumento + "&tiponota=" + tiponota + "&comentario=" + comentario + "&proceso=" + proceso + "&fechanota=" + fechanota + "&importe=" + importe;
     $.ajax({
         type: "POST",
         url: "notascontables/guardanotaadjunto.php",

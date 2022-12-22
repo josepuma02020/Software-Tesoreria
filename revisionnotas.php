@@ -36,17 +36,17 @@ if ($_SESSION['usuario']) {
         case 't':
             $consultanotas = "SELECT SUM(e.debe) 'debe',SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador',g.nombre 'nautoriza'  FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.fecha between '$desde' and '$hasta' and tipo = $n GROUP by a.idnota;";
+            left JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.fecha between '$desde' and '$hasta' and tipo = $n GROUP by a.idnota;";
             break;
         case 'a':
             $consultanotas = "SELECT SUM(e.debe) 'debe', SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' ,g.nombre 'nautoriza' FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where (a.batch is null or a.batch = '' or a.batch='NULL') and a.fecha between '$desde' and '$hasta'  and tipo = $n GROUP by a.idnota;";
+            left JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where (a.batch is null or a.batch = '' or a.batch='NULL'  or a.batch = 0) and a.fecha between '$desde' and '$hasta'  and tipo = $n GROUP by a.idnota;";
             break;
         case 'c':
             $consultanotas = "SELECT SUM(e.debe) 'debe', SUM(e.debe)-sum(e.haber) 'importe',a.*,b.nombre,c.documento,d.clasificacion,sum(e.haber)'haber',f.nombre 'naprobador' ,g.nombre 'nautoriza' FROM notascontables a  LEFT JOIN usuarios g on g.idusuario=a.idautoriza  left join usuarios f on f.idusuario=a.idaprobador
             INNER JOIN usuarios b on a.idusuario = b.idusuario   INNER JOIN tiposdocumento c on c.idtipo=a.idtipodocumento 
-            INNER JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.batch > 0  and a.fecha between '$desde' and '$hasta'  and tipo = $n GROUP by a.idnota;";
+            left JOIN clasificaciones d on d.idclasificacion=a.idclasificacion left JOIN registrosdenota e on e.idnota=a.idnota where a.batch > 0  and a.fecha between '$desde' and '$hasta'  and tipo = $n GROUP by a.idnota;";
             break;
     }
 
@@ -219,43 +219,84 @@ if ($_SESSION['usuario']) {
                                     $estado = 'disabled';
                                 }
                             }
+                            if ($filas1['fechanota'] == "") {
                         ?>
 
-                            <TR style="background-color: <?php echo $color ?> ;">
-                                <TD>
-                                    <?php
-                                    $estadocheck = 'checked';
-                                    if ($filas1['seleccion'] == 1) {
-                                        $estadocheck = '';
-                                    }
-                                    ?>
-                                    <input <?php echo $estadocheck . ' ' . $estado; ?> onchange="cambiarseleccionnota(<?php echo $filas1['idnota'] ?>)" id="check" type="checkbox" aria-label="Checkbox for following text input">
-                                </TD>
-                                <TD><?php echo $filas1['fecha'] . ' ' . $filas1['hora']; ?> </TD>
-                                <TD style="background-color: <?php echo $coloraprobador ?> ;">
-                                    <?php
-                                    if ($filas1['idaprobador'] == 0) {
-                                        echo '';
-                                    } else {
-                                        echo $filas1['naprobador'];
-                                    }
-                                    ?> </TD>
-                                <TD style="background-color: <?php echo $colorautorizador ?> ;">
-                                    <?php
-                                    if ($filas1['idaprobador'] == 0) {
-                                        echo '';
-                                    } else {
-                                        echo $filas1['nautoriza'];
-                                    }
-                                    ?> </TD>
-                                <TD><?php echo $filas1['nombre']; ?> </TD>
-                                <TD><?php echo $filas1['documento']; ?> </TD>
-                                <TD><?php echo $filas1['clasificacion']; ?> </TD>
-                                <TD> <a href="home.php?id=<?php echo "$filas1[idnota]" ?>&n=<?php echo $filas1['tipo'] ?>"> <?php echo number_format($importe); ?></a> </TD>
-                                <TD><?php echo $batch; ?> </TD>
-                                <TD style="width:20% ;"><?php echo $filas1['comentario']; ?> </TD>
-                            </TR>
-                        <?php } ?>
+                                <TR style="background-color: <?php echo $color ?> ;">
+                                    <TD>
+                                        <?php
+                                        $estadocheck = 'checked';
+                                        if ($filas1['seleccion'] == 1) {
+                                            $estadocheck = '';
+                                        }
+                                        ?>
+                                        <input <?php echo $estadocheck . ' ' . $estado; ?> onchange="cambiarseleccionnota(<?php echo $filas1['idnota'] ?>)" id="check" type="checkbox" aria-label="Checkbox for following text input">
+                                    </TD>
+                                    <TD><?php echo $filas1['fecha'] . ' ' . $filas1['hora']; ?> </TD>
+                                    <TD style="background-color: <?php echo $coloraprobador ?> ;">
+                                        <?php
+                                        if ($filas1['idaprobador'] == 0) {
+                                            echo '';
+                                        } else {
+                                            echo $filas1['naprobador'];
+                                        }
+                                        ?> </TD>
+                                    <TD style="background-color: <?php echo $colorautorizador ?> ;">
+                                        <?php
+                                        if ($filas1['idaprobador'] == 0) {
+                                            echo '';
+                                        } else {
+                                            echo $filas1['nautoriza'];
+                                        }
+                                        ?> </TD>
+                                    <TD><?php echo $filas1['nombre']; ?> </TD>
+                                    <TD><?php echo $filas1['documento']; ?> </TD>
+                                    <TD><?php echo $filas1['clasificacion']; ?> </TD>
+                                    <TD> <a href="home.php?id=<?php echo "$filas1[idnota]" ?>&n=<?php echo $filas1['tipo'] ?>"> <?php echo number_format($importe); ?></a> </TD>
+                                    <TD><?php echo $batch; ?> </TD>
+                                    <TD style="width:20% ;"><?php echo $filas1['comentario']; ?> </TD>
+                                </TR>
+                            <?php
+                            } else {
+                            ?>
+
+                                <TR style="background-color: <?php echo $color ?> ;">
+                                    <TD>
+                                        <?php
+                                        $estadocheck = 'checked';
+                                        if ($filas1['seleccion'] == 1) {
+                                            $estadocheck = '';
+                                        }
+                                        ?>
+                                        <input <?php echo $estadocheck . ' ' . $estado; ?> onchange="cambiarseleccionnota(<?php echo $filas1['idnota'] ?>)" id="check" type="checkbox" aria-label="Checkbox for following text input">
+                                    </TD>
+                                    <TD><?php echo $filas1['fecha'] . ' ' . $filas1['hora']; ?> </TD>
+                                    <TD style="background-color: <?php echo $coloraprobador ?> ;">
+                                        <?php
+                                        if ($filas1['idaprobador'] == 0) {
+                                            echo '';
+                                        } else {
+                                            echo $filas1['naprobador'];
+                                        }
+                                        ?> </TD>
+                                    <TD style="background-color: <?php echo $colorautorizador ?> ;">
+                                        <?php
+                                        if ($filas1['idaprobador'] == 0) {
+                                            echo '';
+                                        } else {
+                                            echo $filas1['nautoriza'];
+                                        }
+                                        ?> </TD>
+                                    <TD><?php echo $filas1['nombre']; ?> </TD>
+                                    <TD><?php echo $filas1['documento']; ?> </TD>
+                                    <TD><?php echo $filas1['clasificacion']; ?> </TD>
+                                    <TD> <a href="home.php?id=<?php echo "$filas1[idnota]" ?>&n=5"> <?php echo number_format($importe); ?></a> </TD>
+                                    <TD><?php echo $batch; ?> </TD>
+                                    <TD style="width:20% ;"><?php echo $filas1['comentario']; ?> </TD>
+                                </TR>
+                        <?php
+                            }
+                        } ?>
                     </tbody>
                 </table>
             </div>

@@ -182,7 +182,6 @@
                 <label for="user">Cód. OW - AN8 *</label>
                 <input <?php echo $estado ?> style="text-align:center" class="form-control " id="an" value="<?php echo $an ?>" name="an" type="number">
             </div>
-
             <div class="form-group mediano-pequeno">
                 <label for="fechafactura">Fecha de pago *</label>
                 <input <?php echo $estado ?> style="text-align:center" class="form-control " id="fechafactura" value="<?php echo $fecha ?>" name="fechafactura" type="date">
@@ -557,7 +556,7 @@
                     soporte = $('#soporte').prop('files')[0];
                     datosForm = new FormData;
                     datosForm.append("soporte", soporte);
-                    ruta = 'facturas/subirsoporte.php?iddoc=' + iddoc;
+                    ruta = 'notascontables/subirsoporte.php?iddoc=' + iddoc;
                     $.ajax({
                         type: "POST",
                         url: ruta,

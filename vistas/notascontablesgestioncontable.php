@@ -153,7 +153,6 @@
                 <label for="user"> Nombre dependencia</label>
                 <input <?php echo $estado ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo  $area; ?>">
             </div>
-
         </div>
         <div class="form-row formulario tabla-registros">
             <h5 class="subtitulo-formulario">Información del registro contable</h5>
