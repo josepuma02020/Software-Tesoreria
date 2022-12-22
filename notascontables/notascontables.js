@@ -1,3 +1,22 @@
+function eliminarsoporte(archivo, iddoc) {
+    cadenau = "archivo=" + archivo + "&iddoc=" + iddoc;
+    $.ajax({
+        type: "POST",
+        url: "notascontables/eliminarsoporte.php",
+        data: cadenau,
+        success: function (r) {
+            if (r == 1) {
+                // console.log(r);
+                // debugger;
+                window.location.reload();
+            } else {
+                console.log(r);
+                debugger;
+            }
+        }
+    });
+}
+
 function guardarnotacontableadjunto(iddocumento, tiponota, proceso, fechanota, importe) {
     cadenau = "iddocumento=" + iddocumento + "&tiponota=" + tiponota + "&comentario=" + comentario + "&proceso=" + proceso + "&fechanota=" + fechanota + "&importe=" + importe;
     $.ajax({
