@@ -14,7 +14,7 @@ if ($_SESSION['usuario'] && $_SESSION['rol'] == 1) {
     setlocale(LC_ALL, "es_CO");
     date_default_timezone_set('America/Bogota');
 
-
+aaaa
 ?>
     <HTML>
 

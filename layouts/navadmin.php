@@ -103,6 +103,35 @@
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Flujo de caja </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#"> Garantías &raquo </a>
+                                    <ul class="submenu dropdown-menu">
+                                        <li><a class="dropdown-item" href="home.php?n=1"> comisión garantía</a></li>
+                                        <li><a class="dropdown-item" href="home.php?n=4"> garantía</a></li>
+                                        <li><a class="dropdown-item" href="home.php?n=5"> informe</a></li>
+                                        </ul>
+                                    <div class="dropdown-divider"></div>
+                                    <?php if ($_SESSION['configuracion'] == 1) {
+                                    ?>
+                                <li><a class="dropdown-item" href="#"> Configuración &raquo </a>
+                                    <ul class="submenu dropdown-menu">
+                                        <a class="dropdown-item" href=" ./tiposfactura.php">Tipos de factura</a>
+                                        <a class="dropdown-item" href=" ./cuentastipofactura.php">Cuentas -> Tipos de factura</a>
+                                        <!-- <li><a class="dropdown-item" href=""> Third level 3 &raquo </a>
+                                            <ul class="submenu dropdown-menu">
+                                                <li><a class="dropdown-item" href=""> Fourth level 1</a></li>
+                                                <li><a class="dropdown-item" href=""> Fourth level 2</a></li>
+                                            </ul>
+                                        </li> -->
+                                    </ul>
+                                </li>
+                            <?php
+                                    }
+                            ?>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Configuración general</a>
                             <ul class="dropdown-menu">
                                 <a class="dropdown-item" href="./generales.php">Generales</a>
