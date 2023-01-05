@@ -151,7 +151,7 @@ if ($_SESSION['usuario']) {
                             <th> Usuario </th>
                             <th> Tipo </th>
                             <th> Clasificación </th>
-                            <th> Total importe </th>
+                            <th> Total importe ($) </th>
                             <th> Batch </th>
                             <th> Comentario </th>
                         </tr>
@@ -290,7 +290,13 @@ if ($_SESSION['usuario']) {
                                     <TD><?php echo $filas1['nombre']; ?> </TD>
                                     <TD><?php echo $filas1['documento']; ?> </TD>
                                     <TD><?php echo $filas1['clasificacion']; ?> </TD>
-                                    <TD> <a href="home.php?id=<?php echo "$filas1[idnota]" ?>&n=5"> <?php echo number_format($importe); ?></a> </TD>
+                                    <TD> <a href="home.php?id=<?php echo "$filas1[idnota]" ?>&n=5">
+                                            <?php
+                                            if ($filas1['importe'] > 0) {
+                                                $importe = $filas1['importe'];
+                                            }
+                                            echo number_format($importe);
+                                            ?></a> </TD>
                                     <TD><?php echo $batch; ?> </TD>
                                     <TD style="width:20% ;"><?php echo $filas1['comentario']; ?> </TD>
                                 </TR>

@@ -66,8 +66,8 @@ function revision(iddocumento) {
         url: "notascontables/revision.php",
         data: cadenau,
         success: function (r) {
-            //console.log(r);
-            //debugger;
+            // console.log(r);
+            // debugger;
         }
     });
 }

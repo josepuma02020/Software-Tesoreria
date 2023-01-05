@@ -61,6 +61,10 @@
         $clasificacion = $filadatosnota['idclasificacion'];
         $comentario = $filadatosnota['comentario'];
         $batch = $filadatosnota['batch'];
+        if ($batch == 0) {
+            $batch = '';
+        }
+
         $fecha = $filadatosnota['fecha'];
         $hora = $filadatosnota['hora'];
         $proceso = $filadatosnota['tipo'];
@@ -136,7 +140,24 @@
                 <input value="<?php echo $creado  ?>" style="text-align:center" class="form-control " id="creado" name="creado" type="hidden" disabled>
                 <input <?php echo $estado ?> value="<?php echo $idnota  ?>" style="text-align:center" class="form-control " id="iddoc" name="iddoc" type="text" disabled>
             </div>
-
+            <div class="form-group mediano-pequeno">
+                <label for="user">Fecha creación</label>
+                <input <?php echo $des; ?> style="text-align:center" class="form-control " id="user" name="user" type="text" disabled value="<?php echo $fecha . ' ' . $hora; ?>">
+            </div>
+            <div class="form-group pequeno">
+                <label for="batch">Batch</label>
+                <?php
+                $estado = 'disabled';
+                if ($_SESSION['rol'] == 1 || $_SESSION['rol'] == 2) {
+                } ?>
+                <input <?php echo $estado ?> min="0" value="<?php echo $batch ?>" style="text-align:center;background-color:<?php echo $colorbatch ?>" class="form-control " id="batch" name="batch" type="text">
+                <?php if ($batch != '') {
+                    $estado = 'disabled';
+                } else {
+                    $estado = '';
+                }
+                ?>
+            </div>
 
         </div>
         <div class="form-row formulario tabla-registros">
@@ -402,6 +423,10 @@
             }
             if (a == 0) {
                 guardarnotacontableadjunto(iddocumento, tiponota, proceso, fechanota, importe);
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1000);
+
             }
 
             // alertify.confirm('Envio a revisión', 'Esta seguro de enviar esta nota contable para revisión?', function() {
@@ -435,7 +460,7 @@
         });
         $('#revision').click(function() {
             a = 0;
-            iddocumento = $('#iddocumento').val();
+            iddocumento = $('#iddoc').val();
             alertify.confirm('Envio a revisión', 'Esta seguro de enviar esta nota contable para revisión?', function() {
                 revision(iddocumento);
                 setTimeout(function() {

@@ -25,7 +25,7 @@ if ($_SESSION['usuario']) {
     $existenota = mysqli_fetch_array($queryexistenota);
     if (isset($existenota)) {
         //existe
-        $consultaeditarnota = "UPDATE `notascontables` SET  `idtipodocumento`='$type',`comentario`='$comentario',`fechanota`='$fechanota',`tipo`='$proceso' WHERE idnota=$id";
+        $consultaeditarnota = "UPDATE `notascontables` SET  `fecha`='$fecha_actual', `hora`='$hora', `idtipodocumento`='$type',`comentario`='$comentario',`fechanota`='$fechanota',`tipo`='$proceso' WHERE idnota=$id";
         echo $query = mysqli_query($link, $consultaeditarnota) or die($consultaeditarnota);
     } else {
         //no existe
